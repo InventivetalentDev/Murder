@@ -1,0 +1,106 @@
+# Whether to restore player data (inventory, experience, location, ...) after the game ended
+storePlayerData: true
+
+countdown:
+  lobby: 20
+  start: 10
+
+messages:
+  role:
+    default:
+      name: "&9Bystander"
+      title: "&9You are a ${role.default.name}"
+      subtitle: ""
+      objective: "&e&lSurvive &e&land try to find out who the &c&lMurderer &e&lis!"
+      bossbar:
+        text: "%s                ${role.default.name}"
+        color: "BLUE"
+        style: "PROGRESS"
+    murderer:
+      name: "&cMurderer"
+      title: "&cYou are the ${role.murderer.name}"
+      subtitle: ""
+      objective: "&e&lKill all &9&lBystanders&e&l, but don't act suspicious!"
+      bossbar:
+        text: "%s                ${role.murderer.name}"
+        color: "RED"
+        style: "NOTCHED_10"
+    weapon:
+      name: "&9Bystander"
+      title: "${role.default.title}"
+      subtitle: "&9with a secret weapon"
+      objective: "&e&lFind the &c&lMurderer &e&land kill them with your &9&lsecret Weapon&e!"
+      bossbar:
+        text: "%s                ${role.weapon.name}"
+        color: "BLUE"
+        style: "NOTCHED_10"
+    spectator:
+      name: "&7Spectator"
+  game:
+    state:
+      waiting:
+        sign: "&a[Waiting]"
+      lobby:
+        sign: "&a[Lobby]"
+      starting:
+        sign: "&c[Starting]"
+      started:
+        sign: "&c[Ingame]"
+      ended:
+        sign: "&7[Ended]"
+    join: "&7%s &ejoined the game. &6(%s/%s)"
+    leave: "&7%s &eleft the game. &6(%s/%s)"
+    countdown:
+      lobby:
+        time: "&eLobby ends in %s seconds"
+        cancel: "&cNot enough players, coundown cancelled"
+      start:
+        time: "&eGame starts in %s seconds"
+
+
+
+# Name tags and colors - color+name can only be 15 characters long!
+name:
+  tags:
+  - "Alfa"
+  - "Bravo"
+  - "Charlie"
+  - "Delta"
+  - "Echo"
+  - "Foxtrot"
+  - "Gold"
+  - "Hotel"
+  - "India"
+  - "Juliett"
+  - "Kilo"
+  - "Lima"
+  - "Miko"
+  - "November"
+  - "Oscar"
+  - "Papa"
+  - "Quebec"
+  - "Romeo"
+  - "Sierra"
+  - "Tango"
+  - "Uniform"
+  - "Victor"
+  - "X-Ray"
+  - "Yankee"
+  - "Zulu"
+  colors:
+  - "&1"
+  - "&2"
+  - "&3"
+  - "&4"
+  - "&5"
+  - "&6"
+  - "&7"
+  - "&8"
+  - "&9"
+  - "&a"
+  - "&b"
+  - "&c"
+  - "&d"
+  - "&e"
+
+debug: false
