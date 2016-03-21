@@ -34,6 +34,7 @@ import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.rpapi.ResourcePackAPI;
 
 public class ResetExecutor extends LeavableExecutor {
 
@@ -55,6 +56,9 @@ public class ResetExecutor extends LeavableExecutor {
 						//Restore data and delete data file
 						playerData.restoreData();
 						Murder.instance.playerManager.deleteDataFile(playerData.uuid);
+
+						//Reset resource pack
+						ResourcePackAPI.setResourcepack(playerData.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
 					}
 
 					return true;

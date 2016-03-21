@@ -55,9 +55,10 @@ public class Game {
 	public GameState     gameState     = GameState.WAITING;
 	public StateExecutor stateExecutor = gameState.newExecutor(this);
 
-	public final Set<UUID> joiningPlayers = new HashSet<>();
-	public final Set<UUID> leavingPlayers = new HashSet<>();
-	public final Set<UUID> players        = new HashSet<>();//This set should only be accessed by the state executors
+	public final Set<UUID> joiningPlayers         = new HashSet<>();
+	public final Set<UUID> leavingPlayers         = new HashSet<>();
+	public final Set<UUID> players                = new HashSet<>();//This set should only be accessed by the state executors
+	public final Set<UUID> waitingForResourcepack = new HashSet<>();
 
 	public int ticks = 0;
 

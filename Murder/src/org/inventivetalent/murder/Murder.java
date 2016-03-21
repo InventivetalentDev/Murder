@@ -79,6 +79,11 @@ public class Murder extends JavaPlugin {
 
 	@ConfigValue(path = "end.delay") public int endDelay;
 
+	@ConfigValue(path = "resourcepack.game.url") public   String gamePackUrl;
+	@ConfigValue(path = "resourcepack.game.hash") public  String gamePackHash;
+	@ConfigValue(path = "resourcepack.reset.url") public  String resetPackUrl;
+	@ConfigValue(path = "resourcepack.reset.hash") public String resetPackHash;
+
 	@Override
 	public void onLoad() {
 		APIManager.require(PacketListenerAPI.class, this);

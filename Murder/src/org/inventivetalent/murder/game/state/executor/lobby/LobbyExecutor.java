@@ -35,6 +35,7 @@ import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
 import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.rpapi.ResourcePackAPI;
 
 import java.util.UUID;
 
@@ -47,6 +48,13 @@ public class LobbyExecutor extends CountdownExecutor {
 	@Override
 	public void tick() {
 		super.tick();
+		if (!game.waitingForResourcepack.isEmpty()) {
+			for (UUID uuid : game.waitingForResourcepack) {
+				//Send the resource pack
+				ResourcePackAPI.setResourcepack(game.getPlayer(uuid), Murder.instance.gamePackUrl, Murder.instance.gamePackHash);
+			}
+			game.waitingForResourcepack.clear();
+		}
 		if (!game.joiningPlayers.isEmpty()) {
 			for (UUID uuid : game.joiningPlayers) {
 				game.players.add(uuid);
@@ -57,6 +65,8 @@ public class LobbyExecutor extends CountdownExecutor {
 
 					data.getPlayer().teleport(game.arena.getFirstSpawnPoint(SpawnType.LOBBY).getLocation(game.arena.getWorld()));
 					game.broadcastJoin(uuid);
+
+					game.waitingForResourcepack.add(uuid);
 				} else {
 					Murder.instance.getLogger().warning("Player " + uuid + " doesn't have player data");
 				}
