@@ -30,6 +30,7 @@ package org.inventivetalent.murder.game.state;
 
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
+import org.inventivetalent.murder.game.state.executor.ended.EndedExecutor;
 import org.inventivetalent.murder.game.state.executor.ingame.DropLootExecutor;
 import org.inventivetalent.murder.game.state.executor.ingame.StartedExecutor;
 import org.inventivetalent.murder.game.state.executor.init.WaitingExecutor;
@@ -60,7 +61,7 @@ public enum GameState {
 	DROP_LOOT(DropLootExecutor.class),
 
 	/* End States */
-	ENDED("ended.sign"),
+	ENDED("ended.sign", EndedExecutor.class),
 	RESET;
 
 	private final String signKey;

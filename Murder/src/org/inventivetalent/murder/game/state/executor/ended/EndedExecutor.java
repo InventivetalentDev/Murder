@@ -26,49 +26,41 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.starting;
+package org.inventivetalent.murder.game.state.executor.ended;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import org.inventivetalent.murder.arena.spawn.SpawnPoint;
-import org.inventivetalent.murder.arena.spawn.SpawnType;
-import org.inventivetalent.murder.game.CountdownType;
+import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
-import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 
-import java.util.Iterator;
-import java.util.Set;
+public class EndedExecutor extends LeavableExecutor {
 
-public class TeleportExecutor extends CountdownExecutor {
+	boolean firstTick  = true;
+	int     endSeconds = 0;
 
-	boolean firstTick = true;
-
-	public TeleportExecutor(Game game) {
-		super(game, CountdownType.START);
+	public EndedExecutor(Game game) {
+		super(game);
+		game.ticks = 0;
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
+
 		if (firstTick) {
 			firstTick = false;
+			updatePlayerStates(GameState.ENDED, null);
+		}
 
-			final Set<SpawnPoint> spawnPoints = game.arena.getSpawnPoints(SpawnType.PLAYER);
-			final Iterator<SpawnPoint> iterator = Iterables.cycle(spawnPoints).iterator();
-			updatePlayerStates(GameState.TELEPORT, new Predicate<PlayerData>() {
-				@Override
-				public boolean apply(PlayerData playerData) {
-					playerData.getPlayer().teleport(iterator.next().getLocation(game.arena.getWorld()));
-					return true;
-				}
-			});
+		game.ticks++;
+		if (game.ticks >= 20) {
+			endSeconds++;
+			game.ticks = 0;
 		}
 	}
 
 	@Override
 	public boolean finished() {
-		return super.finished() || !firstTick;
+		return super.finished() || endSeconds >= Murder.instance.endDelay;
 	}
 }

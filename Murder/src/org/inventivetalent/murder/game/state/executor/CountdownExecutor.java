@@ -91,7 +91,7 @@ public class CountdownExecutor extends LeavableExecutor {
 	public boolean finished() {
 		if (type == CountdownType.LOBBY) { return game.lobbyCountdown <= 0; }
 		if (type == CountdownType.START) { return game.startCountdown <= 0; }
-		return false;
+		return super.finished();
 	}
 
 	@Override

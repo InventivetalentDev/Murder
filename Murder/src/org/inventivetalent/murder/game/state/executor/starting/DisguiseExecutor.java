@@ -62,6 +62,6 @@ public class DisguiseExecutor extends CountdownExecutor {
 
 	@Override
 	public boolean finished() {
-		return !firstTick;
+		return super.finished() || !firstTick;
 	}
 }

@@ -100,6 +100,6 @@ public class AssignExecutor extends CountdownExecutor {
 
 	@Override
 	public boolean finished() {
-		return ticks >= 3;
+		return super.finished() || ticks >= 3;
 	}
 }

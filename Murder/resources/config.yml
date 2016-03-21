@@ -13,6 +13,10 @@ loot:
   # Interval of loot drops (seconds)
   interval: 60
 
+end:
+  # Delay after the game ended until players are sent back
+  delay: 5
+
 items:
   knife:
     type: "DIAMOND_AXE" #Don't change this, unless you have a custom resource pack

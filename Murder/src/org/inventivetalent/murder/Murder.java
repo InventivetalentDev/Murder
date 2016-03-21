@@ -77,6 +77,8 @@ public class Murder extends JavaPlugin {
 	@ConfigValue(path = "loot.delay") public    int lootDelay;
 	@ConfigValue(path = "loot.interval") public int lootInterval;
 
+	@ConfigValue(path = "end.delay") public int endDelay;
+
 	@Override
 	public void onLoad() {
 		APIManager.require(PacketListenerAPI.class, this);

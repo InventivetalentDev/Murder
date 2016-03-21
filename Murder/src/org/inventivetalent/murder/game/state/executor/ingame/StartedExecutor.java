@@ -70,6 +70,6 @@ public class StartedExecutor extends IngameExecutor {
 
 	@Override
 	public boolean finished() {
-		return !firstTick;
+		return super.finished() || !firstTick;
 	}
 }

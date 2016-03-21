@@ -26,27 +26,21 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.starting;
+package org.inventivetalent.murder.game.state.executor.ended;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import org.inventivetalent.murder.arena.spawn.SpawnPoint;
-import org.inventivetalent.murder.arena.spawn.SpawnType;
-import org.inventivetalent.murder.game.CountdownType;
+import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
+import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 import org.inventivetalent.murder.player.PlayerData;
 
-import java.util.Iterator;
-import java.util.Set;
-
-public class TeleportExecutor extends CountdownExecutor {
+public class ResetExecutor extends LeavableExecutor {
 
 	boolean firstTick = true;
 
-	public TeleportExecutor(Game game) {
-		super(game, CountdownType.START);
+	public ResetExecutor(Game game) {
+		super(game);
 	}
 
 	@Override
@@ -54,13 +48,15 @@ public class TeleportExecutor extends CountdownExecutor {
 		super.tick();
 		if (firstTick) {
 			firstTick = false;
-
-			final Set<SpawnPoint> spawnPoints = game.arena.getSpawnPoints(SpawnType.PLAYER);
-			final Iterator<SpawnPoint> iterator = Iterables.cycle(spawnPoints).iterator();
-			updatePlayerStates(GameState.TELEPORT, new Predicate<PlayerData>() {
+			updatePlayerStates(GameState.RESET, new Predicate<PlayerData>() {
 				@Override
 				public boolean apply(PlayerData playerData) {
-					playerData.getPlayer().teleport(iterator.next().getLocation(game.arena.getWorld()));
+					if (playerData.getOfflinePlayer().isOnline()) {
+						//Restore data and delete data file
+						playerData.restoreData();
+						Murder.instance.playerManager.deleteDataFile(playerData.uuid);
+					}
+
 					return true;
 				}
 			});
