@@ -69,7 +69,7 @@ public class SkinManager {
 	public void load(Iterable<String> colorCodes) throws ParseException, IOException {
 		if (!localSkinStorage.exists()) {
 			localSkinStorage.mkdirs();
-			plugin.getLogger().info("Local Skin-Storage doesn't exist. Download original skins...");
+			plugin.getLogger().info("Local Skin-Storage doesn't exist. Downloading original skins...");
 			for (final String color : colorCodes) {
 				load(color.substring(1, 2));
 				load(color.substring(1, 2) + "b");
@@ -106,7 +106,7 @@ public class SkinManager {
 				}
 			});
 			JSONObject json = (JSONObject) new JSONParser().parse(string);
-			plugin.getLogger().info("§8Loaded skin data for §7" + name);
+			plugin.getLogger().info("Loaded skin data for " + name);
 			plugin.getNickManager().loadCustomSkin(name, json);
 			File localFile = new File(localSkinStorage, name + ".skin");
 			localFile.createNewFile();

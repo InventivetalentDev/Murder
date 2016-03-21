@@ -55,6 +55,8 @@
                   <include>org.inventivetalent:bossbarapi**</include>
                   <include>org.inventivetalent:playerversion**</include>
                   <include>org.inventivetalent:titleapi**</include>
+                  <include>org.inventivetalent:messagebuilder**</include>
+                  <include>org.inventivetalent:itembuilder**</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -152,12 +154,6 @@
       <groupId>org.inventivetalent.npclib</groupId>
       <artifactId>api</artifactId>
       <version>[1.8.3,)</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.inventivetalent</groupId>
-      <artifactId>messagebuilder</artifactId>
-      <version>[1.0.0,)</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
