@@ -28,11 +28,15 @@
 
 package org.inventivetalent.murder.player;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -143,6 +147,57 @@ public class StoredData extends BasicPlayerData {
 		storedFlying = false;
 
 		stored = false;
+	}
+
+	public void saveToFile(File file) {
+		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+		configuration.set("inventory", new ArrayList<>(Arrays.asList(storedInventory)));
+		configuration.set("extra", new ArrayList<>(Arrays.asList(storedExtra)));
+		configuration.set("armor", new ArrayList<>(Arrays.asList(storedArmor)));
+		configuration.set("world", storedLocation != null ? storedLocation.getWorld().getName() : null);
+		configuration.set("location", storedLocation.toVector());
+		configuration.set("gamemode", storedGameMode.name());
+		configuration.set("exp", storedExp);
+		configuration.set("level", storedLevel);
+		configuration.set("fireticks", storedFireTicks);
+		configuration.set("maxhealth", storedMaxHealth);
+		configuration.set("health", storedHealth);
+		configuration.set("food", storedFood);
+		configuration.set("saturation", storedSaturation);
+		configuration.set("exhaustion", storedExhaustion);
+		configuration.set("flyspeed", storedFlySpeed);
+		configuration.set("walkspeed", storedWalkSpeed);
+		configuration.set("allowflight", storedAllowFlight);
+		configuration.set("flying", storedFlying);
+
+		try {
+			configuration.save(file);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to save data for " + uuid);
+		}
+	}
+
+	public void loadFromFile(File file) {
+		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+
+		storedInventory = (ItemStack[]) configuration.getList("inventory", new ArrayList<ItemStack>()).toArray();
+		storedExtra = (ItemStack[]) configuration.getList("extra", new ArrayList<ItemStack>()).toArray();
+		storedArmor = (ItemStack[]) configuration.getList("armor", new ArrayList<ItemStack>()).toArray();
+		storedLocation = configuration.getVector("location").toLocation(Bukkit.getWorld(configuration.getString("world")));
+		storedGameMode = GameMode.valueOf(configuration.getString("gamemode"));
+		storedExp = (float) configuration.getDouble("exp");
+		storedLevel = configuration.getInt("level");
+		storedFireTicks = configuration.getInt("fireticks");
+		storedMaxHealth = configuration.getDouble("maxhealth");
+		storedHealth = configuration.getDouble("health");
+		storedFood = configuration.getInt("food");
+		storedSaturation = configuration.getInt("saturation");
+		storedExhaustion = (float) configuration.getDouble("exhaustion");
+		storedFlySpeed = configuration.getInt("flyspeed");
+		storedWalkSpeed = configuration.getInt("walkspeed");
+		storedAllowFlight = configuration.getBoolean("allowflight");
+		storedFlying = configuration.getBoolean("flying");
 	}
 
 	@Override

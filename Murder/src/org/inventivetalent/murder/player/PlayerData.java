@@ -41,6 +41,8 @@ public class PlayerData extends StoredData {
 	public GameState gameState = GameState.WAITING;
 	public Role role;
 
+	public boolean killed = false;
+
 	public BossBar bossBar;
 
 	public PlayerData(UUID uuid) {

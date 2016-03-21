@@ -1,9 +1,49 @@
 # Whether to restore player data (inventory, experience, location, ...) after the game ended
 storePlayerData: true
 
+# Countdown (in seconds)
 countdown:
   lobby: 20
   start: 10
+
+loot:
+  # Delay until loot starts to drop (seconds)
+  delay: 20
+
+  # Interval of loot drops (seconds)
+  interval: 60
+
+items:
+  knife:
+    type: "DIAMOND_AXE" #Don't change this, unless you have a custom resource pack
+    meta:
+      display: "&c&lKnife"
+      enchants:
+      - "DAMAGE_ALLx8-f"
+  gun:
+    type: "DIAMOND_HOE" #Don't change this, unless you have a custom resource pack
+    meta:
+      display: "&9&l"
+  bullet:
+    type: "ARROW" #Don't change this, unless you have a custom resource pack
+    meta:
+      display: "&8Bullet"
+  loot:
+    type: "DIAMOND" #Don't change this, unless you have a custom resource pack
+  nameInfo:
+    type: "NAME_TAG"
+    meta:
+      display: "%s" #%s gets replaced by the player's nametag
+      enchants:
+      - "DURABILITYx1-f"
+  speedBoost:
+    type: "SUGAR"
+    meta:
+      display: "&7Speed Boost"
+  teleporter:
+    type: "COMPASS"
+    meta:
+      display: "&7Teleporter"
 
 messages:
   role:

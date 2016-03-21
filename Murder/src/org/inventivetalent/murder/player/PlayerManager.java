@@ -34,6 +34,7 @@ import org.inventivetalent.pluginannotations.config.ConfigValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -43,11 +44,16 @@ public class PlayerManager {
 	private Murder plugin;
 
 	@ConfigValue(path = "storePlayerData") public boolean storePlayerData;
+	public                                        File    dataFolder;
 
 	public final Map<UUID, PlayerData> dataMap = new HashMap<>();
 
 	public PlayerManager(Murder plugin) {
 		this.plugin = plugin;
+		dataFolder = new File(plugin.getDataFolder(), "playerdata");
+		if (!dataFolder.exists()) {
+			dataFolder.mkdirs();
+		}
 	}
 
 	@Nullable
@@ -70,6 +76,38 @@ public class PlayerManager {
 			return dataMap.remove(uuid);
 		}
 		return null;
+	}
+
+	@Nonnull
+	public File saveDataToFile(PlayerData toSave) {
+		try {
+			File file = new File(dataFolder, toSave.uuid.toString());
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			toSave.saveToFile(file);
+			return file;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Nonnull
+	public PlayerData loadFromFile(UUID uuid) {
+		try {
+			File file = new File(dataFolder, uuid.toString());
+			PlayerData data = getOrCreateData(uuid);
+			if (!file.exists()) { return data; }
+			data.loadFromFile(file);
+			return data;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public boolean deleteDataFile(UUID uuid) {
+		File file = new File(dataFolder, uuid.toString());
+		return file.delete();
 	}
 
 	public void disguisePlayer(@Nonnull OfflinePlayer player, @Nonnull String name) {

@@ -26,56 +26,54 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.starting;
+package org.inventivetalent.murder.game.state.executor.ingame;
 
-import com.google.common.base.Predicate;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.inventivetalent.murder.game.CountdownType;
+import org.inventivetalent.murder.Murder;
+import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
+import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 import org.inventivetalent.murder.player.PlayerData;
 
-public class StartingExecutor extends CountdownExecutor {
+import java.util.UUID;
 
-	boolean firstTick = true;
+public class IngameExecutor extends LeavableExecutor {
 
-	public StartingExecutor(Game game) {
-		super(game, CountdownType.START);
+	public IngameExecutor(Game game) {
+		super(game);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		if (firstTick) {
-			firstTick = false;
-
-			updatePlayerStates(GameState.STARTING, new Predicate<PlayerData>() {
-				@Override
-				public boolean apply(PlayerData playerData) {
-					Player player = playerData.getPlayer();
-
-					//Make the screen dark
-					player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 2, false, false));
-					player.getInventory().setHelmet(new ItemStack(Material.PUMPKIN));
-
-					//Prevent movement
-					player.setWalkSpeed(0);
-					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 250, false, false));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 255, false, false));
-
-					return true;
-				}
-			});
-		}
 	}
 
 	@Override
 	public boolean finished() {
-		return !firstTick;
+		if (game.players.size() <= 0) {
+			return true;
+		}
+
+		UUID murdererId = game.getMurderer();
+		PlayerData murdererData = Murder.instance.playerManager.getData(murdererId);
+		if (murdererId == null || murdererData == null || murdererData.killed || !murdererData.getOfflinePlayer().isOnline()) {
+			//Murderer left or was killed - bystanders won
+			game.winner = Role.WEAPON;
+			return true;
+		}
+
+		int aliveCount = 0;
+		for (UUID bystanderId : game.getBystanders(true, true)) {
+			PlayerData bystanderData = Murder.instance.playerManager.getData(bystanderId);
+			if (bystanderData != null && !bystanderData.killed && bystanderData.getOfflinePlayer().isOnline()) {
+				aliveCount++;
+			}
+		}
+		if (aliveCount <= 0) {
+			//All bystanders left or were killed by the murderer - murderer won
+			game.winner = Role.MURDERER;
+			return true;
+		}
+
+		return false;
 	}
 }

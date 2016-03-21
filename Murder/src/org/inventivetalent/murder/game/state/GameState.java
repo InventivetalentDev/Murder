@@ -30,6 +30,8 @@ package org.inventivetalent.murder.game.state;
 
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
+import org.inventivetalent.murder.game.state.executor.ingame.DropLootExecutor;
+import org.inventivetalent.murder.game.state.executor.ingame.StartedExecutor;
 import org.inventivetalent.murder.game.state.executor.init.WaitingExecutor;
 import org.inventivetalent.murder.game.state.executor.lobby.LobbyExecutor;
 import org.inventivetalent.murder.game.state.executor.starting.AssignExecutor;
@@ -54,8 +56,8 @@ public enum GameState {
 	ASSIGN(AssignExecutor.class),
 
 	/* Ingame States */
-	STARTED("started.sign"),
-	DROP_LOOT,
+	STARTED("started.sign", StartedExecutor.class),
+	DROP_LOOT(DropLootExecutor.class),
 
 	/* End States */
 	ENDED("ended.sign"),
@@ -129,7 +131,7 @@ public enum GameState {
 	}
 
 	public static GameState forExecutor(Class<? extends StateExecutor> executorClass) {
-		if(executorClass==null)return null;
+		if (executorClass == null) { return null; }
 		for (GameState state : values()) {
 			if (executorClass.equals(state.executorClass)) {
 				return state;

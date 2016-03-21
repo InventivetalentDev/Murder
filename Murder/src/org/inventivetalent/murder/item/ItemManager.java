@@ -26,56 +26,51 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.starting;
+package org.inventivetalent.murder.item;
 
-import com.google.common.base.Predicate;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.inventivetalent.murder.game.CountdownType;
-import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
-import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.itembuilder.ItemBuilder;
+import org.inventivetalent.murder.Murder;
 
-public class StartingExecutor extends CountdownExecutor {
+public class ItemManager {
 
-	boolean firstTick = true;
+	private Murder               plugin;
+	public  ConfigurationSection itemSection;
 
-	public StartingExecutor(Game game) {
-		super(game, CountdownType.START);
+	public ItemManager(Murder plugin) {
+		this.plugin = plugin;
+		itemSection = plugin.getConfig().getConfigurationSection("items");
 	}
 
-	@Override
-	public void tick() {
-		super.tick();
-		if (firstTick) {
-			firstTick = false;
-
-			updatePlayerStates(GameState.STARTING, new Predicate<PlayerData>() {
-				@Override
-				public boolean apply(PlayerData playerData) {
-					Player player = playerData.getPlayer();
-
-					//Make the screen dark
-					player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 2, false, false));
-					player.getInventory().setHelmet(new ItemStack(Material.PUMPKIN));
-
-					//Prevent movement
-					player.setWalkSpeed(0);
-					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 250, false, false));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 255, false, false));
-
-					return true;
-				}
-			});
-		}
+	public ItemStack getKnife() {
+		return new ItemBuilder(Material.DIAMOND_AXE).fromConfig(itemSection.getConfigurationSection("knife")).build();
 	}
 
-	@Override
-	public boolean finished() {
-		return !firstTick;
+	public ItemStack getGun() {
+		return new ItemBuilder(Material.DIAMOND_HOE).fromConfig(itemSection.getConfigurationSection("gun")).build();
 	}
+
+	public ItemStack getBullet() {
+		return new ItemBuilder(Material.ARROW).fromConfig(itemSection.getConfigurationSection("bullet")).build();
+	}
+
+	public ItemStack getLoot() {
+		return new ItemBuilder(Material.DIAMOND).fromConfig(itemSection.getConfigurationSection("loot")).build();
+	}
+
+	public ItemStack getNameInfo(String name) {
+		//noinspection ConstantConditions
+		return new ItemBuilder(Material.NAME_TAG).fromConfig(itemSection.getConfigurationSection("nameInfo")).buildMeta().withFormat("%s", name).item().build();
+	}
+
+	public ItemStack getSpeedBoost() {
+		return new ItemBuilder(Material.SUGAR).fromConfig(itemSection.getConfigurationSection("speedBoost")).build();
+	}
+
+	public ItemStack getTeleporter() {
+		return new ItemBuilder(Material.COMPASS).fromConfig(itemSection.getConfigurationSection("teleporter")).build();
+	}
+
 }

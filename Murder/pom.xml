@@ -88,6 +88,8 @@
                                     <include>org.inventivetalent:bossbarapi**</include>
                                     <include>org.inventivetalent:playerversion**</include>
                                     <include>org.inventivetalent:titleapi**</include>
+                                    <include>org.inventivetalent:messagebuilder**</include>
+                                    <include>org.inventivetalent:itembuilder**</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -196,6 +198,11 @@
             <groupId>org.inventivetalent</groupId>
             <artifactId>messagebuilder</artifactId>
             <version>[1.0.0,)</version>
+        </dependency>
+        <dependency>
+            <groupId>org.inventivetalent</groupId>
+            <artifactId>itembuilder</artifactId>
+            <version>[1.0.9,)</version>
         </dependency>
     </dependencies>
 

@@ -32,6 +32,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.inventivetalent.murder.Murder;
+import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.arena.Arena;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.StateExecutor;
@@ -62,6 +63,10 @@ public class Game {
 
 	public int lobbyCountdown;
 	public int startCountdown;
+
+	public Role winner = Role.WEAPON;// WEAPON = bystanders, MURDERER = murderer
+
+	public boolean droppingLoot;//Set to true after the drop-delay is over
 
 	public Game(Arena arena) {
 		this.gameId = UUID.randomUUID();
@@ -115,6 +120,50 @@ public class Game {
 		for (UUID uuid : players) {
 			getPlayer(uuid).sendMessage(message);
 		}
+	}
+
+	public int countBystanders(boolean includeDefault, boolean includeWeapon) {
+		int count = 0;
+		for (UUID uuid : players) {
+			PlayerData data = Murder.instance.playerManager.getData(uuid);
+			if (data != null) {
+				if (data.role != null) {
+					if (includeDefault && data.role == Role.DEFAULT) { count++; }
+					if (includeWeapon && data.role == Role.WEAPON) { count++; }
+				}
+			}
+		}
+		return count;
+	}
+
+	public Set<UUID> getBystanders(boolean includeDefault, boolean includeWeapon) {
+		Set<UUID> uuids = new HashSet<>();
+		for (UUID uuid : players) {
+			PlayerData data = Murder.instance.playerManager.getData(uuid);
+			if (data != null) {
+				if (data.role != null) {
+					if (includeDefault && data.role == Role.DEFAULT) {
+						uuids.add(uuid);
+					}
+					if (includeWeapon && data.role == Role.WEAPON) {
+						uuids.add(uuid);
+					}
+				}
+			}
+		}
+		return uuids;
+	}
+
+	public UUID getMurderer() {
+		for (UUID uuid : players) {
+			PlayerData data = Murder.instance.playerManager.getData(uuid);
+			if (data != null) {
+				if (data.role != null) {
+					if (data.role == Role.MURDERER) { return uuid; }
+				}
+			}
+		}
+		return null;
 	}
 
 	public Player getPlayer(UUID uuid) {

@@ -37,10 +37,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.inventivetalent.apihelper.APIManager;
 import org.inventivetalent.bossbar.BossBarAPI;
-import org.inventivetalent.messagebuilder.MessageBuilder;
-import org.inventivetalent.messagebuilder.MessageContainer;
 import org.inventivetalent.murder.arena.ArenaManager;
 import org.inventivetalent.murder.game.GameManager;
+import org.inventivetalent.murder.item.ItemManager;
 import org.inventivetalent.murder.name.NameManager;
 import org.inventivetalent.murder.player.PlayerManager;
 import org.inventivetalent.murder.skin.SkinManager;
@@ -65,8 +64,7 @@ public class Murder extends JavaPlugin {
 	public NameManager   nameManager;
 	public SkinManager   skinManager;
 	public PlayerManager playerManager;
-
-	public MessageContainer messages;
+	public ItemManager   itemManager;
 
 	public File arenaFile = new File(getDataFolder(), "arenas.json");
 	boolean firstStart = !arenaFile.exists();
@@ -75,6 +73,9 @@ public class Murder extends JavaPlugin {
 
 	@ConfigValue(path = "countdown.lobby") public int lobbyTime;
 	@ConfigValue(path = "countdown.start") public int startTime;
+
+	@ConfigValue(path = "loot.delay") public    int lootDelay;
+	@ConfigValue(path = "loot.interval") public int lootInterval;
 
 	@Override
 	public void onLoad() {
@@ -108,7 +109,7 @@ public class Murder extends JavaPlugin {
 		} else {
 			getLogger().info("Found NickNamer");
 		}
-		if (!Bukkit.getPluginManager().isPluginEnabled("ResourcePackApi")  || !Bukkit.getPluginManager().isPluginEnabled("NPCLib")) {
+		if (!Bukkit.getPluginManager().isPluginEnabled("ResourcePackApi") || !Bukkit.getPluginManager().isPluginEnabled("NPCLib")) {
 			getLogger().warning("**************************************");
 			getLogger().warning(" ");
 			getLogger().warning("     It is recommended to install     ");
@@ -137,13 +138,7 @@ public class Murder extends JavaPlugin {
 		nameManager = new NameManager(this);
 		skinManager = new SkinManager(this);
 		playerManager = new PlayerManager(this);
-
-		MessageBuilder messageBuilder = new MessageBuilder()//
-				.withMessage("role.default.name", "§9Bystander")//
-				.withMessage("role.murderer.name", "§cMurderer")//
-				.withMessage("role.weapon.name", "§9Bystander")//
-				;
-		messages = messageBuilder.fromConfig(getConfig().getConfigurationSection("messages")).build();
+		itemManager = new ItemManager(this);
 
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
 			@Override

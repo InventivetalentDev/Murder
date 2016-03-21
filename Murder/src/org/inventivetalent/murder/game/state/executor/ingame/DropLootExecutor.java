@@ -26,56 +26,70 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.starting;
+package org.inventivetalent.murder.game.state.executor.ingame;
 
-import com.google.common.base.Predicate;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.inventivetalent.murder.game.CountdownType;
+import org.inventivetalent.murder.Murder;
+import org.inventivetalent.murder.arena.spawn.SpawnPoint;
+import org.inventivetalent.murder.arena.spawn.SpawnType;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
-import org.inventivetalent.murder.player.PlayerData;
 
-public class StartingExecutor extends CountdownExecutor {
+import java.util.ArrayList;
+import java.util.List;
 
-	boolean firstTick = true;
+public class DropLootExecutor extends IngameExecutor {
 
-	public StartingExecutor(Game game) {
-		super(game, CountdownType.START);
+	boolean firstTick   = true;
+	int     lootSeconds = 0;
+
+	List<SpawnPoint> lootSpawnPoints;
+	int dropIndex = 0;
+
+	public DropLootExecutor(Game game) {
+		super(game);
+		game.ticks = 0;
+		lootSpawnPoints = new ArrayList<>(game.arena.getSpawnPoints(SpawnType.LOOT));
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
+
 		if (firstTick) {
 			firstTick = false;
+			updatePlayerStates(GameState.DROP_LOOT, null);
+		} else {
+			game.ticks++;
+			if (game.ticks >= 20) {
+				lootSeconds++;
+				if (!game.droppingLoot) {// wait until the delay is over
+					if (lootSeconds >= Murder.instance.lootDelay) {
+						lootSeconds = 0;
+						game.droppingLoot = true;
+					}
+				} else {// drop loot
+					if (lootSeconds >= Murder.instance.lootInterval) {
+						lootSeconds = 0;
 
-			updatePlayerStates(GameState.STARTING, new Predicate<PlayerData>() {
-				@Override
-				public boolean apply(PlayerData playerData) {
-					Player player = playerData.getPlayer();
+						if (!lootSpawnPoints.isEmpty()) {
+							if (dropIndex >= lootSpawnPoints.size()) {
+								dropIndex = 0;
+							}
+							SpawnPoint point = lootSpawnPoints.get(dropIndex);
+							game.arena.getWorld().dropItemNaturally(point.getLocation(game.arena.getWorld()), Murder.instance.itemManager.getLoot());
 
-					//Make the screen dark
-					player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 2, false, false));
-					player.getInventory().setHelmet(new ItemStack(Material.PUMPKIN));
-
-					//Prevent movement
-					player.setWalkSpeed(0);
-					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 250, false, false));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 255, false, false));
-
-					return true;
+							dropIndex++;
+						}
+					}
 				}
-			});
+
+				game.ticks = 0;
+			}
 		}
 	}
 
 	@Override
 	public boolean finished() {
-		return !firstTick;
+		return super.finished();
 	}
 }
