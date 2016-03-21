@@ -61,20 +61,20 @@ messages:
   role:
     default:
       name: "&9Bystander"
-      title: "&9You are a ${role.default.name}"
+      title: "&9You are a ${default.name}"
       subtitle: ""
       objective: "&e&lSurvive &e&land try to find out who the &c&lMurderer &e&lis!"
       bossbar:
-        text: "%s                ${role.default.name}"
+        text: "%s                ${default.name}"
         color: "BLUE"
         style: "PROGRESS"
     murderer:
       name: "&cMurderer"
-      title: "&cYou are the ${role.murderer.name}"
+      title: "&cYou are the ${murderer.name}"
       subtitle: ""
       objective: "&e&lKill all &9&lBystanders&e&l, but don't act suspicious!"
       bossbar:
-        text: "%s                ${role.murderer.name}"
+        text: "%s                ${murderer.name}"
         color: "RED"
         style: "NOTCHED_10"
     weapon:
@@ -83,7 +83,7 @@ messages:
       subtitle: "&9with a secret weapon"
       objective: "&e&lFind the &c&lMurderer &e&land kill them with your &9&lsecret Weapon&e!"
       bossbar:
-        text: "%s                ${role.weapon.name}"
+        text: "%s                ${weapon.name}"
         color: "BLUE"
         style: "NOTCHED_10"
     spectator:
