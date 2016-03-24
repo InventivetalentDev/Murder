@@ -74,7 +74,7 @@ public class ArenaCommands {
 		if (action == ArenaAction.FINISH || action == ArenaAction.CANCEL) {
 			editor = plugin.arenaEditorManager.getEditor(sender.getUniqueId());
 		}
-		if (action == ArenaAction.EDIT || action == ArenaAction.REMOVE) {
+		if (action == ArenaAction.CREATE || action == ArenaAction.EDIT || action == ArenaAction.REMOVE) {
 			if (name == null) {
 				throw new InvalidLengthException(2, 1);
 			}
@@ -121,7 +121,7 @@ public class ArenaCommands {
 			if (playerData.stored) {
 				sender.getInventory().clear();
 				playerData.restoreData();
-//				Murder.instance.playerManager.deleteDataFile(playerData.uuid);
+				//				Murder.instance.playerManager.deleteDataFile(playerData.uuid);
 			}
 			return;
 		}
@@ -133,7 +133,7 @@ public class ArenaCommands {
 			if (playerData.stored) {
 				sender.getInventory().clear();
 				playerData.restoreData();
-//				Murder.instance.playerManager.deleteDataFile(playerData.uuid);
+				//				Murder.instance.playerManager.deleteDataFile(playerData.uuid);
 			}
 
 			sender.sendMessage(MESSAGE_LOADER.getMessage("canceled", "canceled"));
