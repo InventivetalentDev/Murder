@@ -26,49 +26,45 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.ended;
+package org.inventivetalent.murder.arena.editor;
 
-import com.google.common.base.Predicate;
 import org.inventivetalent.murder.Murder;
-import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
-import org.inventivetalent.murder.player.PlayerData;
-import org.inventivetalent.rpapi.ResourcePackAPI;
 
-public class ResetExecutor extends LeavableExecutor {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
-	boolean firstTick = true;
+public class ArenaEditorManager {
 
-	public ResetExecutor(Game game) {
-		super(game);
+	private Murder plugin;
+
+	public Map<UUID, ArenaEditor> editorMap = new HashMap<>();
+
+	public ArenaEditorManager(Murder plugin) {
+		this.plugin = plugin;
 	}
 
-	@Override
-	public void tick() {
-		super.tick();
-		if (firstTick) {
-			firstTick = false;
-			updatePlayerStates(GameState.RESET, new Predicate<PlayerData>() {
-				@Override
-				public boolean apply(PlayerData playerData) {
-					if (playerData.getOfflinePlayer().isOnline()) {
-						//Restore data and delete data file
-						playerData.restoreData();
-//						Murder.instance.playerManager.deleteDataFile(playerData.uuid);
-
-						//Reset resource pack
-						ResourcePackAPI.setResourcepack(playerData.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
-					}
-
-					return true;
-				}
-			});
+	public ArenaEditor getEditor(UUID uuid) {
+		if (editorMap.containsKey(uuid)) {
+			return editorMap.get(uuid);
 		}
+		return null;
 	}
 
-	@Override
-	public boolean finished() {
-		return super.finished() || !firstTick;
+	public boolean isEditing(UUID uuid) {
+		return editorMap.containsKey(uuid);
 	}
+
+	public ArenaEditor newEditor(UUID uuid) {
+		removeEditor(uuid);
+
+		ArenaEditor editor = new ArenaEditor(uuid);
+		editorMap.put(uuid, editor);
+		return editor;
+	}
+
+	public ArenaEditor removeEditor(UUID uuid) {
+		return editorMap.remove(uuid);
+	}
+
 }

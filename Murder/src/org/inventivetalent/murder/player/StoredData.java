@@ -34,10 +34,12 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.inventivetalent.murder.Murder;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class StoredData extends BasicPlayerData {
@@ -71,7 +73,7 @@ public class StoredData extends BasicPlayerData {
 
 		Player player = getPlayer();
 		storedInventory = player.getInventory().getContents();
-		storedExtra = player.getInventory().getExtraContents();
+		//		storedExtra = player.getInventory().getExtraContents();
 		storedArmor = player.getInventory().getArmorContents();
 		storedLocation = player.getLocation();
 		storedGameMode = player.getGameMode();
@@ -111,7 +113,7 @@ public class StoredData extends BasicPlayerData {
 
 		Player player = getPlayer();
 		player.getInventory().setContents(storedInventory);
-		player.getInventory().setExtraContents(storedExtra);
+		//		player.getInventory().setExtraContents(storedExtra);
 		player.getInventory().setArmorContents(storedArmor);
 		player.teleport(storedLocation);
 		player.setGameMode(storedGameMode);
@@ -147,14 +149,16 @@ public class StoredData extends BasicPlayerData {
 		storedFlying = false;
 
 		stored = false;
+
+		Murder.instance.playerManager.deleteDataFile(uuid);
 	}
 
 	public void saveToFile(File file) {
 		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
-		configuration.set("inventory", new ArrayList<>(Arrays.asList(storedInventory)));
-		configuration.set("extra", new ArrayList<>(Arrays.asList(storedExtra)));
-		configuration.set("armor", new ArrayList<>(Arrays.asList(storedArmor)));
+		configuration.set("inventory", new ArrayList<ItemStack>(Arrays.asList(storedInventory)));
+		//		configuration.set("extra", new ArrayList<>(Arrays.asList(storedExtra)));
+		configuration.set("armor", new ArrayList<ItemStack>(Arrays.asList(storedArmor)));
 		configuration.set("world", storedLocation != null ? storedLocation.getWorld().getName() : null);
 		configuration.set("location", storedLocation.toVector());
 		configuration.set("gamemode", storedGameMode.name());
@@ -181,9 +185,9 @@ public class StoredData extends BasicPlayerData {
 	public void loadFromFile(File file) {
 		YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
-		storedInventory = (ItemStack[]) configuration.getList("inventory", new ArrayList<ItemStack>()).toArray();
-		storedExtra = (ItemStack[]) configuration.getList("extra", new ArrayList<ItemStack>()).toArray();
-		storedArmor = (ItemStack[]) configuration.getList("armor", new ArrayList<ItemStack>()).toArray();
+		storedInventory = ((List<ItemStack>) configuration.getList("inventory")).toArray(new ItemStack[0]);
+		//		storedExtra = (ItemStack[]) configuration.getList("extra", new ArrayList<ItemStack>()).toArray();
+		storedArmor = ((List<ItemStack>) configuration.getList("armor")).toArray(new ItemStack[0]);
 		storedLocation = configuration.getVector("location").toLocation(Bukkit.getWorld(configuration.getString("world")));
 		storedGameMode = GameMode.valueOf(configuration.getString("gamemode"));
 		storedExp = (float) configuration.getDouble("exp");
@@ -192,10 +196,10 @@ public class StoredData extends BasicPlayerData {
 		storedMaxHealth = configuration.getDouble("maxhealth");
 		storedHealth = configuration.getDouble("health");
 		storedFood = configuration.getInt("food");
-		storedSaturation = configuration.getInt("saturation");
+		storedSaturation = (float) configuration.getDouble("saturation");
 		storedExhaustion = (float) configuration.getDouble("exhaustion");
-		storedFlySpeed = configuration.getInt("flyspeed");
-		storedWalkSpeed = configuration.getInt("walkspeed");
+		storedFlySpeed = (float) configuration.getDouble("flyspeed");
+		storedWalkSpeed = (float) configuration.getDouble("walkspeed");
 		storedAllowFlight = configuration.getBoolean("allowflight");
 		storedFlying = configuration.getBoolean("flying");
 	}

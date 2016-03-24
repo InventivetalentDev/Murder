@@ -31,18 +31,22 @@ package org.inventivetalent.murder;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 import org.inventivetalent.apihelper.APIManager;
 import org.inventivetalent.bossbar.BossBarAPI;
 import org.inventivetalent.murder.arena.ArenaManager;
+import org.inventivetalent.murder.arena.editor.ArenaEditorManager;
+import org.inventivetalent.murder.command.ArenaCommands;
 import org.inventivetalent.murder.game.GameManager;
 import org.inventivetalent.murder.item.ItemManager;
+import org.inventivetalent.murder.listener.DataListener;
+import org.inventivetalent.murder.listener.EditorListener;
 import org.inventivetalent.murder.name.NameManager;
 import org.inventivetalent.murder.player.PlayerManager;
 import org.inventivetalent.murder.skin.SkinManager;
+import org.inventivetalent.murder.task.ArenaOutlineTask;
 import org.inventivetalent.nicknamer.api.INickNamer;
 import org.inventivetalent.nicknamer.api.NickManager;
 import org.inventivetalent.packetlistener.PacketListenerAPI;
@@ -59,12 +63,20 @@ public class Murder extends JavaPlugin {
 
 	public static Murder instance;
 
-	public ArenaManager  arenaManager;
-	public GameManager   gameManager;
-	public NameManager   nameManager;
-	public SkinManager   skinManager;
-	public PlayerManager playerManager;
-	public ItemManager   itemManager;
+	public ArenaManager       arenaManager;
+	public GameManager        gameManager;
+	public NameManager        nameManager;
+	public SkinManager        skinManager;
+	public PlayerManager      playerManager;
+	public ItemManager        itemManager;
+	public ArenaEditorManager arenaEditorManager;
+
+	public EditorListener editorListener;
+	public DataListener   dataListener;
+
+	public ArenaCommands arenaCommands;
+
+	public ArenaOutlineTask arenaOutlineTask;
 
 	public File arenaFile = new File(getDataFolder(), "arenas.json");
 	boolean firstStart = !arenaFile.exists();
@@ -84,6 +96,8 @@ public class Murder extends JavaPlugin {
 	@ConfigValue(path = "resourcepack.reset.url") public  String resetPackUrl;
 	@ConfigValue(path = "resourcepack.reset.hash") public String resetPackHash;
 
+	@ConfigValue(path = "players.min") public int minPlayers;
+
 	@Override
 	public void onLoad() {
 		APIManager.require(PacketListenerAPI.class, this);
@@ -92,18 +106,18 @@ public class Murder extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		if (!Bukkit.getPluginManager().isPluginEnabled("WorldEdit")) {
-			getLogger().severe("****************************************");
-			getLogger().severe(" ");
-			getLogger().severe("         Please install WorldEdit        ");
-			getLogger().severe("http://dev.bukkit.org/bukkit-plugins/worldedit");
-			getLogger().severe(" ");
-			getLogger().severe("****************************************");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
-		} else {
-			getLogger().info("Found WorldEdit");
-		}
+		//		if (!Bukkit.getPluginManager().isPluginEnabled("WorldEdit")) {
+		//			getLogger().severe("****************************************");
+		//			getLogger().severe(" ");
+		//			getLogger().severe("         Please install WorldEdit        ");
+		//			getLogger().severe("http://dev.bukkit.org/bukkit-plugins/worldedit");
+		//			getLogger().severe(" ");
+		//			getLogger().severe("****************************************");
+		//			Bukkit.getPluginManager().disablePlugin(this);
+		//			return;
+		//		} else {
+		//			getLogger().info("Found WorldEdit");
+		//		}
 		if (!Bukkit.getPluginManager().isPluginEnabled("NickNamer")) {
 			getLogger().severe("****************************************");
 			getLogger().severe(" ");
@@ -120,7 +134,7 @@ public class Murder extends JavaPlugin {
 			getLogger().warning("**************************************");
 			getLogger().warning(" ");
 			getLogger().warning("     It is recommended to install     ");
-			getLogger().warning("  ResourcePackApi & NPCLib  ");
+			getLogger().warning("       ResourcePackApi & NPCLib       ");
 			getLogger().warning("       https://r.spiget.org/2397      ");
 			getLogger().warning("       https://r.spiget.org/5853      ");
 			getLogger().warning(" ");
@@ -146,6 +160,15 @@ public class Murder extends JavaPlugin {
 		skinManager = new SkinManager(this);
 		playerManager = new PlayerManager(this);
 		itemManager = new ItemManager(this);
+		arenaEditorManager = new ArenaEditorManager(this);
+
+		Bukkit.getPluginManager().registerEvents(editorListener = new EditorListener(this), this);
+		Bukkit.getPluginManager().registerEvents(dataListener = new DataListener(this), this);
+
+		PluginAnnotations.COMMAND.registerCommands(this, arenaCommands = new ArenaCommands(this));
+
+		arenaOutlineTask = new ArenaOutlineTask(this);
+		arenaOutlineTask.runTaskTimer(this, 10, 10);
 
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
 			@Override
@@ -156,9 +179,15 @@ public class Murder extends JavaPlugin {
 		}, 20);
 	}
 
-	public WorldEdit getWorldEdit() {
-		return ((WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit")).getWorldEdit();
+	@Override
+	public void onDisable() {
+		getLogger().info("Saving data...");
+		saveData();
 	}
+
+	//	public WorldEdit getWorldEdit() {
+	//		return ((WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit")).getWorldEdit();
+	//	}
 
 	public NickManager getNickManager() {
 		return ((INickNamer) Bukkit.getPluginManager().getPlugin("NickNamer")).getAPI();
@@ -178,7 +207,7 @@ public class Murder extends JavaPlugin {
 		}
 	}
 
-	void writeJson(JsonElement jsonElement, File file) {
+	public void writeJson(JsonElement jsonElement, File file) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonElement));
@@ -187,6 +216,14 @@ public class Murder extends JavaPlugin {
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to write json", e);
 		}
+	}
+
+	public Vector minVector(Vector a, Vector b) {
+		return new Vector(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
+	}
+
+	public Vector maxVector(Vector a, Vector b) {
+		return new Vector(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
 	}
 
 }

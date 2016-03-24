@@ -26,49 +26,34 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.ended;
+package org.inventivetalent.murder.listener;
 
-import com.google.common.base.Predicate;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.inventivetalent.murder.Murder;
-import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 import org.inventivetalent.murder.player.PlayerData;
-import org.inventivetalent.rpapi.ResourcePackAPI;
 
-public class ResetExecutor extends LeavableExecutor {
+public class DataListener implements Listener {
 
-	boolean firstTick = true;
+	private Murder plugin;
 
-	public ResetExecutor(Game game) {
-		super(game);
+	public DataListener(Murder plugin) {
+		this.plugin = plugin;
 	}
 
-	@Override
-	public void tick() {
-		super.tick();
-		if (firstTick) {
-			firstTick = false;
-			updatePlayerStates(GameState.RESET, new Predicate<PlayerData>() {
+	@EventHandler
+	public void onJoin(final PlayerJoinEvent event) {
+		final PlayerData playerData = plugin.playerManager.loadFromFile(event.getPlayer().getUniqueId());
+		if (playerData.stored) {
+			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 				@Override
-				public boolean apply(PlayerData playerData) {
-					if (playerData.getOfflinePlayer().isOnline()) {
-						//Restore data and delete data file
-						playerData.restoreData();
-//						Murder.instance.playerManager.deleteDataFile(playerData.uuid);
-
-						//Reset resource pack
-						ResourcePackAPI.setResourcepack(playerData.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
-					}
-
-					return true;
+				public void run() {
+					if (event.getPlayer().isOnline() && playerData.stored) { playerData.restoreData(); }
 				}
-			});
+			}, 10);
 		}
 	}
 
-	@Override
-	public boolean finished() {
-		return super.finished() || !firstTick;
-	}
 }

@@ -26,49 +26,52 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.ended;
+package org.inventivetalent.murder.listener;
 
-import com.google.common.base.Predicate;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.inventivetalent.murder.Murder;
-import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
-import org.inventivetalent.murder.player.PlayerData;
-import org.inventivetalent.rpapi.ResourcePackAPI;
 
-public class ResetExecutor extends LeavableExecutor {
+public class EditorListener implements Listener {
 
-	boolean firstTick = true;
+	private Murder plugin;
 
-	public ResetExecutor(Game game) {
-		super(game);
+	public EditorListener(Murder plugin) {
+		this.plugin = plugin;
 	}
 
-	@Override
-	public void tick() {
-		super.tick();
-		if (firstTick) {
-			firstTick = false;
-			updatePlayerStates(GameState.RESET, new Predicate<PlayerData>() {
-				@Override
-				public boolean apply(PlayerData playerData) {
-					if (playerData.getOfflinePlayer().isOnline()) {
-						//Restore data and delete data file
-						playerData.restoreData();
-//						Murder.instance.playerManager.deleteDataFile(playerData.uuid);
-
-						//Reset resource pack
-						ResourcePackAPI.setResourcepack(playerData.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
-					}
-
-					return true;
-				}
-			});
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void on(PlayerInteractEvent event) {
+//		if (event.isCancelled()) { return; }
+		if (plugin.arenaEditorManager.isEditing(event.getPlayer().getUniqueId())) {
+			plugin.arenaEditorManager.getEditor(event.getPlayer().getUniqueId()).handleInteract(event);
 		}
 	}
 
-	@Override
-	public boolean finished() {
-		return super.finished() || !firstTick;
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void on(BlockPlaceEvent event) {
+		if (event.isCancelled() || !event.canBuild()) { return; }
+		if (plugin.arenaEditorManager.isEditing(event.getPlayer().getUniqueId())) {
+			plugin.arenaEditorManager.getEditor(event.getPlayer().getUniqueId()).handleBlockPlace(event);
+		}
 	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void on(BlockBreakEvent event) {
+		if (event.isCancelled()) { return; }
+		if (plugin.arenaEditorManager.isEditing(event.getPlayer().getUniqueId())) {
+			plugin.arenaEditorManager.getEditor(event.getPlayer().getUniqueId()).handleBlockBreak(event);
+		}
+	}
+
+	@EventHandler
+	public void on(PlayerQuitEvent event) {
+		plugin.arenaEditorManager.removeEditor(event.getPlayer().getUniqueId());
+	}
+
 }

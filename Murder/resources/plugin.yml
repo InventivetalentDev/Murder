@@ -3,7 +3,7 @@ main: org.inventivetalent.murder.Murder
 author: inventivetalent
 version: ${project.version}
 
-softdepend: [PacketListenerApi, ItemBuilder, MessageBuilder, WorldEdit, NPCLib, ResourcePackApi, TitleAPI]
+softdepend: [PacketListenerApi, ItemBuilder, MessageBuilder, NPCLib, ResourcePackApi, TitleAPI]
 
 commands:
   murder:

@@ -26,49 +26,42 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.ended;
+package org.inventivetalent.murder;
 
-import com.google.common.base.Predicate;
-import org.inventivetalent.murder.Murder;
-import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.GameState;
-import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
-import org.inventivetalent.murder.player.PlayerData;
-import org.inventivetalent.rpapi.ResourcePackAPI;
+import org.bukkit.util.Vector;
+import org.inventivetalent.pluginannotations.message.MessageFormatter;
 
-public class ResetExecutor extends LeavableExecutor {
+import java.util.concurrent.Callable;
 
-	boolean firstTick = true;
+public class VectorFormatter extends MessageFormatter {
 
-	public ResetExecutor(Game game) {
-		super(game);
+	private Callable<Vector> callable;
+
+	public VectorFormatter(Callable<Vector> callable) {
+		this.callable = callable;
+	}
+
+	public VectorFormatter(final Vector vector) {
+		this.callable = new Callable<Vector>() {
+			@Override
+			public Vector call() throws Exception {
+				return vector;
+			}
+		};
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
-		if (firstTick) {
-			firstTick = false;
-			updatePlayerStates(GameState.RESET, new Predicate<PlayerData>() {
-				@Override
-				public boolean apply(PlayerData playerData) {
-					if (playerData.getOfflinePlayer().isOnline()) {
-						//Restore data and delete data file
-						playerData.restoreData();
-//						Murder.instance.playerManager.deleteDataFile(playerData.uuid);
-
-						//Reset resource pack
-						ResourcePackAPI.setResourcepack(playerData.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
-					}
-
-					return true;
+	public String format(String key, String message) {
+		try {
+			if (callable != null) {
+				Vector vector = callable.call();
+				if (vector != null) {
+					return String.format(message, vector.getX(), vector.getY(), vector.getZ());
 				}
-			});
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-	}
-
-	@Override
-	public boolean finished() {
-		return super.finished() || !firstTick;
+		return super.format(key, message);
 	}
 }

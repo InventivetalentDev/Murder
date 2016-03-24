@@ -44,6 +44,8 @@ public class ItemManager {
 		itemSection = plugin.getConfig().getConfigurationSection("items");
 	}
 
+	//Game Items
+
 	public ItemStack getKnife() {
 		return new ItemBuilder(Material.DIAMOND_AXE).fromConfig(itemSection.getConfigurationSection("knife")).build();
 	}
@@ -71,6 +73,24 @@ public class ItemManager {
 
 	public ItemStack getTeleporter() {
 		return new ItemBuilder(Material.COMPASS).fromConfig(itemSection.getConfigurationSection("teleporter")).build();
+	}
+
+	//Editor Items
+
+	public ItemStack getBoundsSelector() {
+		return new ItemBuilder(Material.GOLD_AXE).fromConfig(itemSection.getConfigurationSection("editor.arena.boundsSelector")).build();
+	}
+
+	public ItemStack getLobbySpawnSelector() {
+		return new ItemBuilder(Material.REDSTONE_BLOCK).fromConfig(itemSection.getConfigurationSection("editor.arena.spawnSelector.lobby")).build();
+	}
+
+	public ItemStack getPlayerSpawnSelector() {
+		return new ItemBuilder(Material.EMERALD_BLOCK).fromConfig(itemSection.getConfigurationSection("editor.arena.spawnSelector.player")).build();
+	}
+
+	public ItemStack getLootSpawnSelector() {
+		return new ItemBuilder(Material.DIAMOND_BLOCK).fromConfig(itemSection.getConfigurationSection("editor.arena.spawnSelector.loot")).build();
 	}
 
 }

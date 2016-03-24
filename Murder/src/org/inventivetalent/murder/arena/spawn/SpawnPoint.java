@@ -31,6 +31,7 @@ package org.inventivetalent.murder.arena.spawn;
 import com.google.gson.JsonObject;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.util.Vector;
 
 public class SpawnPoint {
 
@@ -46,11 +47,19 @@ public class SpawnPoint {
 		this.type = type;
 	}
 
+	public SpawnPoint(Vector vector, SpawnType type) {
+		this(vector.getX(), vector.getY(), vector.getZ(), type);
+	}
+
 	public SpawnPoint(JsonObject jsonObject) {
 		this.x = jsonObject.get("x").getAsDouble();
 		this.y = jsonObject.get("y").getAsDouble();
 		this.z = jsonObject.get("z").getAsDouble();
 		this.type = SpawnType.valueOf(jsonObject.get("type").getAsString());
+	}
+
+	public Vector getVector() {
+		return new Vector(x, y, z);
 	}
 
 	public Location getLocation(World world) {

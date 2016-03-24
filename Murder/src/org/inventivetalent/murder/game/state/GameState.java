@@ -64,19 +64,14 @@ public enum GameState {
 	ENDED("ended.sign", EndedExecutor.class),
 	RESET;
 
-	private final String signKey;
+	private static final MessageLoader MESSAGE_LOADER = PluginAnnotations.MESSAGE.newMessageLoader(Murder.instance, "config.yml", "messages.game.state", null);
+
+	private String signKey;
 
 	private Class<? extends StateExecutor> executorClass;
 	private boolean                        joinable;
 
-	private static final MessageLoader MESSAGE_LOADER = PluginAnnotations.MESSAGE.newMessageLoader(Murder.instance, "config.yml", "messages.game.state", null);
-
 	GameState() {
-		GameState prev = previous();
-		while (prev.signKey == null) {
-			prev = previous();
-		}
-		this.signKey = prev.signKey;
 	}
 
 	GameState(String signKey) {
@@ -89,16 +84,24 @@ public enum GameState {
 	}
 
 	GameState(String signKey, Class<? extends StateExecutor> executorClass) {
-		this(signKey);
+		this.signKey = signKey;
 		this.executorClass = executorClass;
 	}
 
 	GameState(String signKey, Class<? extends StateExecutor> executorClass, boolean joinable) {
-		this(signKey, executorClass);
+		this.signKey = signKey;
+		this.executorClass = executorClass;
 		this.joinable = joinable;
 	}
 
 	public String getSignText() {
+		if (signKey == null) {
+			GameState prev = previous();
+			while (prev.signKey == null) {
+				prev = previous();
+			}
+			this.signKey = prev.signKey;
+		}
 		return MESSAGE_LOADER.getMessage(signKey, signKey);
 	}
 
@@ -140,4 +143,5 @@ public enum GameState {
 		}
 		return null;
 	}
+
 }

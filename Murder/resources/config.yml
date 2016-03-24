@@ -1,6 +1,3 @@
-# Whether to restore player data (inventory, experience, location, ...) after the game ended
-storePlayerData: true
-
 # Countdown (in seconds)
 countdown:
   lobby: 20
@@ -16,6 +13,10 @@ loot:
 end:
   # Delay after the game ended until players are sent back
   delay: 5
+
+players:
+  # Minumum amount of players in an arena (must be at least 2 for Murder & Weapon Bystander)
+  min: 2
 
 items:
   knife:
@@ -48,6 +49,39 @@ items:
     type: "COMPASS"
     meta:
       display: "&7Teleporter"
+  editor:
+    arena:
+      boundsSelector:
+        type: "GOLD_AXE"
+        meta:
+          display: "&6Bounds Selector"
+          lore:
+          - "&9Left-click &7to set the first corner"
+          - "&9Right-click &7to set the second corner"
+          - "&7Hold &9SHIFT &7while clicking to use your location"
+      spawnSelector: # All of the below items should be blocks!
+        lobby:
+          type: "REDSTONE_BLOCK"
+          meta:
+            display: "&9Lobby &6Spawnpoint"
+            lore:
+            - "&7Place to set the Lobby spawnpoint"
+            - "&7Break to remove it"
+        player:
+          type: "EMERALD_BLOCK"
+          meta:
+            display: "&9Player &6Spawnpoint"
+            lore:
+            - "&7Place to add a Player spawnpoint"
+            - "&7Break to remove a spawnpoint"
+        loot:
+          type: "DIAMOND_BLOCK"
+          meta:
+            display: "&9Loot &6Spawnpoint"
+            lore:
+            - "&7Place to add a Loot spawnpoint"
+            - "&7Break to remove a spawnpoint"
+
 
 resourcepack:
   game:
@@ -108,6 +142,46 @@ messages:
         cancel: "&cNot enough players, coundown cancelled"
       start:
         time: "&eGame starts in %s seconds"
+  editor:
+    arena:
+      bounds:
+        set:
+          self:
+            min: "&aSet first corner to your location (%s,%s,%s)"
+            max: "&aSet second corner to your location (%s,%s,%s)"
+          block:
+            min: "&aSet first corner to %s,%s,%s"
+            max: "&aSet second corner to %s,%s,%s"
+      spawn:
+        add:
+          lobby: "&9Lobby &aSpawnpoint set to %s,%s,%s"
+          player: "&9Player &aSpawnpoint added at %s,%s,%s"
+          loot: "&9Loot &aSpawnpoint added at %s,%s,%s"
+        remove:
+          lobby: "&9Lobby &aSpawnpoint removed"
+          player: "&9Player &aSpawnpoint removed"
+          loot: "&9Loot &aSpawnpoint removed"
+  command:
+    arena:
+      editor:
+        started: "&aStarted arena setup. Please select the two corners using the bound wand and place the blocks in your inventory to set the Spawnpoints."
+        finished: "&aFinished arena setup for #%s/%s"
+        canceled: "&aCanceled arena setup"
+        removed: "&aArena removed"
+        error:
+          notFound: "&cArena not found"
+          notEditing: "&cYou are not editing an arena"
+          notComplete: "&cThe arena setup is not complete yet"
+          duplicate: "&cAn arena with that name already exists"
+    error:
+      unknown: "&cUnknown error while executing command. See console for details."
+      permission: "&cYou are missing the following permission: %s"
+      illegalSender: "&cThis command is only available to players"
+      unhandled: "&cInternal exception. See console for details."
+      length:
+        short: "&cMissing arguments. Usage: %s"
+        long: "&cToo many arguments. Usage: %s"
+      parse: "&cFailed to parse argument '%s' to %s"
 
 
 

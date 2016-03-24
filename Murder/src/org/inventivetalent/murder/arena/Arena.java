@@ -33,9 +33,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.util.Vector;
 import org.inventivetalent.murder.arena.spawn.SpawnPoint;
 import org.inventivetalent.murder.arena.spawn.SpawnType;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -48,12 +50,20 @@ public class Arena {
 	public final int    id;
 	public final String world;
 	public final Set<SpawnPoint> spawnPoints = new HashSet<>();
+	public Vector minCorner;
+	public Vector maxCorner;
 	public String name;
 	public int    minPlayers;
 	public int    maxPlayers;
 
 	public Arena(@Nonnull String world, @Nonnull String name) {
 		this.id = ID_COUNTER++;
+		this.world = world;
+		this.name = name;
+	}
+
+	public Arena(@Nonnegative int id, @Nonnull String world, @Nonnull String name) {
+		this.id = id;
 		this.world = world;
 		this.name = name;
 	}
@@ -71,6 +81,11 @@ public class Arena {
 		for (Iterator<JsonElement> iterator = jsonObject.get("spawns").getAsJsonArray().iterator(); iterator.hasNext(); ) {
 			spawnPoints.add(new SpawnPoint(iterator.next().getAsJsonObject()));
 		}
+
+		JsonObject boundsObject = jsonObject.getAsJsonObject("bounds");
+		this.minCorner = jsonToVector(boundsObject.getAsJsonObject("min"));
+		this.maxCorner = jsonToVector(boundsObject.getAsJsonObject("max"));
+
 		JsonObject playerObject = jsonObject.getAsJsonObject("players");
 		this.minPlayers = playerObject.get("min").getAsInt();
 		this.maxPlayers = playerObject.get("max").getAsInt();
@@ -108,12 +123,31 @@ public class Arena {
 		}
 		jsonObject.add("spawns", spawnArray);
 
+		JsonObject boundsObject = new JsonObject();
+		boundsObject.add("min", vectorToJson(minCorner));
+		boundsObject.add("max", vectorToJson(maxCorner));
+		jsonObject.add("bounds", boundsObject);
+
 		JsonObject playerObject = new JsonObject();
 		playerObject.addProperty("min", minPlayers);
 		playerObject.addProperty("max", maxPlayers);
 		jsonObject.add("players", playerObject);
 
 		return jsonObject;
+	}
+
+	JsonObject vectorToJson(Vector vector) {
+		JsonObject jsonObject = new JsonObject();
+
+		jsonObject.addProperty("x", vector.getX());
+		jsonObject.addProperty("y", vector.getY());
+		jsonObject.addProperty("z", vector.getZ());
+
+		return jsonObject;
+	}
+
+	Vector jsonToVector(JsonObject jsonObject) {
+		return new Vector(jsonObject.get("x").getAsDouble(), jsonObject.get("y").getAsDouble(), jsonObject.get("z").getAsDouble());
 	}
 
 	@Override

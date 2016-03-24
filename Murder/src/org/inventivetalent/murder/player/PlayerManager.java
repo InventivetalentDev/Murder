@@ -30,7 +30,6 @@ package org.inventivetalent.murder.player;
 
 import org.bukkit.OfflinePlayer;
 import org.inventivetalent.murder.Murder;
-import org.inventivetalent.pluginannotations.config.ConfigValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +42,7 @@ public class PlayerManager {
 
 	private Murder plugin;
 
-	@ConfigValue(path = "storePlayerData") public boolean storePlayerData;
+//	@ConfigValue(path = "storePlayerData") public boolean storePlayerData;
 	public                                        File    dataFolder;
 
 	public final Map<UUID, PlayerData> dataMap = new HashMap<>();
@@ -99,6 +98,7 @@ public class PlayerManager {
 			PlayerData data = getOrCreateData(uuid);
 			if (!file.exists()) { return data; }
 			data.loadFromFile(file);
+			data.stored = true;
 			return data;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

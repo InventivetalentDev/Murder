@@ -30,32 +30,86 @@ package org.inventivetalent.murder.arena;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.inventivetalent.murder.Murder;
 
-import java.util.HashSet;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.Map;
 
+//TODO: Store arenas in individual files; only load when needed
 public class ArenaManager {
 
 	private Murder plugin;
-	public final Set<Arena> arenas = new HashSet<>();
+	public  File   arenaFolder;
+	//	public final Set<Arena> tempArenas = new HashSet<>();
+	public final Map<String, Integer> nameMap = new HashMap<>();
 
 	public ArenaManager(Murder plugin) {
 		this.plugin = plugin;
+		arenaFolder = new File(Murder.instance.getDataFolder(), "arenas");
+		if (!arenaFolder.exists()) {
+			arenaFolder.mkdirs();
+		}
+	}
+
+	public void addArena(Arena arena) {
+		File file = new File(arenaFolder, String.valueOf(arena.id));
+		if (file.exists()) { throw new IllegalArgumentException("arena file exists"); }
+		try {
+			file.createNewFile();
+			Murder.instance.writeJson(arena.toJson(), file);
+			nameMap.put(arena.name.toLowerCase(), arena.id);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public Arena getArenaById(int id) {
+		if (id < 0) { return null; }
+		File file = new File(arenaFolder, String.valueOf(id));
+		if (!file.exists()) { return null; }
+		try {
+			return new Arena(new JsonParser().parse(new FileReader(file)).getAsJsonObject());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public Arena getArenaByName(String name) {
+		if (name == null || name.isEmpty()) { return null; }
+		if (nameMap.containsKey(name.toLowerCase())) {
+			return getArenaById(nameMap.get(name.toLowerCase()));
+		}
+		return null;
+	}
+
+	public boolean removeArena(Arena arena) {
+		if (arena == null) { return false; }
+		nameMap.remove(arena.name);
+		File file = new File(arenaFolder, String.valueOf(arena.id));
+		return file.delete();
 	}
 
 	public void loadJson(JsonArray jsonArray) {
 		for (Iterator<JsonElement> iterator = jsonArray.iterator(); iterator.hasNext(); ) {
-			arenas.add(new Arena(iterator.next().getAsJsonObject()));
+			JsonObject next = iterator.next().getAsJsonObject();
+			nameMap.put(next.get("name").getAsString(), next.get("id").getAsInt());
 		}
 	}
 
+	//
 	public JsonArray toJson() {
 		JsonArray jsonArray = new JsonArray();
 
-		for (Arena arena : arenas) {
-			jsonArray.add(arena.toJson());
+		for (Map.Entry<String, Integer> entry : nameMap.entrySet()) {
+			JsonObject jsonEntry = new JsonObject();
+			jsonEntry.addProperty("name", entry.getKey());
+			jsonEntry.addProperty("id", entry.getValue());
+			jsonArray.add(jsonEntry);
 		}
 
 		return jsonArray;
