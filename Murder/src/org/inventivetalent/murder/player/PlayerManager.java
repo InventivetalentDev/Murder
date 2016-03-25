@@ -42,8 +42,8 @@ public class PlayerManager {
 
 	private Murder plugin;
 
-//	@ConfigValue(path = "storePlayerData") public boolean storePlayerData;
-	public                                        File    dataFolder;
+	//	@ConfigValue(path = "storePlayerData") public boolean storePlayerData;
+	public File dataFolder;
 
 	public final Map<UUID, PlayerData> dataMap = new HashMap<>();
 
@@ -55,10 +55,16 @@ public class PlayerManager {
 		}
 	}
 
+	public boolean contains(UUID uuid) {
+		return dataMap.containsKey(uuid);
+	}
+
 	@Nullable
-	public PlayerData getData(UUID uuid) {
-		if (!dataMap.containsKey(uuid)) { return null; }
-		return dataMap.get(uuid);
+	public PlayerData getData(@Nullable UUID uuid) {
+		if (uuid == null) { return null; }
+		//		if (!dataMap.containsKey(uuid)) { return null; }
+		//		return dataMap.get(uuid);
+		return loadFromFile(uuid);
 	}
 
 	@Nonnull
@@ -71,6 +77,7 @@ public class PlayerManager {
 
 	@Nullable
 	public PlayerData removeData(UUID uuid) {
+		deleteDataFile(uuid);
 		if (dataMap.containsKey(uuid)) {
 			return dataMap.remove(uuid);
 		}
@@ -92,7 +99,7 @@ public class PlayerManager {
 	}
 
 	@Nonnull
-	public PlayerData loadFromFile(UUID uuid) {
+	public PlayerData loadFromFile(@Nonnull UUID uuid) {
 		try {
 			File file = new File(dataFolder, uuid.toString());
 			PlayerData data = getOrCreateData(uuid);

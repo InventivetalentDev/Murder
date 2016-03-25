@@ -152,7 +152,7 @@ public class ArenaCommands {
 			PlayerData playerData = plugin.playerManager.getOrCreateData(sender.getUniqueId());
 			if (!playerData.stored) {
 				playerData.storeData();
-				plugin.playerManager.saveDataToFile(playerData);
+//				plugin.playerManager.saveDataToFile(playerData);
 			}
 
 			giveEditorItems(sender);
@@ -178,7 +178,7 @@ public class ArenaCommands {
 			PlayerData playerData = plugin.playerManager.getOrCreateData(sender.getUniqueId());
 			if (!playerData.stored) {
 				playerData.storeData();
-				plugin.playerManager.saveDataToFile(playerData);
+//				plugin.playerManager.saveDataToFile(playerData);
 			}
 
 			giveEditorItems(sender);

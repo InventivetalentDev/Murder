@@ -33,7 +33,7 @@ import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 
 public class WaitingExecutor extends LeavableExecutor {
 
-	protected WaitingExecutor(Game game) {
+	public WaitingExecutor(Game game) {
 		super(game);
 	}
 

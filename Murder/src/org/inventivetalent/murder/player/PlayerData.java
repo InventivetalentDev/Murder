@@ -29,12 +29,15 @@
 package org.inventivetalent.murder.player;
 
 import org.inventivetalent.bossbar.BossBar;
+import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.game.state.GameState;
 
 import java.util.UUID;
 
 public class PlayerData extends StoredData {
+
+	public UUID gameId;
 
 	public String nameTag;
 
@@ -47,6 +50,16 @@ public class PlayerData extends StoredData {
 
 	public PlayerData(UUID uuid) {
 		super(uuid);
+	}
+
+	@Override
+	public void storeData(boolean clear) {
+		super.storeData(clear);
+		Murder.instance.playerManager.saveDataToFile(this);
+	}
+
+	public boolean isInGame() {
+		return gameId != null;
 	}
 
 	@Override

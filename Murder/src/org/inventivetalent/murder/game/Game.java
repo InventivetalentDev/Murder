@@ -29,6 +29,7 @@
 package org.inventivetalent.murder.game;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.inventivetalent.murder.Murder;
@@ -80,7 +81,9 @@ public class Game {
 		if (joiningPlayers.contains(player.getUniqueId())) { return; }
 
 		PlayerData data = Murder.instance.playerManager.getOrCreateData(player.getUniqueId());
+		data.gameId = this.gameId;
 		data.storeData(true);
+		player.setGameMode(GameMode.ADVENTURE);
 
 		leavingPlayers.remove(player.getUniqueId());
 		joiningPlayers.add(player.getUniqueId());
@@ -175,15 +178,40 @@ public class Game {
 		if (this.stateExecutor != null) {
 			this.stateExecutor.tick();
 			if (this.stateExecutor.finished()) {
-				Murder.instance.getLogger().finer("[" + gameId + "] State " + gameState + " finished, switching to " + gameState.next());
+				if (Murder.instance.debug) { Murder.instance.getLogger().info("[" + gameId + "] State " + gameState + " finished, switching to " + gameState.next()); }
 				gameState = gameState.next();
 				stateExecutor = gameState.newExecutor(this);
 			} else if (this.stateExecutor.revert()) {
-				Murder.instance.getLogger().fine("[" + gameId + "] State " + gameState + " did not finish, going back to " + gameState.previous());
+				if (Murder.instance.debug) { Murder.instance.getLogger().info("[" + gameId + "] State " + gameState + " did not finish, going back to " + gameState.previous()); }
 				gameState = gameState.previous();
 				stateExecutor = gameState.newExecutor(this);
 			}
+
+			if (gameState == GameState.DISPOSE) {
+				if (Murder.instance.debug) { Murder.instance.getLogger().info("[" + gameId + "] Reached DISPOSE state, removing game."); }
+				Murder.instance.gameManager.removeGame(this.gameId);
+			}
+		} else {
+			Murder.instance.getLogger().warning("State Executor is null");
 		}
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) { return true; }
+		if (o == null || getClass() != o.getClass()) { return false; }
+
+		Game game = (Game) o;
+
+		if (gameId != null ? !gameId.equals(game.gameId) : game.gameId != null) { return false; }
+		return arena != null ? arena.equals(game.arena) : game.arena == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = gameId != null ? gameId.hashCode() : 0;
+		result = 31 * result + (arena != null ? arena.hashCode() : 0);
+		return result;
+	}
 }

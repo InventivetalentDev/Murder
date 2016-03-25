@@ -76,17 +76,16 @@ public class AssignExecutor extends CountdownExecutor {
 		if (ticks == 2) {//Send role messages
 			for (UUID uuid : game.players) {
 				PlayerData data = Murder.instance.playerManager.getData(uuid);
-				if (data != null) {
-					//Titles
-					TitleAPI.reset(data.getPlayer());
-					TitleAPI.sendTimings(data.getPlayer(), 10, Murder.instance.startTime, 10);
-					TitleAPI.sendSubTitle(data.getPlayer(), new TextComponent(data.role.getSubTitle()));
-					TitleAPI.sendTitle(data.getPlayer(), new TextComponent(data.role.getTitle()));
 
-					//BossBar
-					TextComponent textComponent = new TextComponent(String.format(data.role.getBarText(), data.nameTag));
-					data.bossBar = BossBarAPI.addBar(data.getPlayer(), textComponent, data.role.getBarColor(), data.role.getBarStyle(), 1);
-				}
+				//Titles
+				TitleAPI.reset(data.getPlayer());
+				TitleAPI.sendTimings(data.getPlayer(), 10, (Murder.instance.startTime * 20) - 5, 10);
+				TitleAPI.sendSubTitle(data.getPlayer(), new TextComponent(data.role.getSubTitle()));
+				TitleAPI.sendTitle(data.getPlayer(), new TextComponent(data.role.getTitle()));
+
+				//BossBar
+				TextComponent textComponent = new TextComponent(String.format(data.role.getBarText(), data.nameTag));
+				data.bossBar = BossBarAPI.addBar(data.getPlayer(), textComponent, data.role.getBarColor(), data.role.getBarStyle(), 1);
 			}
 		}
 		ticks++;
@@ -94,7 +93,6 @@ public class AssignExecutor extends CountdownExecutor {
 
 	void updateRole(UUID uuid, Role role) {
 		PlayerData data = Murder.instance.playerManager.getData(uuid);
-		if (data == null) { throw new IllegalStateException("Missing player data for " + uuid); }
 		data.role = role;
 	}
 

@@ -29,6 +29,7 @@
 package org.inventivetalent.murder.game;
 
 import org.inventivetalent.murder.Murder;
+import org.inventivetalent.murder.arena.Arena;
 import org.inventivetalent.murder.game.state.GameTask;
 
 import java.util.HashMap;
@@ -48,14 +49,30 @@ public class GameManager {
 		gameTask.runTaskTimer(plugin, 1, 1);
 	}
 
+	public Game addGame(Game game) {
+		if (gameMap.containsKey(game.gameId)) { throw new IllegalStateException("Game #" + game.gameId + " is already added"); }
+		gameMap.put(game.gameId, game);
+		return game;
+	}
+
 	public Game getGame(UUID uuid) {
 		if (!gameMap.containsKey(uuid)) { return null; }
 		return gameMap.get(uuid);
 	}
 
-	public void addGame(Game game) {
-		if (gameMap.containsKey(game.gameId)) { throw new IllegalStateException("Game #" + game.gameId + " is already added"); }
-		gameMap.put(game.gameId, game);
+	public Game getGameForArenaId(int id) {
+		for (Game game : gameMap.values()) {
+			if (id == game.arena.id) { return game; }
+		}
+		return null;
+	}
+
+	public Game getOrCreateGame(Arena arena) {
+		Game game = getGameForArenaId(arena.id);
+		if (game == null) {
+			game = addGame(new Game(arena));
+		}
+		return game;
 	}
 
 	public void removeGame(UUID uuid) {

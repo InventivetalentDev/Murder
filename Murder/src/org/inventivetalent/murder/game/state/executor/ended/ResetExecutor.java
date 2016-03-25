@@ -29,16 +29,14 @@
 package org.inventivetalent.murder.game.state.executor.ended;
 
 import com.google.common.base.Predicate;
-import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 import org.inventivetalent.murder.player.PlayerData;
-import org.inventivetalent.rpapi.ResourcePackAPI;
 
 public class ResetExecutor extends LeavableExecutor {
 
-	boolean firstTick = true;
+	int ticks = 0;
 
 	public ResetExecutor(Game game) {
 		super(game);
@@ -47,28 +45,29 @@ public class ResetExecutor extends LeavableExecutor {
 	@Override
 	public void tick() {
 		super.tick();
-		if (firstTick) {
-			firstTick = false;
+		if (ticks == 0) {
 			updatePlayerStates(GameState.RESET, new Predicate<PlayerData>() {
 				@Override
 				public boolean apply(PlayerData playerData) {
 					if (playerData.getOfflinePlayer().isOnline()) {
-						//Restore data and delete data file
-						playerData.restoreData();
-//						Murder.instance.playerManager.deleteDataFile(playerData.uuid);
-
-						//Reset resource pack
-						ResourcePackAPI.setResourcepack(playerData.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
+						game.leavingPlayers.add(playerData.uuid);
+						//						//Restore data and delete data file
+						//						playerData.restoreData();
+						////						Murder.instance.playerManager.deleteDataFile(playerData.uuid);
+						//
+						//						//Reset resource pack
+						//						ResourcePackAPI.setResourcepack(playerData.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
 					}
 
 					return true;
 				}
 			});
 		}
+		ticks++;
 	}
 
 	@Override
 	public boolean finished() {
-		return super.finished() || !firstTick;
+		return super.finished() || ticks > 2;
 	}
 }

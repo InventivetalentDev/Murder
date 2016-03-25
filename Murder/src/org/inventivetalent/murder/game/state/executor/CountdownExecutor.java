@@ -63,7 +63,7 @@ public class CountdownExecutor extends LeavableExecutor {
 					game.broadcastMessage(Game.MESSAGE_LOADER.getMessage("countdown.lobby.time", "countdown.lobby.time", new MessageFormatter() {
 						@Override
 						public String format(String key, String message) {
-							return String.format(message, game.lobbyCountdown);
+							return String.format(message, game.lobbyCountdown + 1);
 						}
 					}));
 				} else {
@@ -79,7 +79,7 @@ public class CountdownExecutor extends LeavableExecutor {
 				game.broadcastMessage(Game.MESSAGE_LOADER.getMessage("countdown.start.time", "countdown.start.time", new MessageFormatter() {
 					@Override
 					public String format(String key, String message) {
-						return String.format(message, game.startCountdown);
+						return String.format(message, game.startCountdown + 1);
 					}
 				}));
 			}

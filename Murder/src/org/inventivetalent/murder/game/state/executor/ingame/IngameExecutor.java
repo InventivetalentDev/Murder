@@ -50,12 +50,14 @@ public class IngameExecutor extends LeavableExecutor {
 	@Override
 	public boolean finished() {
 		if (game.players.size() <= 0) {
+			//No winner
+			game.winner = null;
 			return true;
 		}
 
 		UUID murdererId = game.getMurderer();
 		PlayerData murdererData = Murder.instance.playerManager.getData(murdererId);
-		if (murdererId == null || murdererData == null || murdererData.killed || !murdererData.getOfflinePlayer().isOnline()) {
+		if (murdererData == null || murdererData.killed || !murdererData.isInGame() || !murdererData.getOfflinePlayer().isOnline()) {
 			//Murderer left or was killed - bystanders won
 			game.winner = Role.WEAPON;
 			return true;
@@ -64,7 +66,7 @@ public class IngameExecutor extends LeavableExecutor {
 		int aliveCount = 0;
 		for (UUID bystanderId : game.getBystanders(true, true)) {
 			PlayerData bystanderData = Murder.instance.playerManager.getData(bystanderId);
-			if (bystanderData != null && !bystanderData.killed && bystanderData.getOfflinePlayer().isOnline()) {
+			if (bystanderData != null && !bystanderData.killed && bystanderData.isInGame() && bystanderData.getOfflinePlayer().isOnline()) {
 				aliveCount++;
 			}
 		}

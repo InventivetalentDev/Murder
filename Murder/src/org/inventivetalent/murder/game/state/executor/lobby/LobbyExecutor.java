@@ -60,16 +60,12 @@ public class LobbyExecutor extends CountdownExecutor {
 				game.players.add(uuid);
 
 				PlayerData data = Murder.instance.playerManager.getData(uuid);
-				if (data != null) {
-					data.gameState = GameState.LOBBY;
+				data.gameState = GameState.LOBBY;
 
-					data.getPlayer().teleport(game.arena.getFirstSpawnPoint(SpawnType.LOBBY).getLocation(game.arena.getWorld()));
-					game.broadcastJoin(uuid);
+				data.getPlayer().teleport(game.arena.getFirstSpawnPoint(SpawnType.LOBBY).getLocation(game.arena.getWorld()));
+				game.broadcastJoin(uuid);
 
-					game.waitingForResourcepack.add(uuid);
-				} else {
-					Murder.instance.getLogger().warning("Player " + uuid + " doesn't have player data");
-				}
+				game.waitingForResourcepack.add(uuid);
 			}
 			game.joiningPlayers.clear();
 		}

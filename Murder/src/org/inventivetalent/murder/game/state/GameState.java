@@ -31,14 +31,12 @@ package org.inventivetalent.murder.game.state;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.executor.ended.EndedExecutor;
+import org.inventivetalent.murder.game.state.executor.ended.ResetExecutor;
 import org.inventivetalent.murder.game.state.executor.ingame.DropLootExecutor;
 import org.inventivetalent.murder.game.state.executor.ingame.StartedExecutor;
 import org.inventivetalent.murder.game.state.executor.init.WaitingExecutor;
 import org.inventivetalent.murder.game.state.executor.lobby.LobbyExecutor;
-import org.inventivetalent.murder.game.state.executor.starting.AssignExecutor;
-import org.inventivetalent.murder.game.state.executor.starting.DisguiseExecutor;
-import org.inventivetalent.murder.game.state.executor.starting.StartingExecutor;
-import org.inventivetalent.murder.game.state.executor.starting.TeleportExecutor;
+import org.inventivetalent.murder.game.state.executor.starting.*;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
 
@@ -52,17 +50,22 @@ public enum GameState {
 
 	/* Starting States */
 	STARTING("starting.sign", StartingExecutor.class),
-	TELEPORT(TeleportExecutor.class),
 	DISGUISE(DisguiseExecutor.class),
 	ASSIGN(AssignExecutor.class),
+	TELEPORT(TeleportExecutor.class),
+	STARTING_DELAY(StartingDelayExecutor.class),
 
 	/* Ingame States */
 	STARTED("started.sign", StartedExecutor.class),
+
 	DROP_LOOT(DropLootExecutor.class),
 
 	/* End States */
 	ENDED("ended.sign", EndedExecutor.class),
-	RESET;
+
+	RESET(ResetExecutor.class),
+
+	DISPOSE;
 
 	private static final MessageLoader MESSAGE_LOADER = PluginAnnotations.MESSAGE.newMessageLoader(Murder.instance, "config.yml", "messages.game.state", null);
 

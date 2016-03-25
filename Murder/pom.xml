@@ -88,6 +88,7 @@
                                     <include>org.inventivetalent:bossbarapi**</include>
                                     <include>org.inventivetalent:playerversion**</include>
                                     <include>org.inventivetalent:titleapi**</include>
+                                    <include>org.inventivetalent:playerversion**</include>
                                     <include>org.inventivetalent:messagebuilder**</include>
                                     <include>org.inventivetalent:itembuilder**</include>
                                 </includes>

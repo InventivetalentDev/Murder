@@ -28,10 +28,12 @@
 
 package org.inventivetalent.murder.game.state.executor;
 
+import org.bukkit.potion.PotionEffect;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.StateExecutor;
 import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.rpapi.ResourcePackAPI;
 
 import java.util.UUID;
 
@@ -50,12 +52,32 @@ public class LeavableExecutor extends StateExecutor {
 
 				PlayerData data = Murder.instance.playerManager.removeData(uuid);
 				if (data != null) {
+					//Remove black screen
+					data.getPlayer().getInventory().setHelmet(null);
+
+					//Clear effects
+					for (PotionEffect effect : data.getPlayer().getActivePotionEffects()) {
+						data.getPlayer().removePotionEffect(effect.getType());
+					}
+
 					Murder.instance.playerManager.resetPlayer(data.getOfflinePlayer());
 					data.restoreData();
+
+					//Reset resource pack
+					ResourcePackAPI.setResourcepack(data.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
+
+					//Reset BossBar
+					if (data.bossBar != null) {
+						data.bossBar.removePlayer(data.getPlayer());
+					}
 				}
 			}
 			game.leavingPlayers.clear();
 		}
 	}
 
+	@Override
+	public boolean finished() {
+		return super.finished();
+	}
 }

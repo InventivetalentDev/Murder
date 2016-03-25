@@ -39,6 +39,8 @@ import org.inventivetalent.bossbar.BossBarAPI;
 import org.inventivetalent.murder.arena.ArenaManager;
 import org.inventivetalent.murder.arena.editor.ArenaEditorManager;
 import org.inventivetalent.murder.command.ArenaCommands;
+import org.inventivetalent.murder.command.GameCommands;
+import org.inventivetalent.murder.command.PlayerCommands;
 import org.inventivetalent.murder.game.GameManager;
 import org.inventivetalent.murder.item.ItemManager;
 import org.inventivetalent.murder.listener.DataListener;
@@ -50,8 +52,10 @@ import org.inventivetalent.murder.task.ArenaOutlineTask;
 import org.inventivetalent.nicknamer.api.INickNamer;
 import org.inventivetalent.nicknamer.api.NickManager;
 import org.inventivetalent.packetlistener.PacketListenerAPI;
+import org.inventivetalent.playerversion.PlayerVersion;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.config.ConfigValue;
+import org.inventivetalent.title.TitleAPI;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -74,7 +78,9 @@ public class Murder extends JavaPlugin {
 	public EditorListener editorListener;
 	public DataListener   dataListener;
 
-	public ArenaCommands arenaCommands;
+	public ArenaCommands  arenaCommands;
+	public GameCommands   gameCommands;
+	public PlayerCommands playerCommands;
 
 	public ArenaOutlineTask arenaOutlineTask;
 
@@ -102,6 +108,8 @@ public class Murder extends JavaPlugin {
 	public void onLoad() {
 		APIManager.require(PacketListenerAPI.class, this);
 		APIManager.require(BossBarAPI.class, this);
+		APIManager.require(PlayerVersion.class, this);
+		APIManager.require(TitleAPI.class, this);
 	}
 
 	@Override
@@ -146,12 +154,14 @@ public class Murder extends JavaPlugin {
 
 		APIManager.initAPI(PacketListenerAPI.class);
 		APIManager.initAPI(BossBarAPI.class);
+		APIManager.initAPI(PlayerVersion.class);
+		APIManager.initAPI(TitleAPI.class);
 
 		saveDefaultConfig();
 		PluginAnnotations.CONFIG.loadValues(this, this);
 		if (debug) {
 			getLogger().setLevel(Level.ALL);
-			getLogger().fine("Debug enabled.");
+			getLogger().info("Debug enabled.");
 		}
 
 		arenaManager = new ArenaManager(this);
@@ -166,6 +176,8 @@ public class Murder extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(dataListener = new DataListener(this), this);
 
 		PluginAnnotations.COMMAND.registerCommands(this, arenaCommands = new ArenaCommands(this));
+		PluginAnnotations.COMMAND.registerCommands(this, gameCommands = new GameCommands(this));
+		PluginAnnotations.COMMAND.registerCommands(this, playerCommands = new PlayerCommands(this));
 
 		arenaOutlineTask = new ArenaOutlineTask(this);
 		arenaOutlineTask.runTaskTimer(this, 10, 10);

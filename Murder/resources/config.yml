@@ -113,7 +113,7 @@ messages:
         style: "NOTCHED_10"
     weapon:
       name: "&9Bystander"
-      title: "${role.default.title}"
+      title: "${default.title}"
       subtitle: "&9with a secret weapon"
       objective: "&e&lFind the &c&lMurderer &e&land kill them with your &9&lsecret Weapon&e!"
       bossbar:
@@ -142,6 +142,10 @@ messages:
         cancel: "&cNot enough players, coundown cancelled"
       start:
         time: "&eGame starts in %s seconds"
+    winner:
+      bystander: "&aThe &9Bystanders &awon!"
+      murderer: "&aThe &cMurderer &awon!"
+      draw: "&7Draw! &aEverybody looses!"
   editor:
     arena:
       bounds:
@@ -173,6 +177,12 @@ messages:
           notEditing: "&cYou are not editing an arena"
           notComplete: "&cThe arena setup is not complete yet"
           duplicate: "&cAn arena with that name already exists"
+      error:
+        notFound: "&cArena not found"
+    game:
+      error:
+        ingame: "&cYou are already ingame"
+        notIngame: "&cYou are not ingame"
     error:
       unknown: "&cUnknown error while executing command. See console for details."
       permission: "&cYou are missing the following permission: %s"
@@ -194,7 +204,7 @@ name:
   - "Delta"
   - "Echo"
   - "Foxtrot"
-  - "Gold"
+  - "Golf"
   - "Hotel"
   - "India"
   - "Juliett"

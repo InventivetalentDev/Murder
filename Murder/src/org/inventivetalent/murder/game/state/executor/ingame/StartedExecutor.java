@@ -62,6 +62,8 @@ public class StartedExecutor extends IngameExecutor {
 					for (PotionEffect effect : player.getActivePotionEffects()) {
 						player.removePotionEffect(effect.getType());
 					}
+
+					player.setWalkSpeed(playerData.storedWalkSpeed);
 					return true;
 				}
 			});
