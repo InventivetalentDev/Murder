@@ -79,11 +79,12 @@ public class Murder extends JavaPlugin {
 	public ArenaEditorManager arenaEditorManager;
 	public SpectateManager    spectateManager;
 
-	public EditorListener    editorListener;
-	public DataListener      dataListener;
-	public GameListener      gameListener;
-	public SpectatorListener spectatorListener;
-	public NameListener      nameListener;
+	public EditorListener     editorListener;
+	public DataListener       dataListener;
+	public GameListener       gameListener;
+	public SpectatorListener  spectatorListener;
+	public NameListener       nameListener;
+	public ProtectionListener protectionListener;
 
 	public PacketListener packetListener;
 
@@ -202,6 +203,7 @@ public class Murder extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(spectatorListener = new SpectatorListener(this), this);
 		Bukkit.getPluginManager().registerEvents(nameListener = new NameListener(this), this);
 		if (classExists("org.bukkit.event.player.PlayerPickupArrowEvent")) { Bukkit.getPluginManager().registerEvents(new GameListenerArrow(this), this); }
+		Bukkit.getPluginManager().registerEvents(protectionListener = new ProtectionListener(this), this);
 
 		packetListener = new PacketListener(this);
 

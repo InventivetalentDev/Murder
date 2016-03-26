@@ -71,7 +71,7 @@ public class PlayerData extends StoredData {
 	}
 
 	public boolean isInGame() {
-		return gameId != null;
+		return gameId != null && getGame() != null;
 	}
 
 	@Nullable
