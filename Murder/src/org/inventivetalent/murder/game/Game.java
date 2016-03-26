@@ -128,7 +128,10 @@ public class Game {
 
 	public void broadcastMessage(String message) {
 		for (UUID uuid : players) {
-			getPlayer(uuid).sendMessage(message);
+			Player player = getPlayer(uuid);
+			if (player != null && player.isOnline()) {
+				player.sendMessage(message);
+			}
 		}
 	}
 
@@ -181,7 +184,7 @@ public class Game {
 		for (UUID uuid : players) {
 			PlayerData data = Murder.instance.playerManager.getData(uuid);
 			if (data != null) {
-				if (!data.killed &&!data.isSpectator) {
+				if (!data.killed && !data.isSpectator) {
 					uuids.add(uuid);
 				}
 			}
