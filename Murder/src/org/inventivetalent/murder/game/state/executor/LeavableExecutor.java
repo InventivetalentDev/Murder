@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.game.state.executor;
 
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
@@ -64,7 +65,8 @@ public class LeavableExecutor extends StateExecutor {
 					Murder.instance.playerManager.resetPlayer(data.getOfflinePlayer());
 
 					for (UUID uuid1 : game.players) {
-						game.getPlayer(uuid1).showPlayer(data.getPlayer());
+						Player player = game.getPlayer(uuid1);
+						if (player != null) { player.showPlayer(data.getPlayer()); }
 					}
 
 					//Reset resource pack

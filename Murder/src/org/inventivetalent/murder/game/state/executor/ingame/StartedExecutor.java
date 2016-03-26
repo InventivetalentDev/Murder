@@ -66,7 +66,8 @@ public class StartedExecutor extends IngameExecutor {
 						player.removePotionEffect(effect.getType());
 					}
 					for (UUID uuid1 : game.players) {
-						game.getPlayer(uuid1).showPlayer(playerData.getPlayer());
+						Player player1 = game.getPlayer(uuid1);
+						if (player1 != null) { player1.showPlayer(playerData.getPlayer()); }
 					}
 
 					player.setWalkSpeed(0.2f);

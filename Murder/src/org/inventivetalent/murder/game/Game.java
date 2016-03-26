@@ -43,6 +43,7 @@ import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageFormatter;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -108,22 +109,26 @@ public class Game {
 
 	public void broadcastJoin(UUID uuid) {
 		final Player player = getPlayer(uuid);
-		broadcastMessage(MESSAGE_LOADER.getMessage("join", "join", true, '&', new MessageFormatter() {
-			@Override
-			public String format(String key, String message) {
-				return String.format(message, player.getName(), players.size(), arena.maxPlayers);
-			}
-		}));
+		if (player != null) {
+			broadcastMessage(MESSAGE_LOADER.getMessage("join", "join", true, '&', new MessageFormatter() {
+				@Override
+				public String format(String key, String message) {
+					return String.format(message, player.getName(), players.size(), arena.maxPlayers);
+				}
+			}));
+		}
 	}
 
 	public void broadcastLeave(UUID uuid) {
 		final Player player = getPlayer(uuid);
-		broadcastMessage(MESSAGE_LOADER.getMessage("leave", "leave", true, '&', new MessageFormatter() {
-			@Override
-			public String format(String key, String message) {
-				return String.format(message, player.getName(), players.size(), arena.maxPlayers);
-			}
-		}));
+		if (player != null) {
+			broadcastMessage(MESSAGE_LOADER.getMessage("leave", "leave", true, '&', new MessageFormatter() {
+				@Override
+				public String format(String key, String message) {
+					return String.format(message, player.getName(), players.size(), arena.maxPlayers);
+				}
+			}));
+		}
 	}
 
 	public void broadcastMessage(String message) {
@@ -192,6 +197,7 @@ public class Game {
 		return uuids;
 	}
 
+	@Nullable
 	public Player getPlayer(UUID uuid) {
 		return Bukkit.getPlayer(uuid);
 	}

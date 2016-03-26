@@ -106,7 +106,7 @@ public class GameListener implements Listener {
 			Player player = (Player) event.getEntity();
 			PlayerData data = plugin.playerManager.getData(player.getUniqueId());
 			if (data != null) {
-				if (data.isInGame()) {
+				if (data.isInGame() && data.getGame() != null) {
 					if (data.gameState.isInvulnerable() || data.isSpectator) {
 						event.setCancelled(true);
 					} else {
@@ -133,7 +133,7 @@ public class GameListener implements Listener {
 							}
 
 							if (damagerData != null) {
-								if (damagerData.isInGame() && damagerData.role == Role.MURDERER) {
+								if (damagerData.isInGame() && damagerData.getGame() != null && damagerData.role == Role.MURDERER) {
 									if (damagerData.getPlayer().getItemInHand().equals(Murder.instance.itemManager.getKnife())) {
 										//Set the potential killer
 										data.killer = damagerData.uuid;
