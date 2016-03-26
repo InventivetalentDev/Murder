@@ -46,8 +46,8 @@ import java.util.logging.Level;
 
 public class PacketListener {
 
-	static NMSClassResolver nmsClassResolver;
-	static OBCClassResolver obcClassResolver;
+	static NMSClassResolver nmsClassResolver = new NMSClassResolver();
+	static OBCClassResolver obcClassResolver = new OBCClassResolver();
 
 	static Class<?> ItemStack = nmsClassResolver.resolveSilent("ItemStack");
 
