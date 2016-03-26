@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.game.state.executor.lobby;
 
+import org.bukkit.entity.Player;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.arena.spawn.SpawnType;
 import org.inventivetalent.murder.game.CountdownType;
@@ -35,6 +36,7 @@ import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
 import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.rpapi.ResourcePackAPI;
 
 import java.util.UUID;
 
@@ -51,8 +53,10 @@ public class LobbyExecutor extends CountdownExecutor {
 		if (!game.waitingForResourcepack.isEmpty()) {
 			for (UUID uuid : game.waitingForResourcepack) {
 				//Send the resource pack
-				//TODO: enable
-//				ResourcePackAPI.setResourcepack(game.getPlayer(uuid), Murder.instance.gamePackUrl, Murder.instance.gamePackHash);
+				Player player = game.getPlayer(uuid);
+				if (player != null) {
+					ResourcePackAPI.setResourcepack(player, Murder.instance.gamePackUrl, Murder.instance.gamePackHash);
+				}
 			}
 			game.waitingForResourcepack.clear();
 		}
