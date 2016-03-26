@@ -214,7 +214,7 @@ public class GameListener implements Listener {
 						player.setFoodLevel(20);
 						player.setWalkSpeed(0.3f);
 						data.speedTimeout = 100;
-						data.getGame().weaponTimeoutPlayers.add(data.uuid);
+						data.getGame().timeoutPlayers.add(data.uuid);
 						return;
 					}
 				}
@@ -227,7 +227,7 @@ public class GameListener implements Listener {
 							projectile = new GunProjectile(data.getGame(), player, player.getLocation().getDirection());
 							data.reloadTimer = 80;
 							//noinspection ConstantConditions
-							data.getGame().weaponTimeoutPlayers.add(data.uuid);
+							data.getGame().timeoutPlayers.add(data.uuid);
 
 							data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.2f, 1.5f);
 							data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.1f, 2f);
@@ -240,7 +240,7 @@ public class GameListener implements Listener {
 						projectile = new KnifeProjectile(data.getGame(), player, player.getLocation().getDirection());
 						data.knifeTimout = 600;
 						//noinspection ConstantConditions
-						data.getGame().weaponTimeoutPlayers.add(data.uuid);
+						data.getGame().timeoutPlayers.add(data.uuid);
 
 						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SNOWMAN_SHOOT, 0.1f, 3f);
 						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SHULKER_SHOOT, 0.1f, 2f);
@@ -276,7 +276,7 @@ public class GameListener implements Listener {
 								event.getItem().remove();
 								data.getPlayer().getInventory().setItem(4, Murder.instance.itemManager.getKnife());
 								//noinspection ConstantConditions
-								data.getGame().weaponTimeoutPlayers.remove(data.uuid);
+								data.getGame().timeoutPlayers.remove(data.uuid);
 								data.knifeTimout = 0;
 
 								data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.2f, 1f);

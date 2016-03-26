@@ -29,6 +29,7 @@
 package org.inventivetalent.murder.game.state.executor.ingame;
 
 import org.bukkit.Sound;
+import org.bukkit.entity.Item;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.inventivetalent.murder.Murder;
@@ -120,21 +121,24 @@ public class IngameExecutor extends LeavableExecutor {
 									}
 								}));
 								killerData.gunTimeout = 200;
-								game.weaponTimeoutPlayers.add(killerData.uuid);
+								game.timeoutPlayers.add(killerData.uuid);
 								//Drop the gun
-								killerData.getPlayer().getWorld().dropItemNaturally(killerData.getPlayer().getLocation(), Murder.instance.itemManager.getGun());
+								Item dropped = killerData.getPlayer().getWorld().dropItemNaturally(killerData.getPlayer().getLocation(), Murder.instance.itemManager.getGun());
+								game.droppedItems.add(dropped);
 								killerData.getPlayer().getInventory().setItem(4, null);
 								killerData.getPlayer().getInventory().setItem(8, null);
 							}
 						}
 					}
 
+					//TODO: Spawn corpse
+
 				}
 			}
 			game.killedPlayers.clear();
 		}
 
-		for (Iterator<UUID> iterator = game.weaponTimeoutPlayers.iterator(); iterator.hasNext(); ) {
+		for (Iterator<UUID> iterator = game.timeoutPlayers.iterator(); iterator.hasNext(); ) {
 			PlayerData data = Murder.instance.playerManager.getData(iterator.next());
 			if (data != null) {
 				if (data.gunTimeout > 0) {

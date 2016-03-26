@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.game.state.executor.ingame;
 
+import org.bukkit.entity.Item;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.arena.spawn.SpawnPoint;
 import org.inventivetalent.murder.arena.spawn.SpawnType;
@@ -76,7 +77,8 @@ public class DropLootExecutor extends IngameExecutor {
 								dropIndex = 0;
 							}
 							SpawnPoint point = lootSpawnPoints.get(dropIndex);
-							game.arena.getWorld().dropItemNaturally(point.getLocation(game.arena.getWorld()), Murder.instance.itemManager.getLoot());
+							Item dropped = game.arena.getWorld().dropItemNaturally(point.getLocation(game.arena.getWorld()), Murder.instance.itemManager.getLoot());
+							game.droppedItems.add(dropped);
 
 							dropIndex++;
 						}

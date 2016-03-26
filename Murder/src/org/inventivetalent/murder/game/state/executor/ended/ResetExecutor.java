@@ -29,6 +29,7 @@
 package org.inventivetalent.murder.game.state.executor.ended;
 
 import com.google.common.base.Predicate;
+import org.bukkit.entity.Item;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
@@ -62,6 +63,11 @@ public class ResetExecutor extends LeavableExecutor {
 					return true;
 				}
 			});
+
+			//Remove dropped items
+			for (Item item : game.droppedItems) {
+				item.remove();
+			}
 		}
 		ticks++;
 	}

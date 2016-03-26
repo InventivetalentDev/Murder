@@ -30,6 +30,7 @@ package org.inventivetalent.murder.projectile;
 
 import org.bukkit.Color;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.inventivetalent.murder.Murder;
@@ -58,7 +59,8 @@ public class KnifeProjectile extends MurderProjectile {
 	@Override
 	public boolean finished() {
 		if (super.finished()) {
-			projectile.getLocation().getWorld().dropItemNaturally(projectile.getLocation(), Murder.instance.itemManager.getKnife());
+			Item dropped = projectile.getLocation().getWorld().dropItemNaturally(projectile.getLocation(), Murder.instance.itemManager.getKnife());
+			game.droppedItems.add(dropped);
 			projectile.remove();
 			return true;
 		}

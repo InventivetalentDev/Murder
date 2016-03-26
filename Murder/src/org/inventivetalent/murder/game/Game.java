@@ -31,6 +31,7 @@ package org.inventivetalent.murder.game;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
@@ -64,9 +65,11 @@ public class Game {
 
 	public final Set<UUID> waitingForResourcepack = new HashSet<>();
 	public final Set<UUID> killedPlayers          = new HashSet<>();
-	public final Set<UUID> weaponTimeoutPlayers   = new HashSet<>();//Contains reloading players, players who shot innocent bystanders and murderers waiting for their knife
+	public final Set<UUID> timeoutPlayers         = new HashSet<>();//Contains reloading players, players who shot innocent bystanders, murderers waiting for their knife, players who used speed-boost
 
 	public final Set<MurderProjectile> projectiles = new HashSet<>();
+
+	public final Set<Item> droppedItems = new HashSet<>();//Dropped loot, knife, guns
 
 	public int ticks = 0;
 
