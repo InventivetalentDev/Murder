@@ -40,7 +40,7 @@ import java.util.Collections;
 public class GunProjectile extends MurderProjectile {
 
 	public GunProjectile(Game game, Player shooter, Vector direction) {
-		super(Type.GUN, game, shooter, direction);
+		super(Type.GUN, game, shooter, direction.clone());
 		initProjectile(shooter.launchProjectile(Arrow.class, this.direction.multiply(3)));
 	}
 

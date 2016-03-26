@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.projectile;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -89,7 +90,16 @@ public class MurderProjectile {
 			PlayerData playerData = Murder.instance.playerManager.getData(entity.getUniqueId());
 			if (playerData != null) {
 				if (playerData.isInGame()) {
-					System.out.println("add " + playerData.getPlayer() + " to killed players");
+					if (playerData.isSpectator) {
+						Player spectator = playerData.getPlayer();
+						if (spectator.getEyeLocation().add(0, 1, 0).getBlock().getType() == Material.AIR) {
+							playerData.getPlayer().setVelocity(new Vector(0, 2, 0));
+						} else if (spectator.getLocation().add(0, -1, 0).getBlock().getType() == Material.AIR) {
+							playerData.getPlayer().setVelocity(new Vector(0, -2, 0));
+						}
+
+						continue;
+					}
 					playerData.killer = shooter.getUniqueId();
 					playerData.killed = true;
 					game.killedPlayers.add(playerData.uuid);
