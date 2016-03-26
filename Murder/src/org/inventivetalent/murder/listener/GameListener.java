@@ -44,6 +44,7 @@ import org.bukkit.util.Vector;
 import org.inventivetalent.entityanimation.AnimationAPI;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
+import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.player.PlayerData;
 import org.inventivetalent.murder.projectile.GunProjectile;
 import org.inventivetalent.murder.projectile.KnifeProjectile;
@@ -68,9 +69,11 @@ public class GameListener implements Listener {
 		PlayerData data = plugin.playerManager.getData(player.getUniqueId());
 		if (data != null) {
 			if (data.isInGame() && data.getGame() != null) {
-				if (!data.getGame().arena.contains(event.getTo().toVector())) {
-					Vector middle = data.getGame().arena.maxCorner.clone().midpoint(data.getGame().arena.minCorner.clone());
-					player.setVelocity(middle.clone().subtract(event.getTo().toVector()).normalize());
+				if (data.gameState.ordinal() > GameState.LOBBY.ordinal()) {
+					if (!data.getGame().arena.contains(event.getTo().toVector())) {
+						Vector middle = data.getGame().arena.maxCorner.clone().midpoint(data.getGame().arena.minCorner.clone());
+						player.setVelocity(middle.clone().subtract(event.getTo().toVector()).normalize());
+					}
 				}
 			}
 		}
