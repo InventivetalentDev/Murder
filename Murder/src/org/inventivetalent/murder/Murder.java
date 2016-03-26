@@ -44,10 +44,7 @@ import org.inventivetalent.murder.command.GameCommands;
 import org.inventivetalent.murder.command.PlayerCommands;
 import org.inventivetalent.murder.game.GameManager;
 import org.inventivetalent.murder.item.ItemManager;
-import org.inventivetalent.murder.listener.DataListener;
-import org.inventivetalent.murder.listener.EditorListener;
-import org.inventivetalent.murder.listener.GameListener;
-import org.inventivetalent.murder.listener.SpectatorListener;
+import org.inventivetalent.murder.listener.*;
 import org.inventivetalent.murder.name.NameListener;
 import org.inventivetalent.murder.name.NameManager;
 import org.inventivetalent.murder.packet.PacketListener;
@@ -86,7 +83,7 @@ public class Murder extends JavaPlugin {
 	public DataListener      dataListener;
 	public GameListener      gameListener;
 	public SpectatorListener spectatorListener;
-	public NameListener nameListener;
+	public NameListener      nameListener;
 
 	public PacketListener packetListener;
 
@@ -204,6 +201,7 @@ public class Murder extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(gameListener = new GameListener(this), this);
 		Bukkit.getPluginManager().registerEvents(spectatorListener = new SpectatorListener(this), this);
 		Bukkit.getPluginManager().registerEvents(nameListener = new NameListener(this), this);
+		if (classExists("org.bukkit.event.player.PlayerPickupArrowEvent")) { Bukkit.getPluginManager().registerEvents(new GameListenerArrow(this), this); }
 
 		packetListener = new PacketListener(this);
 
@@ -278,6 +276,14 @@ public class Murder extends JavaPlugin {
 		return (point.getX() >= min.getX() && point.getX() <= max.getX()) &&//
 				(point.getY() >= min.getY() && point.getY() <= max.getY()) &&//
 				(point.getZ() >= min.getZ() && point.getZ() <= max.getZ());
+	}
+
+	boolean classExists(String name) {
+		try {
+			return Class.forName(name) != null;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }

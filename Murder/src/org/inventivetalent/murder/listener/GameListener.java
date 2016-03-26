@@ -36,7 +36,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.inventivetalent.entityanimation.AnimationAPI;
@@ -268,22 +271,6 @@ public class GameListener implements Listener {
 								}
 							}
 						}
-					}
-				}
-			}
-		}
-	}
-
-	@EventHandler
-	public void on(PlayerPickupArrowEvent event) {
-		Player player = event.getPlayer();
-		PlayerData data = plugin.playerManager.getData(player.getUniqueId());
-		if (data != null) {
-			if (data.isInGame()) {
-				if (event.getArrow() != null) {
-					if (event.getArrow().hasMetadata("MURDER")) {
-						event.setCancelled(true);
-						event.getArrow().remove();
 					}
 				}
 			}
