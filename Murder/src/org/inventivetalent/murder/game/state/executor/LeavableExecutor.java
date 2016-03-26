@@ -60,8 +60,12 @@ public class LeavableExecutor extends StateExecutor {
 						data.getPlayer().removePotionEffect(effect.getType());
 					}
 
-					Murder.instance.playerManager.resetPlayer(data.getOfflinePlayer());
 					data.restoreData();
+					Murder.instance.playerManager.resetPlayer(data.getOfflinePlayer());
+
+					for (UUID uuid1 : game.players) {
+						game.getPlayer(uuid1).showPlayer(data.getPlayer());
+					}
 
 					//Reset resource pack
 					ResourcePackAPI.setResourcepack(data.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);

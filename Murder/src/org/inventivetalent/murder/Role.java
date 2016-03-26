@@ -37,8 +37,8 @@ public enum Role {
 	/* Default Bystander */
 	DEFAULT("default.name", "default.title", "default.subtitle", "default.objective", "default.bossbar.text", "default.bossbar.color", "default.bossbar.style"),
 	MURDERER("murderer.name", "murderer.title", "murderer.subtitle", "murderer.objective", "murderer.bossbar.text", "murderer.bossbar.color", "murderer.bossbar.style"),
-	WEAPON("weapon.name", "weapon.title", "weapon.subtitle", "weapon.objective", "weapon.bossbar.text", "weapon.bossbar.color", "weapon.bossbar.style"),
-	SPECTATOR("spectator.name", null, null, null, null, null, null),;
+	WEAPON("weapon.name", "weapon.title", "weapon.subtitle", "weapon.objective", "weapon.bossbar.text", "weapon.bossbar.color", "weapon.bossbar.style")
+	/*,SPECTATOR("spectator.name", null, null, null, null, null, null)*/;
 
 	private String nameKey;
 	private String titleKey;

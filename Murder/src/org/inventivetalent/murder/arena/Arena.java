@@ -32,8 +32,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
+import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.arena.spawn.SpawnPoint;
 import org.inventivetalent.murder.arena.spawn.SpawnType;
 
@@ -108,6 +110,14 @@ public class Arena {
 			if (spawnPoint.type == type) {return spawnPoint;}
 		}
 		return null;
+	}
+
+	boolean contains(Location location) {
+		return (location != null && location.getWorld() != null) && world.equals(location.getWorld().getName()) && contains(location.toVector());
+	}
+
+	boolean contains(Vector point) {
+		return Murder.instance.contains(minCorner, maxCorner, point);
 	}
 
 	public JsonObject toJson() {

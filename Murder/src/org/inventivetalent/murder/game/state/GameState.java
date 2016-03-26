@@ -40,31 +40,34 @@ import org.inventivetalent.murder.game.state.executor.starting.*;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
 
+import static org.inventivetalent.murder.game.state.GameState.Flag.INVULNERABLE;
+import static org.inventivetalent.murder.game.state.GameState.Flag.JOINABLE;
+
 public enum GameState {
 
 	/* Initial state when no game instance exists yet */
-	WAITING("waiting.sign", WaitingExecutor.class, true),
+	WAITING("waiting.sign", WaitingExecutor.class, JOINABLE, INVULNERABLE),
 
 	/* Lobby States */
-	LOBBY("lobby.sign", LobbyExecutor.class, true),
+	LOBBY("lobby.sign", LobbyExecutor.class, JOINABLE, INVULNERABLE),
 
 	/* Starting States */
-	STARTING("starting.sign", StartingExecutor.class),
-	DISGUISE(DisguiseExecutor.class),
-	ASSIGN(AssignExecutor.class),
-	TELEPORT(TeleportExecutor.class),
-	STARTING_DELAY(StartingDelayExecutor.class),
+	STARTING("starting.sign", StartingExecutor.class, INVULNERABLE),
+	DISGUISE(DisguiseExecutor.class, INVULNERABLE),
+	ASSIGN(AssignExecutor.class, INVULNERABLE),
+	TELEPORT(TeleportExecutor.class, INVULNERABLE),
+	STARTING_DELAY(StartingDelayExecutor.class, INVULNERABLE),
+	GIVE_ITEMS(GiveItemsExecutor.class),
 
 	/* Ingame States */
 	STARTED("started.sign", StartedExecutor.class),
-
 	DROP_LOOT(DropLootExecutor.class),
 
 	/* End States */
-	ENDED("ended.sign", EndedExecutor.class),
+	ENDED("ended.sign", EndedExecutor.class, INVULNERABLE),
+	RESET(ResetExecutor.class, INVULNERABLE),
 
-	RESET(ResetExecutor.class),
-
+	/* Dummy state to tell the manager to remove the game instance */
 	DISPOSE;
 
 	private static final MessageLoader MESSAGE_LOADER = PluginAnnotations.MESSAGE.newMessageLoader(Murder.instance, "config.yml", "messages.game.state", null);
@@ -72,7 +75,9 @@ public enum GameState {
 	private String signKey;
 
 	private Class<? extends StateExecutor> executorClass;
-	private boolean                        joinable;
+
+	private boolean joinable;
+	private boolean invulnerable;
 
 	GameState() {
 	}
@@ -81,9 +86,10 @@ public enum GameState {
 		this.signKey = signKey;
 	}
 
-	GameState(Class<? extends StateExecutor> executorClass) {
+	GameState(Class<? extends StateExecutor> executorClass, Flag... flags) {
 		this.signKey = null;
 		this.executorClass = executorClass;
+		setFlags(flags);
 	}
 
 	GameState(String signKey, Class<? extends StateExecutor> executorClass) {
@@ -91,10 +97,17 @@ public enum GameState {
 		this.executorClass = executorClass;
 	}
 
-	GameState(String signKey, Class<? extends StateExecutor> executorClass, boolean joinable) {
+	GameState(String signKey, Class<? extends StateExecutor> executorClass, Flag... flags) {
 		this.signKey = signKey;
 		this.executorClass = executorClass;
-		this.joinable = joinable;
+		setFlags(flags);
+	}
+
+	void setFlags(Flag... flags) {
+		for (Flag flag : flags) {
+			if (flag == Flag.JOINABLE) { joinable = true; }
+			if (flag == Flag.INVULNERABLE) { invulnerable = true; }
+		}
 	}
 
 	public String getSignText() {
@@ -123,6 +136,10 @@ public enum GameState {
 		return joinable;
 	}
 
+	public boolean isInvulnerable() {
+		return invulnerable;
+	}
+
 	public GameState next() {
 		if (ordinal() < values().length - 1) {
 			return values()[ordinal() + 1];
@@ -145,6 +162,11 @@ public enum GameState {
 			}
 		}
 		return null;
+	}
+
+	public enum Flag {
+		JOINABLE,
+		INVULNERABLE;
 	}
 
 }

@@ -33,7 +33,9 @@ import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
+import org.inventivetalent.murder.player.PlayerData;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
+import org.inventivetalent.pluginannotations.message.MessageFormatter;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
 
 public class EndedExecutor extends LeavableExecutor {
@@ -56,12 +58,23 @@ public class EndedExecutor extends LeavableExecutor {
 			firstTick = false;
 			updatePlayerStates(GameState.ENDED, null);
 
+			MessageFormatter murdererFormatter = new MessageFormatter() {
+				@Override
+				public String format(String key, String message) {
+					PlayerData murdererData = Murder.instance.playerManager.getData(game.getMurderer());
+					if (murdererData != null) {
+						return String.format(message, murdererData.getPlayer().getName(), murdererData.nameTag);
+					}
+					return String.format(message, "?", "?");
+				}
+			};
+
 			if (game.winner == null) {
 				game.broadcastMessage(MESSAGE_LOADER.getMessage("winner.draw", "winner.draw"));
 			} else if (game.winner == Role.WEAPON) {
-				game.broadcastMessage(MESSAGE_LOADER.getMessage("winner.bystander", "winner.bystander"));
+				game.broadcastMessage(MESSAGE_LOADER.getMessage("winner.bystander", "winner.bystander", murdererFormatter));
 			} else if (game.winner == Role.MURDERER) {
-				game.broadcastMessage(MESSAGE_LOADER.getMessage("winner.murderer", "winner.murderer"));
+				game.broadcastMessage(MESSAGE_LOADER.getMessage("winner.murderer", "winner.murderer", murdererFormatter));
 			} else {
 				Murder.instance.getLogger().warning("Invalid Winner: " + game.winner);
 			}

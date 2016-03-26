@@ -58,6 +58,7 @@
                   <include>org.inventivetalent:playerversion**</include>
                   <include>org.inventivetalent:messagebuilder**</include>
                   <include>org.inventivetalent:itembuilder**</include>
+                  <include>org.inventivetalent:entityanimationapi**</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -155,6 +156,12 @@
       <groupId>org.inventivetalent.npclib</groupId>
       <artifactId>api</artifactId>
       <version>[1.8.3,)</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.inventivetalent</groupId>
+      <artifactId>menubuilder</artifactId>
+      <version>[1.0.2,)</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

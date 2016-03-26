@@ -36,6 +36,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.inventivetalent.apihelper.APIManager;
 import org.inventivetalent.bossbar.BossBarAPI;
+import org.inventivetalent.entityanimation.AnimationAPI;
 import org.inventivetalent.murder.arena.ArenaManager;
 import org.inventivetalent.murder.arena.editor.ArenaEditorManager;
 import org.inventivetalent.murder.command.ArenaCommands;
@@ -45,9 +46,14 @@ import org.inventivetalent.murder.game.GameManager;
 import org.inventivetalent.murder.item.ItemManager;
 import org.inventivetalent.murder.listener.DataListener;
 import org.inventivetalent.murder.listener.EditorListener;
+import org.inventivetalent.murder.listener.GameListener;
+import org.inventivetalent.murder.listener.SpectatorListener;
+import org.inventivetalent.murder.name.NameListener;
 import org.inventivetalent.murder.name.NameManager;
+import org.inventivetalent.murder.packet.PacketListener;
 import org.inventivetalent.murder.player.PlayerManager;
 import org.inventivetalent.murder.skin.SkinManager;
+import org.inventivetalent.murder.spectate.SpectateManager;
 import org.inventivetalent.murder.task.ArenaOutlineTask;
 import org.inventivetalent.nicknamer.api.INickNamer;
 import org.inventivetalent.nicknamer.api.NickManager;
@@ -74,9 +80,15 @@ public class Murder extends JavaPlugin {
 	public PlayerManager      playerManager;
 	public ItemManager        itemManager;
 	public ArenaEditorManager arenaEditorManager;
+	public SpectateManager    spectateManager;
 
-	public EditorListener editorListener;
-	public DataListener   dataListener;
+	public EditorListener    editorListener;
+	public DataListener      dataListener;
+	public GameListener      gameListener;
+	public SpectatorListener spectatorListener;
+	public NameListener nameListener;
+
+	public PacketListener packetListener;
 
 	public ArenaCommands  arenaCommands;
 	public GameCommands   gameCommands;
@@ -110,6 +122,7 @@ public class Murder extends JavaPlugin {
 		APIManager.require(BossBarAPI.class, this);
 		APIManager.require(PlayerVersion.class, this);
 		APIManager.require(TitleAPI.class, this);
+		APIManager.require(AnimationAPI.class, this);
 	}
 
 	@Override
@@ -138,6 +151,18 @@ public class Murder extends JavaPlugin {
 		} else {
 			getLogger().info("Found NickNamer");
 		}
+		if (!Bukkit.getPluginManager().isPluginEnabled("MenuBuilder")) {
+			getLogger().severe("****************************************");
+			getLogger().severe(" ");
+			getLogger().severe("    This plugin depends on MenuBuilder    ");
+			getLogger().severe("        https://r.spiget.org/12995        ");
+			getLogger().severe(" ");
+			getLogger().severe("****************************************");
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		} else {
+			getLogger().info("Found MenuBuilder");
+		}
 		if (!Bukkit.getPluginManager().isPluginEnabled("ResourcePackApi") || !Bukkit.getPluginManager().isPluginEnabled("NPCLib")) {
 			getLogger().warning("**************************************");
 			getLogger().warning(" ");
@@ -156,6 +181,7 @@ public class Murder extends JavaPlugin {
 		APIManager.initAPI(BossBarAPI.class);
 		APIManager.initAPI(PlayerVersion.class);
 		APIManager.initAPI(TitleAPI.class);
+		APIManager.initAPI(AnimationAPI.class);
 
 		saveDefaultConfig();
 		PluginAnnotations.CONFIG.loadValues(this, this);
@@ -171,9 +197,15 @@ public class Murder extends JavaPlugin {
 		playerManager = new PlayerManager(this);
 		itemManager = new ItemManager(this);
 		arenaEditorManager = new ArenaEditorManager(this);
+		spectateManager = new SpectateManager(this);
 
 		Bukkit.getPluginManager().registerEvents(editorListener = new EditorListener(this), this);
 		Bukkit.getPluginManager().registerEvents(dataListener = new DataListener(this), this);
+		Bukkit.getPluginManager().registerEvents(gameListener = new GameListener(this), this);
+		Bukkit.getPluginManager().registerEvents(spectatorListener = new SpectatorListener(this), this);
+		Bukkit.getPluginManager().registerEvents(nameListener = new NameListener(this), this);
+
+		packetListener = new PacketListener(this);
 
 		PluginAnnotations.COMMAND.registerCommands(this, arenaCommands = new ArenaCommands(this));
 		PluginAnnotations.COMMAND.registerCommands(this, gameCommands = new GameCommands(this));
@@ -195,6 +227,10 @@ public class Murder extends JavaPlugin {
 	public void onDisable() {
 		getLogger().info("Saving data...");
 		saveData();
+
+		if (packetListener != null) {
+			packetListener.disable();
+		}
 	}
 
 	//	public WorldEdit getWorldEdit() {
@@ -236,6 +272,12 @@ public class Murder extends JavaPlugin {
 
 	public Vector maxVector(Vector a, Vector b) {
 		return new Vector(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+	}
+
+	public boolean contains(Vector min, Vector max, Vector point) {
+		return (point.getX() >= min.getX() && point.getX() <= max.getX()) &&//
+				(point.getY() >= min.getY() && point.getY() <= max.getY()) &&//
+				(point.getZ() >= min.getZ() && point.getZ() <= max.getZ());
 	}
 
 }

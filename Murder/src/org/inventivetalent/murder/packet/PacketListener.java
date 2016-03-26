@@ -26,26 +26,35 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.init;
+package org.inventivetalent.murder.packet;
 
-import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
+import org.inventivetalent.murder.Murder;
+import org.inventivetalent.packetlistener.handler.PacketHandler;
+import org.inventivetalent.packetlistener.handler.ReceivedPacket;
+import org.inventivetalent.packetlistener.handler.SentPacket;
 
-public class WaitingExecutor extends LeavableExecutor {
+public class PacketListener {
 
-	public WaitingExecutor(Game game) {
-		super(game);
+	private Murder        plugin;
+	public  PacketHandler packetHandler;
+
+	public PacketListener(Murder plugin) {
+		this.plugin = plugin;
+		PacketHandler.addHandler(packetHandler = new PacketHandler() {
+			@Override
+			public void onSend(SentPacket sentPacket) {
+				//TODO: cancel held item packet
+			}
+
+			@Override
+			public void onReceive(ReceivedPacket receivedPacket) {
+
+			}
+		});
 	}
 
-	@Override
-	public boolean finished() {
-		//If there are players, go to LOBBY
-		return !game.players.isEmpty() || !game.joiningPlayers.isEmpty();
+	public void disable() {
+		PacketHandler.removeHandler(packetHandler);
 	}
 
-	@Override
-	public boolean revert() {
-		//If no players are waiting, go "back" to DISPOSE
-		return game.players.isEmpty() && game.joiningPlayers.isEmpty();
-	}
 }

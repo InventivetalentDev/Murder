@@ -40,10 +40,10 @@ public class CountdownExecutor extends LeavableExecutor {
 	public CountdownExecutor(Game game, CountdownType type) {
 		super(game);
 		this.type = type;
-		resetTime();
+//		resetTime();
 	}
 
-	void resetTime() {
+	protected void resetTime() {
 		if (type == CountdownType.LOBBY) {
 			game.lobbyCountdown = Murder.instance.lobbyTime;
 		}

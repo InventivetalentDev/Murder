@@ -26,26 +26,39 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.init;
+package org.inventivetalent.murder.listener;
 
-import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.inventivetalent.murder.Murder;
+import org.inventivetalent.murder.player.PlayerData;
 
-public class WaitingExecutor extends LeavableExecutor {
+public class SpectatorListener implements Listener {
 
-	public WaitingExecutor(Game game) {
-		super(game);
+	private Murder plugin;
+
+	public SpectatorListener(Murder plugin) {
+		this.plugin = plugin;
 	}
 
-	@Override
-	public boolean finished() {
-		//If there are players, go to LOBBY
-		return !game.players.isEmpty() || !game.joiningPlayers.isEmpty();
+	@EventHandler
+	public void on(PlayerInteractEvent event) {
+		ItemStack itemStack = event.getItem();
+		if (itemStack != null && plugin.itemManager.getTeleporter().equals(itemStack)) {
+			PlayerData data = Murder.instance.playerManager.getData(event.getPlayer().getUniqueId());
+			if (data != null) {
+				if (data.isInGame() && data.isSpectator) {
+					if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+						plugin.spectateManager.teleportToClosestPlayer(data);
+					} else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+						plugin.spectateManager.openSpectatorMenu(data);
+					}
+				}
+			}
+		}
 	}
 
-	@Override
-	public boolean revert() {
-		//If no players are waiting, go "back" to DISPOSE
-		return game.players.isEmpty() && game.joiningPlayers.isEmpty();
-	}
 }

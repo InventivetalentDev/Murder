@@ -31,6 +31,7 @@ package org.inventivetalent.murder.item;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.inventivetalent.itembuilder.ItemBuilder;
 import org.inventivetalent.murder.Murder;
 
@@ -42,6 +43,15 @@ public class ItemManager {
 	public ItemManager(Murder plugin) {
 		this.plugin = plugin;
 		itemSection = plugin.getConfig().getConfigurationSection("items");
+	}
+
+	public boolean lazyEqual(ItemStack a, ItemStack b) {
+		if (a == null || b == null) { return false; }
+		if (a.getType() != b.getType()) { return false; }
+		ItemMeta aMeta = a.getItemMeta();
+		ItemMeta bMeta = b.getItemMeta();
+		if (!aMeta.getDisplayName().equals(bMeta.getDisplayName())) { return false; }
+		return true;
 	}
 
 	//Game Items

@@ -38,6 +38,7 @@ import org.inventivetalent.murder.arena.Arena;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.StateExecutor;
 import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.murder.projectile.MurderProjectile;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageFormatter;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
@@ -56,10 +57,15 @@ public class Game {
 	public GameState     gameState     = GameState.WAITING;
 	public StateExecutor stateExecutor = gameState.newExecutor(this);
 
-	public final Set<UUID> joiningPlayers         = new HashSet<>();
-	public final Set<UUID> leavingPlayers         = new HashSet<>();
-	public final Set<UUID> players                = new HashSet<>();//This set should only be accessed by the state executors
+	public final Set<UUID> joiningPlayers = new HashSet<>();
+	public final Set<UUID> leavingPlayers = new HashSet<>();
+	public final Set<UUID> players        = new HashSet<>();//This set should only be accessed by the state executors
+
 	public final Set<UUID> waitingForResourcepack = new HashSet<>();
+	public final Set<UUID> killedPlayers          = new HashSet<>();
+	public final Set<UUID> weaponTimeoutPlayers   = new HashSet<>();//Contains reloading players, players who shot innocent bystanders and murderers waiting for their knife
+
+	public final Set<MurderProjectile> projectiles = new HashSet<>();
 
 	public int ticks = 0;
 
@@ -105,7 +111,7 @@ public class Game {
 		broadcastMessage(MESSAGE_LOADER.getMessage("join", "join", true, '&', new MessageFormatter() {
 			@Override
 			public String format(String key, String message) {
-				return String.format(message, player.getDisplayName(), players.size(), arena.maxPlayers);
+				return String.format(message, player.getName(), players.size(), arena.maxPlayers);
 			}
 		}));
 	}
@@ -115,7 +121,7 @@ public class Game {
 		broadcastMessage(MESSAGE_LOADER.getMessage("leave", "leave", true, '&', new MessageFormatter() {
 			@Override
 			public String format(String key, String message) {
-				return String.format(message, player.getDisplayName(), players.size(), arena.maxPlayers);
+				return String.format(message, player.getName(), players.size(), arena.maxPlayers);
 			}
 		}));
 	}
@@ -168,6 +174,19 @@ public class Game {
 			}
 		}
 		return null;
+	}
+
+	public Set<UUID> getAlivePlayers() {
+		Set<UUID> uuids = new HashSet<>();
+		for (UUID uuid : players) {
+			PlayerData data = Murder.instance.playerManager.getData(uuid);
+			if (data != null) {
+				if (!data.killed &&!data.isSpectator) {
+					uuids.add(uuid);
+				}
+			}
+		}
+		return uuids;
 	}
 
 	public Player getPlayer(UUID uuid) {

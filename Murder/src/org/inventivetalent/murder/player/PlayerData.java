@@ -31,8 +31,10 @@ package org.inventivetalent.murder.player;
 import org.inventivetalent.bossbar.BossBar;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
+import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class PlayerData extends StoredData {
@@ -42,9 +44,19 @@ public class PlayerData extends StoredData {
 	public String nameTag;
 
 	public GameState gameState = GameState.WAITING;
-	public Role role;
+	public Role    role;
+	public boolean isSpectator;
 
+	public int damageAmount;// Determines when the player is "dead"
 	public boolean killed = false;
+	public UUID killer;
+
+	public int reloadTimer;// Delay until the gun is reloaded
+	public int gunTimeout;// Delay for players who killed innocent bystanders
+	public int knifeTimout;// Backup delay for the murderer to get their knife back
+	public int speedTimeout;// Speed-Boost timeout
+
+	public int lootCount;
 
 	public BossBar bossBar;
 
@@ -60,6 +72,12 @@ public class PlayerData extends StoredData {
 
 	public boolean isInGame() {
 		return gameId != null;
+	}
+
+	@Nullable
+	public Game getGame() {
+		if (gameId == null) { return null; }
+		return Murder.instance.gameManager.getGame(gameId);
 	}
 
 	@Override

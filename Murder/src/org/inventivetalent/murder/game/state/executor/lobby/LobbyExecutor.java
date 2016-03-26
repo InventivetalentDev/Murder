@@ -35,7 +35,6 @@ import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
 import org.inventivetalent.murder.player.PlayerData;
-import org.inventivetalent.rpapi.ResourcePackAPI;
 
 import java.util.UUID;
 
@@ -43,6 +42,7 @@ public class LobbyExecutor extends CountdownExecutor {
 
 	public LobbyExecutor(Game game) {
 		super(game, CountdownType.LOBBY);
+		resetTime();
 	}
 
 	@Override
@@ -51,7 +51,8 @@ public class LobbyExecutor extends CountdownExecutor {
 		if (!game.waitingForResourcepack.isEmpty()) {
 			for (UUID uuid : game.waitingForResourcepack) {
 				//Send the resource pack
-				ResourcePackAPI.setResourcepack(game.getPlayer(uuid), Murder.instance.gamePackUrl, Murder.instance.gamePackHash);
+				//TODO: enable
+//				ResourcePackAPI.setResourcepack(game.getPlayer(uuid), Murder.instance.gamePackUrl, Murder.instance.gamePackHash);
 			}
 			game.waitingForResourcepack.clear();
 		}

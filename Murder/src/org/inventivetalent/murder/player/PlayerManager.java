@@ -62,8 +62,7 @@ public class PlayerManager {
 	@Nullable
 	public PlayerData getData(@Nullable UUID uuid) {
 		if (uuid == null) { return null; }
-		//		if (!dataMap.containsKey(uuid)) { return null; }
-		//		return dataMap.get(uuid);
+		if (dataMap.containsKey(uuid)) { return dataMap.get(uuid); }
 		return loadFromFile(uuid);
 	}
 

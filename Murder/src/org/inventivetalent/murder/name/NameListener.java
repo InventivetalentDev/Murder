@@ -26,26 +26,37 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.init;
+package org.inventivetalent.murder.name;
 
-import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.inventivetalent.murder.Murder;
+import org.inventivetalent.nicknamer.api.INickNamer;
+import org.inventivetalent.nicknamer.api.NickManager;
 
-public class WaitingExecutor extends LeavableExecutor {
+public class NameListener implements Listener {
 
-	public WaitingExecutor(Game game) {
-		super(game);
+	private Murder plugin;
+
+	public NameListener(Murder plugin) {
+		this.plugin = plugin;
 	}
 
-	@Override
-	public boolean finished() {
-		//If there are players, go to LOBBY
-		return !game.players.isEmpty() || !game.joiningPlayers.isEmpty();
+	@EventHandler
+	public void on(org.inventivetalent.nicknamer.api.event.NickNamerUpdateEvent event) {
+//		PlayerData data = plugin.playerManager.getData(event.getPlayer().getUniqueId());
+//		if (data != null) {
+//			if (data.isInGame()) {
+//				if (getNickManager().isNicked(event.getPlayer().getUniqueId())) {
+//					event.setNick(getNickManager().getNick(event.getPlayer().getUniqueId()));
+//				}
+//			}
+//		}
 	}
 
-	@Override
-	public boolean revert() {
-		//If no players are waiting, go "back" to DISPOSE
-		return game.players.isEmpty() && game.joiningPlayers.isEmpty();
+	NickManager getNickManager() {
+		return ((INickNamer) Bukkit.getPluginManager().getPlugin("NickNamer")).getAPI();
 	}
+
 }

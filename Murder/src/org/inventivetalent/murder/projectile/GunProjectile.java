@@ -26,26 +26,34 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.murder.game.state.executor.init;
+package org.inventivetalent.murder.projectile;
 
+import org.bukkit.Color;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import org.inventivetalent.murder.game.Game;
-import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
+import org.inventivetalent.particle.ParticleEffect;
 
-public class WaitingExecutor extends LeavableExecutor {
+import java.util.Collections;
 
-	public WaitingExecutor(Game game) {
-		super(game);
+public class GunProjectile extends MurderProjectile {
+
+	public GunProjectile(Game game, Player shooter, Vector direction) {
+		super(Type.GUN, game, shooter, direction);
+		initProjectile(shooter.launchProjectile(Arrow.class, this.direction.multiply(3)));
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		projectile.setVelocity(direction);
+
+		ParticleEffect.REDSTONE.sendColor(Collections.singleton(shooter), projectile.getLocation().getX(), projectile.getLocation().getY(), projectile.getLocation().getZ(), Color.BLUE);
 	}
 
 	@Override
 	public boolean finished() {
-		//If there are players, go to LOBBY
-		return !game.players.isEmpty() || !game.joiningPlayers.isEmpty();
-	}
-
-	@Override
-	public boolean revert() {
-		//If no players are waiting, go "back" to DISPOSE
-		return game.players.isEmpty() && game.joiningPlayers.isEmpty();
+		return super.finished();
 	}
 }

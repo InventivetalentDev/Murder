@@ -28,15 +28,24 @@
 
 package org.inventivetalent.murder.game.state.executor.ingame;
 
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.murder.projectile.MurderProjectile;
+import org.inventivetalent.pluginannotations.PluginAnnotations;
+import org.inventivetalent.pluginannotations.message.MessageFormatter;
+import org.inventivetalent.pluginannotations.message.MessageLoader;
 
+import java.util.Iterator;
 import java.util.UUID;
 
 public class IngameExecutor extends LeavableExecutor {
+
+	static MessageLoader MESSAGE_LOADER = PluginAnnotations.MESSAGE.newMessageLoader(Murder.instance, "config.yml", "messages.game", null);
 
 	public IngameExecutor(Game game) {
 		super(game);
@@ -45,6 +54,119 @@ public class IngameExecutor extends LeavableExecutor {
 	@Override
 	public void tick() {
 		super.tick();
+
+		//Update projectiles
+		for (Iterator<MurderProjectile> iterator = game.projectiles.iterator(); iterator.hasNext(); ) {
+			MurderProjectile next = iterator.next();
+			next.tick();
+			if (next.finished()) {
+				iterator.remove();
+			}
+		}
+
+		if (!game.killedPlayers.isEmpty()) {
+			System.out.println("Killed players:");
+			System.out.println(game.killedPlayers);
+			for (UUID uuid : game.killedPlayers) {
+				PlayerData data = Murder.instance.playerManager.getData(uuid);
+				if (data != null) {
+					System.out.println(data.getPlayer() + " died");
+
+					//Make the player a spectator
+					data.isSpectator = true;
+					//					data.getPlayer().setGameMode(GameMode.SPECTATOR);
+					data.getPlayer().setAllowFlight(true);
+					data.getPlayer().setFlying(true);
+					data.getPlayer().getInventory().clear();
+					data.getPlayer().getInventory().addItem(Murder.instance.itemManager.getTeleporter());
+					Murder.instance.spectateManager.teleportToClosestPlayer(data);
+
+					data.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+					for (UUID uuid1 : game.players) {
+						PlayerData playerData = Murder.instance.playerManager.getData(uuid1);
+						if (playerData != null && playerData.isInGame() && !playerData.killed) {
+							//Make the spectator invisible to alive players
+							playerData.getPlayer().hidePlayer(data.getPlayer());
+						}
+					}
+
+					//Broadcast special kill messages
+					if (data.role == Role.MURDERER) {
+						final PlayerData killerData;
+						if (data.killer != null && (killerData = Murder.instance.playerManager.getData(data.killer)) != null) {
+							game.broadcastMessage(MESSAGE_LOADER.getMessage("kill.murderer.player", "kill.murderer.player", new MessageFormatter() {
+								@Override
+								public String format(String key, String message) {
+									return String.format(message, killerData.getPlayer().getName(), killerData.nameTag);
+								}
+							}));
+						} else {
+							game.broadcastMessage(MESSAGE_LOADER.getMessage("kill.murderer.unknown", "kill.murderer.unknown"));
+						}
+					}
+					if (data.role == Role.DEFAULT || data.role == Role.WEAPON) {
+						final PlayerData killerData;
+						if (data.killer != null && (killerData = Murder.instance.playerManager.getData(data.killer)) != null) {
+							if (killerData.role != Role.MURDERER) {
+								game.broadcastMessage(MESSAGE_LOADER.getMessage("kill.innocent.player", "kill.innocent.player", new MessageFormatter() {
+									@Override
+									public String format(String key, String message) {
+										return String.format(message, killerData.getPlayer().getName(), killerData.nameTag);
+									}
+								}));
+								killerData.gunTimeout = 100;
+								game.weaponTimeoutPlayers.add(killerData.uuid);
+								//Drop the gun
+								killerData.getPlayer().getWorld().dropItemNaturally(killerData.getPlayer().getLocation(), Murder.instance.itemManager.getGun());
+								killerData.getPlayer().getInventory().setItem(4, null);
+								killerData.getPlayer().getInventory().setItem(8, null);
+							}
+						}
+					}
+
+				}
+			}
+			game.killedPlayers.clear();
+		}
+
+		for (Iterator<UUID> iterator = game.weaponTimeoutPlayers.iterator(); iterator.hasNext(); ) {
+			PlayerData data = Murder.instance.playerManager.getData(iterator.next());
+			if (data != null) {
+				if (data.gunTimeout > 0) {
+					data.gunTimeout--;
+				} else if (data.reloadTimer > 0) {
+					data.reloadTimer--;
+					if (data.reloadTimer <= 0) {
+						if (data.isInGame()) {
+							data.getPlayer().getInventory().setItem(8, Murder.instance.itemManager.getBullet());
+						}
+						iterator.remove();
+					}
+				} else if (data.knifeTimout > 0) {
+					data.knifeTimout--;
+					if (data.knifeTimout <= 0) {
+						if (data.isInGame()) {
+							data.getPlayer().getInventory().setItem(4, Murder.instance.itemManager.getKnife());
+						}
+						iterator.remove();
+					}
+				} else if (data.speedTimeout > 0) {
+					data.speedTimeout--;
+					if (data.speedTimeout <= 0) {
+						if (data.isInGame()) {
+							data.getPlayer().setFoodLevel(6);
+							data.getPlayer().setWalkSpeed(0.2f);
+						}
+						iterator.remove();
+					}
+				} else {
+					iterator.remove();
+				}
+			} else {
+				iterator.remove();
+			}
+		}
+
 	}
 
 	@Override

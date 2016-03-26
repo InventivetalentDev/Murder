@@ -46,6 +46,7 @@ public class StartingExecutor extends CountdownExecutor {
 
 	public StartingExecutor(Game game) {
 		super(game, CountdownType.START);
+		resetTime();
 	}
 
 	@Override

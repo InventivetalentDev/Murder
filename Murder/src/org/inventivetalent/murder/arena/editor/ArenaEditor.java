@@ -84,8 +84,6 @@ public class ArenaEditor {
 	}
 
 	public void handleInteract(PlayerInteractEvent event) {
-		System.out.println(event);
-		System.out.println(event.getAction());
 		ItemStack itemStack = event.getItem();
 		if (itemStack != null) {
 			if (event.getPlayer().hasPermission("murder.editor.arena.use")) {
@@ -123,17 +121,30 @@ public class ArenaEditor {
 					event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("spawn.add.lobby", "spawn.add.lobby", new VectorFormatter(lobbySpawnPoint.getVector())));
 				}
 				if (itemStack.equals(Murder.instance.itemManager.getPlayerSpawnSelector())) {
-					Vector vector = event.getBlockPlaced().getLocation().toVector();
-					playerSpawnPoints.add(new SpawnPoint(vector, SpawnType.PLAYER));
-					event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("spawn.add.player", "spawn.add.player", new VectorFormatter(vector)));
+					if (checkBounds(event)) {
+						Vector vector = event.getBlockPlaced().getLocation().toVector();
+						playerSpawnPoints.add(new SpawnPoint(vector, SpawnType.PLAYER));
+						event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("spawn.add.player", "spawn.add.player", new VectorFormatter(vector)));
+					}
 				}
 				if (itemStack.equals(Murder.instance.itemManager.getLootSpawnSelector())) {
-					Vector vector = event.getBlockPlaced().getLocation().toVector();
-					playerSpawnPoints.add(new SpawnPoint(vector, SpawnType.LOOT));
-					event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("spawn.add.loot", "spawn.add.loot", new VectorFormatter(vector)));
+					if (checkBounds(event)) {
+						Vector vector = event.getBlockPlaced().getLocation().toVector();
+						playerSpawnPoints.add(new SpawnPoint(vector, SpawnType.LOOT));
+						event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("spawn.add.loot", "spawn.add.loot", new VectorFormatter(vector)));
+					}
 				}
 			}
 		}
+	}
+
+	boolean checkBounds(BlockPlaceEvent event) {
+		if (!isInBounds(event.getBlockPlaced().getLocation().toVector())) {
+			event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("spawn.error.outOfBounds", "spawn.error.outOfBounds"));
+			event.setCancelled(true);
+			return false;
+		}
+		return true;
 	}
 
 	public void handleBlockBreak(BlockBreakEvent event) {
@@ -191,6 +202,12 @@ public class ArenaEditor {
 
 			spawnPoint.getLocation(getPlayer().getWorld()).getBlock().setType(type);
 		}
+	}
+
+	boolean isInBounds(Vector vector) {
+		Vector min = Murder.instance.minVector(this.minCorner, this.maxCorner);
+		Vector max = Murder.instance.maxVector(this.minCorner, this.maxCorner);
+		return Murder.instance.contains(min, max, vector);
 	}
 
 	public Player getPlayer() {

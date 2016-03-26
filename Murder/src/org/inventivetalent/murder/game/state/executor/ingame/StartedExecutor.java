@@ -31,9 +31,12 @@ package org.inventivetalent.murder.game.state.executor.ingame;
 import com.google.common.base.Predicate;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
+import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.player.PlayerData;
+
+import java.util.UUID;
 
 public class StartedExecutor extends IngameExecutor {
 
@@ -62,8 +65,14 @@ public class StartedExecutor extends IngameExecutor {
 					for (PotionEffect effect : player.getActivePotionEffects()) {
 						player.removePotionEffect(effect.getType());
 					}
+					for (UUID uuid1 : game.players) {
+						game.getPlayer(uuid1).showPlayer(playerData.getPlayer());
+					}
 
-					player.setWalkSpeed(playerData.storedWalkSpeed);
+					player.setWalkSpeed(0.2f);
+					if (playerData.role != Role.MURDERER) {
+						player.setFoodLevel(6);
+					}
 					return true;
 				}
 			});

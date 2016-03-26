@@ -142,10 +142,19 @@ messages:
         cancel: "&cNot enough players, coundown cancelled"
       start:
         time: "&eGame starts in %s seconds"
+    kill:
+      murderer:
+        player: "%s, %s &fkilled the &cMurderer."
+        unknown: "&eThe &cMurderer &edied under mysterious circumstances."
+      innocent:
+        player: "%s, %s &fkilled an &9innocent Bystander"
     winner:
-      bystander: "&aThe &9Bystanders &awon!"
-      murderer: "&aThe &cMurderer &awon!"
+      bystander: "&9Bystanders win! &fThe &cMurderer&f was %s, %s"
+      murderer: "&cThe Murderer wins! &fIt was %s, %s"
       draw: "&7Draw! &aEverybody looses!"
+    spectate:
+      menu:
+        title: "&8Teleporter"
   editor:
     arena:
       bounds:
@@ -165,6 +174,8 @@ messages:
           lobby: "&9Lobby &aSpawnpoint removed"
           player: "&9Player &aSpawnpoint removed"
           loot: "&9Loot &aSpawnpoint removed"
+        error:
+          outOfBounds: "&cThis Spawnpoint is not inside the arena bounds"
   command:
     arena:
       editor:
