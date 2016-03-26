@@ -71,6 +71,9 @@ public class MurderProjectile {
 		if (game.gameState.ordinal() >= GameState.ENDED.ordinal()) {
 			projectile.remove();
 		}
+		if (!game.arena.contains(projectile.getLocation().toVector())) {
+			projectile.remove();
+		}
 	}
 
 	public boolean finished() {
@@ -93,9 +96,9 @@ public class MurderProjectile {
 					if (playerData.isSpectator) {
 						Player spectator = playerData.getPlayer();
 						if (spectator.getEyeLocation().add(0, 1, 0).getBlock().getType() == Material.AIR) {
-							playerData.getPlayer().setVelocity(new Vector(0, 2, 0));
+							playerData.getPlayer().setVelocity(new Vector(0, 2, 0).add(projectile.getVelocity().clone().multiply(-1)));
 						} else if (spectator.getLocation().add(0, -1, 0).getBlock().getType() == Material.AIR) {
-							playerData.getPlayer().setVelocity(new Vector(0, -2, 0));
+							playerData.getPlayer().setVelocity(new Vector(0, -2, 0).add(projectile.getVelocity().clone().multiply(-1)));
 						}
 
 						continue;

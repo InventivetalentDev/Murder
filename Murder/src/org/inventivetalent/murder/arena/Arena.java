@@ -112,11 +112,11 @@ public class Arena {
 		return null;
 	}
 
-	boolean contains(Location location) {
+	public boolean contains(Location location) {
 		return (location != null && location.getWorld() != null) && world.equals(location.getWorld().getName()) && contains(location.toVector());
 	}
 
-	boolean contains(Vector point) {
+	public boolean contains(Vector point) {
 		return Murder.instance.contains(minCorner, maxCorner, point);
 	}
 

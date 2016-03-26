@@ -91,18 +91,22 @@ public class ArenaEditor {
 					if (event.getPlayer().isSneaking()) {//Use the player's location
 						if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
 							minCorner = event.getPlayer().getLocation().toVector();
+							minCorner.setY(Math.max(0, Math.min(255, minCorner.getY())));
 							event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("bounds.set.self.min", "bounds.set.self.min", minCornerFormatter));
 						} else {
 							maxCorner = event.getPlayer().getLocation().toVector();
+							maxCorner.setY(Math.max(0, Math.min(255, maxCorner.getY())));
 							event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("bounds.set.self.max", "bounds.set.self.max", maxCornerFormatter));
 						}
 					} else {//Use the clicked block's location
 						if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 							minCorner = event.getClickedBlock().getLocation().toVector();
+							minCorner.setY(Math.max(0, Math.min(255, minCorner.getY())));
 							event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("bounds.set.block.min", "bounds.set.block.min", minCornerFormatter));
 						}
 						if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 							maxCorner = event.getClickedBlock().getLocation().toVector();
+							maxCorner.setY(Math.max(0, Math.min(255, maxCorner.getY())));
 							event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("bounds.set.block.max", "bounds.set.block.max", maxCornerFormatter));
 						}
 					}

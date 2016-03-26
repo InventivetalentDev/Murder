@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.game.state.executor.ingame;
 
+import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.inventivetalent.murder.Murder;
@@ -81,6 +82,10 @@ public class IngameExecutor extends LeavableExecutor {
 					data.getPlayer().getInventory().addItem(Murder.instance.itemManager.getTeleporter());
 					Murder.instance.spectateManager.teleportToClosestPlayer(data);
 
+					data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_PLAYER_HURT, 0.5f, 1f);
+					data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_PLAYER_DEATH, 0.5f, 1f);
+					data.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("kill.death", "kill.death"));
+
 					data.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
 					for (UUID uuid1 : game.players) {
 						PlayerData playerData = Murder.instance.playerManager.getData(uuid1);
@@ -114,7 +119,7 @@ public class IngameExecutor extends LeavableExecutor {
 										return String.format(message, killerData.getPlayer().getName(), killerData.nameTag);
 									}
 								}));
-								killerData.gunTimeout = 100;
+								killerData.gunTimeout = 200;
 								game.weaponTimeoutPlayers.add(killerData.uuid);
 								//Drop the gun
 								killerData.getPlayer().getWorld().dropItemNaturally(killerData.getPlayer().getLocation(), Murder.instance.itemManager.getGun());
@@ -151,6 +156,7 @@ public class IngameExecutor extends LeavableExecutor {
 						iterator.remove();
 					}
 				} else if (data.speedTimeout > 0) {
+					System.out.println(data);
 					data.speedTimeout--;
 					if (data.speedTimeout <= 0) {
 						if (data.isInGame()) {

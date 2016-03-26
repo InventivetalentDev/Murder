@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.listener;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -36,12 +37,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.util.Vector;
 import org.inventivetalent.entityanimation.AnimationAPI;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
@@ -61,6 +60,22 @@ public class GameListener implements Listener {
 		this.plugin = plugin;
 	}
 
+	// Move
+
+	@EventHandler
+	public void on(PlayerMoveEvent event) {
+		Player player = event.getPlayer();
+		PlayerData data = plugin.playerManager.getData(player.getUniqueId());
+		if (data != null) {
+			if (data.isInGame() && data.getGame() != null) {
+				if (!data.getGame().arena.contains(event.getTo().toVector())) {
+					Vector middle = data.getGame().arena.maxCorner.clone().midpoint(data.getGame().arena.minCorner.clone());
+					player.setVelocity(middle.clone().subtract(event.getTo().toVector()).normalize());
+				}
+			}
+		}
+	}
+
 	//Entity Damage
 
 	@EventHandler
@@ -72,6 +87,13 @@ public class GameListener implements Listener {
 				if (data.isInGame()) {
 					if (data.gameState.isInvulnerable() || data.isSpectator) {
 						event.setCancelled(true);
+					} else {
+						if (player.getHealth() - event.getFinalDamage() <= 0.0) {
+							event.setCancelled(true);
+							data.damageAmount = 0;
+							data.killed = true;
+							data.getGame().killedPlayers.add(data.uuid);
+						}
 					}
 				}
 			}
@@ -189,6 +211,7 @@ public class GameListener implements Listener {
 						player.setFoodLevel(20);
 						player.setWalkSpeed(0.3f);
 						data.speedTimeout = 100;
+						data.getGame().weaponTimeoutPlayers.add(data.uuid);
 						return;
 					}
 				}
@@ -202,6 +225,9 @@ public class GameListener implements Listener {
 							data.reloadTimer = 80;
 							//noinspection ConstantConditions
 							data.getGame().weaponTimeoutPlayers.add(data.uuid);
+
+							data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.2f, 1.5f);
+							data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.1f, 2f);
 						}
 					}
 				}
@@ -212,6 +238,9 @@ public class GameListener implements Listener {
 						data.knifeTimout = 600;
 						//noinspection ConstantConditions
 						data.getGame().weaponTimeoutPlayers.add(data.uuid);
+
+						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SNOWMAN_SHOOT, 0.1f, 3f);
+						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SHULKER_SHOOT, 0.1f, 2f);
 					}
 				}
 
@@ -246,6 +275,8 @@ public class GameListener implements Listener {
 								//noinspection ConstantConditions
 								data.getGame().weaponTimeoutPlayers.remove(data.uuid);
 								data.knifeTimout = 0;
+
+								data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.2f, 1f);
 							}
 						} else if (Murder.instance.itemManager.getGun().equals(itemStack)) {
 							event.setCancelled(true);
@@ -254,6 +285,8 @@ public class GameListener implements Listener {
 									event.getItem().remove();
 									data.getPlayer().getInventory().setItem(4, Murder.instance.itemManager.getGun());
 									data.getPlayer().getInventory().setItem(8, Murder.instance.itemManager.getBullet());
+
+									data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.2f, 1f);
 								}
 							}
 						} else if (Murder.instance.itemManager.getLoot().equals(itemStack)) {
@@ -261,13 +294,17 @@ public class GameListener implements Listener {
 							data.lootCount += event.getItem().getItemStack().getAmount();
 							event.getItem().remove();
 
+							data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.2f, 1f);
 							data.getPlayer().setLevel(data.lootCount);
 
 							if (data.lootCount >= 5) {
 								if (data.role == Role.DEFAULT) {
+									data.lootCount -= 5;
 									data.role = Role.WEAPON;
 									data.getPlayer().getInventory().setItem(4, Murder.instance.itemManager.getGun());
 									data.getPlayer().getInventory().setItem(8, Murder.instance.itemManager.getBullet());
+
+									data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
 								}
 							}
 						}

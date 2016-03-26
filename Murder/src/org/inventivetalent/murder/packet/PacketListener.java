@@ -68,7 +68,7 @@ public class PacketListener {
 					public void onSend(SentPacket sentPacket) {
 						if (sentPacket.hasPlayer()) {
 							Player player = sentPacket.getPlayer();
-							if (sentPacket.getPacketName().equalsIgnoreCase("PacketPlayOutEntityEquipment")) {
+							if ("PacketPlayOutEntityEquipment".equals(sentPacket.getPacketName())) {
 								PlayerData playerData = plugin.playerManager.getData(player.getUniqueId());
 								if (playerData != null && playerData.isInGame()) {
 									int slot = -1;

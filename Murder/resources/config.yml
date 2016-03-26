@@ -148,6 +148,7 @@ messages:
         unknown: "&eThe &cMurderer &edied under mysterious circumstances."
       innocent:
         player: "%s, %s &fkilled an &9innocent Bystander"
+      death: "&7You died. You are now a spectator."
     winner:
       bystander: "&9Bystanders win! &fThe &cMurderer&f was %s, %s"
       murderer: "&cThe Murderer wins! &fIt was %s, %s"

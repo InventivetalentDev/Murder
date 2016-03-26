@@ -273,9 +273,9 @@ public class Murder extends JavaPlugin {
 	}
 
 	public boolean contains(Vector min, Vector max, Vector point) {
-		return (point.getX() >= min.getX() && point.getX() <= max.getX()) &&//
-				(point.getY() >= min.getY() && point.getY() <= max.getY()) &&//
-				(point.getZ() >= min.getZ() && point.getZ() <= max.getZ());
+		return ((point.getX() >= min.getX()) && (point.getX() <= max.getX())) &&//
+				((point.getY() >= min.getY()) && (point.getY() <= max.getY())) &&//
+				((point.getZ() >= min.getZ()) && (point.getZ() <= max.getZ()));
 	}
 
 	boolean classExists(String name) {
