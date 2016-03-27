@@ -199,6 +199,7 @@ messages:
       error:
         ingame: "&cYou are already ingame"
         notIngame: "&cYou are not ingame"
+        notJoinable: "&cYou can't join this game"
     error:
       unknown: "&cUnknown error while executing command. See console for details."
       permission: "&cYou are missing the following permission: %s"
