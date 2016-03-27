@@ -212,14 +212,11 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	public void on(PlayerInteractEvent event) {
-		System.out.println(event);
 		Player player = event.getPlayer();
 		PlayerData data = plugin.playerManager.getData(player.getUniqueId());
 		if (data != null) {
 			if (data.isInGame()) {
 				if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) { return; }
-
-				System.out.println(data.role);
 
 				if (data.role == Role.DEFAULT) {
 					if (Murder.instance.itemManager.getSpeedBoost().equals(player.getItemInHand())) {
@@ -256,13 +253,12 @@ public class GameListener implements Listener {
 						//noinspection ConstantConditions
 						data.getGame().timeoutPlayers.add(data.uuid);
 
-//						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SNOWMAN_SHOOT, 0.1f, 1f);
+						//						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SNOWMAN_SHOOT, 0.1f, 1f);
 						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.BLOCK_METAL_HIT, 1f, 3f);
 					}
 				}
 
 				if (projectile != null) {
-					System.out.println(projectile);
 					//noinspection ConstantConditions
 					data.getGame().projectiles.add(projectile);
 				}

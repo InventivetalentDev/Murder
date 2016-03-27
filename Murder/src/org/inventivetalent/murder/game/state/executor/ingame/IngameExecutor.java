@@ -69,13 +69,9 @@ public class IngameExecutor extends LeavableExecutor {
 		}
 
 		if (!game.killedPlayers.isEmpty()) {
-			System.out.println("Killed players:");
-			System.out.println(game.killedPlayers);
 			for (UUID uuid : game.killedPlayers) {
 				PlayerData data = Murder.instance.playerManager.getData(uuid);
 				if (data != null) {
-					System.out.println(data.getPlayer() + " died");
-
 					final Location deathLocation = data.getPlayer().getLocation();
 					NPCPlayer corpse = Murder.instance.corpseManager.spawnCorpse(game, data, deathLocation.clone());
 					corpse.setGravity(true);
@@ -176,7 +172,6 @@ public class IngameExecutor extends LeavableExecutor {
 						iterator.remove();
 					}
 				} else if (data.speedTimeout > 0) {
-					System.out.println(data);
 					data.speedTimeout--;
 					if (data.speedTimeout <= 0) {
 						if (data.isInGame()) {

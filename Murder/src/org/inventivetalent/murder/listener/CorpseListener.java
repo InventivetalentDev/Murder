@@ -88,7 +88,6 @@ public class CorpseListener implements Listener {
 		if (data != null && data.isInGame() && data.getGame() != null) {
 			if (!data.isSpectator && data.role == Role.MURDERER) {
 				for (final Entity entity : player.getNearbyEntities(1, 2, 1)) {
-					System.out.println(entity);
 					if (NPCLib.isNPC(entity)) {
 						if (data.lootCount > 0) {
 							data.lootCount--;

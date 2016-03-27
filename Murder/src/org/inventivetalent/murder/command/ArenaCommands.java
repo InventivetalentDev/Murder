@@ -64,8 +64,6 @@ public class ArenaCommands {
 			 errorHandler = MurderErrorHandler.class)
 	@Permission(PERM_BASE + "edit")
 	public void arena(Player sender, ArenaAction action, @OptionalArg @JoinedArg String name) {
-		System.out.println("arena( " + sender + ", " + action + ", " + name + " )");
-
 		Arena arena = null;
 		ArenaEditor editor = null;
 		if (action == ArenaAction.CREATE || action == ArenaAction.EDIT) {
