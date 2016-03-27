@@ -141,15 +141,18 @@ public class GameListener implements Listener {
 
 							if (damagerData != null) {
 								if (damagerData.isInGame() && damagerData.getGame() != null && (damagerData.role == Role.MURDERER || damagerData.role == Role.WEAPON)) {
-									//Set the potential killer
-									data.killer = damagerData.uuid;
+									if (plugin.itemManager.getGun().equals(player.getItemInHand()) || plugin.itemManager.getKnife().equals(player.getItemInHand())) {
+										//Set the potential killer
+										data.killer = damagerData.uuid;
 
-									if (player.getHealth() - event.getFinalDamage() <= 0.0) {
+										if (player.getHealth() - event.getFinalDamage() <= 0.0) {
+											event.setCancelled(true);
+											data.killed = true;
+											data.getGame().killedPlayers.add(data.uuid);
+										}
+									} else {
 										event.setCancelled(true);
-										data.killed = true;
-										data.getGame().killedPlayers.add(data.uuid);
 									}
-
 									//									if (damagerData.getPlayer().getItemInHand().equals(Murder.instance.itemManager.getKnife())) {
 									//										//Set the potential killer
 									//										data.killer = damagerData.uuid;
@@ -163,6 +166,8 @@ public class GameListener implements Listener {
 									//											AnimationAPI.playAnimation(player, data.getGame().getPlayer(uuid), AnimationAPI.Animation.TAKE_DAMGE);
 									//										}
 									//									}
+								} else {
+									event.setCancelled(true);
 								}
 							}
 						}
