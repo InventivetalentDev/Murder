@@ -54,7 +54,7 @@ public class CorpseManager {
 			while (block.getType() != Material.AIR) {
 				block = block.getRelative(BlockFace.UP);
 			}
-			location.setY(block.getY() + .125);
+			location.setY(block.getY() + .5);
 
 			//Make sure there's enough room
 			block = location.getBlock().getRelative(BlockFace.NORTH);
