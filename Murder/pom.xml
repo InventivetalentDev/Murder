@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>murder</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <name>Murder</name>
 
     <build>
