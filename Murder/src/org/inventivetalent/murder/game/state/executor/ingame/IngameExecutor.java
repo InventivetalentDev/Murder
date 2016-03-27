@@ -155,10 +155,10 @@ public class IngameExecutor extends LeavableExecutor {
 					data.gunTimeout--;
 				} else if (data.reloadTimer > 0) {
 					if (data.reloadTimer == 65) {
-						data.getPlayer().playSound(data.getPlayer().getLocation(), "murder.gun.clip.out", 0.8f, 1f);
+						data.getPlayer().getPlayer().playSound(data.getPlayer().getLocation(), "murder.gun.clip.out", 0.8f, 1f);
 					}
 					if (data.reloadTimer == 10) {
-						data.getPlayer().playSound(data.getPlayer().getLocation(), "murder.gun.clip.in", 0.8f, 1f);
+						data.getPlayer().getPlayer().playSound(data.getPlayer().getLocation(), "murder.gun.clip.in", 0.8f, 1f);
 					}
 					data.reloadTimer--;
 					if (data.reloadTimer <= 0) {
