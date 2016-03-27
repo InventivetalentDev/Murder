@@ -113,7 +113,7 @@ messages:
         style: "NOTCHED_10"
     weapon:
       name: "&9Bystander"
-      title: "${default.title}"
+      title: "&9You are a ${default.name}"
       subtitle: "&9with a secret weapon"
       objective: "&e&lFind the &c&lMurderer &e&land kill them with your &9&lsecret Weapon&e!"
       bossbar:
@@ -156,6 +156,10 @@ messages:
     spectate:
       menu:
         title: "&8Teleporter"
+    disguise:
+      info: "&6[Right Click]&7 to disguise as %s &7for 1 loot"
+      error: "&7Not enough loot to disguise!"
+      disguised: "&aYou are now disguised as %s"
   editor:
     arena:
       bounds:

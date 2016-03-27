@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.listener;
 
+import de.inventivegames.npc.NPCLib;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -41,7 +42,6 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
-import org.inventivetalent.entityanimation.AnimationAPI;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.game.state.GameState;
@@ -51,7 +51,6 @@ import org.inventivetalent.murder.projectile.KnifeProjectile;
 import org.inventivetalent.murder.projectile.MurderProjectile;
 
 import java.util.List;
-import java.util.UUID;
 
 public class GameListener implements Listener {
 
@@ -93,7 +92,7 @@ public class GameListener implements Listener {
 					} else {
 						if (player.getHealth() - event.getFinalDamage() <= 0.0) {
 							event.setCancelled(true);
-							data.damageAmount = 0;
+							//							data.damageAmount = 0;
 							data.killed = true;
 							data.getGame().killedPlayers.add(data.uuid);
 						}
@@ -118,38 +117,49 @@ public class GameListener implements Listener {
 							PlayerData damagerData = null;
 
 							if (damager.getType() == EntityType.PLAYER) {
-								event.setCancelled(true);
+								//								event.setCancelled(true);
 
 								damagerData = Murder.instance.playerManager.getData(damager.getUniqueId());
 							}
 							if (damager.getType() == EntityType.ARROW) {
 								if (damager.hasMetadata("MURDER")) {
-									event.setCancelled(true);
+									//									event.setCancelled(true);
 									List<MetadataValue> metaList = damager.getMetadata("MURDER");
 									if (metaList != null && !metaList.isEmpty()) {
 										MurderProjectile projectile = (MurderProjectile) metaList.get(0).value();
 										if (projectile != null) {
 											damagerData = Murder.instance.playerManager.getData(projectile.shooter.getUniqueId());
+											//Instant killa
+											event.setDamage(40);
 										}
 									}
 								}
 							}
 
 							if (damagerData != null) {
-								if (damagerData.isInGame() && damagerData.getGame() != null && damagerData.role == Role.MURDERER) {
-									if (damagerData.getPlayer().getItemInHand().equals(Murder.instance.itemManager.getKnife())) {
-										//Set the potential killer
-										data.killer = damagerData.uuid;
-										if (data.damageAmount++ >= 2) {
-											data.damageAmount = 0;
-											data.killed = true;
-											data.getGame().killedPlayers.add(data.uuid);
-										}
+								if (damagerData.isInGame() && damagerData.getGame() != null && (damagerData.role == Role.MURDERER || damagerData.role == Role.WEAPON)) {
+									//Set the potential killer
+									data.killer = damagerData.uuid;
 
-										for (UUID uuid : data.getGame().players) {
-											AnimationAPI.playAnimation(player, data.getGame().getPlayer(uuid), AnimationAPI.Animation.TAKE_DAMGE);
-										}
+									if (player.getHealth() - event.getFinalDamage() <= 0.0) {
+										event.setCancelled(true);
+										data.killed = true;
+										data.getGame().killedPlayers.add(data.uuid);
 									}
+
+									//									if (damagerData.getPlayer().getItemInHand().equals(Murder.instance.itemManager.getKnife())) {
+									//										//Set the potential killer
+									//										data.killer = damagerData.uuid;
+									//										if (data.damageAmount++ >= 2) {
+									//											data.damageAmount = 0;
+									//											data.killed = true;
+									//											data.getGame().killedPlayers.add(data.uuid);
+									//										}
+									//
+									//										for (UUID uuid : data.getGame().players) {
+									//											AnimationAPI.playAnimation(player, data.getGame().getPlayer(uuid), AnimationAPI.Animation.TAKE_DAMGE);
+									//										}
+									//									}
 								}
 							}
 						}
@@ -202,11 +212,14 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	public void on(PlayerInteractEvent event) {
+		System.out.println(event);
 		Player player = event.getPlayer();
 		PlayerData data = plugin.playerManager.getData(player.getUniqueId());
 		if (data != null) {
 			if (data.isInGame()) {
 				if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) { return; }
+
+				System.out.println(data.role);
 
 				if (data.role == Role.DEFAULT) {
 					if (Murder.instance.itemManager.getSpeedBoost().equals(player.getItemInHand())) {
@@ -285,6 +298,7 @@ public class GameListener implements Listener {
 							event.setCancelled(true);
 							if (data.role == Role.DEFAULT || data.role == Role.WEAPON) {
 								if (data.gunTimeout <= 0) {
+									data.role = Role.WEAPON;
 									event.getItem().remove();
 									data.getPlayer().getInventory().setItem(4, Murder.instance.itemManager.getGun());
 									data.getPlayer().getInventory().setItem(8, Murder.instance.itemManager.getBullet());
@@ -298,7 +312,6 @@ public class GameListener implements Listener {
 							event.getItem().remove();
 
 							data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.2f, 1f);
-							data.getPlayer().setLevel(data.lootCount);
 
 							if (data.lootCount >= 5) {
 								if (data.role == Role.DEFAULT) {
@@ -310,10 +323,18 @@ public class GameListener implements Listener {
 									data.getPlayer().playSound(data.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
 								}
 							}
+
+							data.getPlayer().setLevel(data.lootCount);
+						} else {
+							event.setCancelled(true);
 						}
 					}
 				}
 			}
+		}
+
+		if (NPCLib.isNPC(event.getPlayer())) {
+			event.setCancelled(true);
 		}
 	}
 

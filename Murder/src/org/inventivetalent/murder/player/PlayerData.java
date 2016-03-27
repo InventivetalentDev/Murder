@@ -42,12 +42,13 @@ public class PlayerData extends StoredData {
 	public UUID gameId;
 
 	public String nameTag;
+	public String disguiseTag;// Murderer only
 
 	public GameState gameState = GameState.WAITING;
 	public Role    role;
 	public boolean isSpectator;
 
-	public int damageAmount;// Determines when the player is "dead"
+//	public int damageAmount;// Determines when the player is "dead"
 	public boolean killed = false;
 	public UUID killer;
 
