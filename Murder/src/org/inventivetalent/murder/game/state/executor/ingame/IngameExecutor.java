@@ -28,6 +28,8 @@
 
 package org.inventivetalent.murder.game.state.executor.ingame;
 
+import de.inventivegames.npc.living.NPCPlayer;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Item;
 import org.bukkit.potion.PotionEffect;
@@ -73,6 +75,7 @@ public class IngameExecutor extends LeavableExecutor {
 				PlayerData data = Murder.instance.playerManager.getData(uuid);
 				if (data != null) {
 					System.out.println(data.getPlayer() + " died");
+					final Location deathLocation = data.getPlayer().getLocation();
 
 					//Make the player a spectator
 					data.isSpectator = true;
@@ -131,8 +134,8 @@ public class IngameExecutor extends LeavableExecutor {
 						}
 					}
 
-					//TODO: Spawn corpse
-
+					NPCPlayer corpse = Murder.instance.corpseManager.spawnCorpse(game, data, deathLocation.clone().add(0, .25, 0));
+					corpse.setGravity(true);
 				}
 			}
 			game.killedPlayers.clear();

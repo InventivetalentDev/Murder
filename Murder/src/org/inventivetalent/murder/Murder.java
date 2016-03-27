@@ -42,6 +42,7 @@ import org.inventivetalent.murder.arena.editor.ArenaEditorManager;
 import org.inventivetalent.murder.command.ArenaCommands;
 import org.inventivetalent.murder.command.GameCommands;
 import org.inventivetalent.murder.command.PlayerCommands;
+import org.inventivetalent.murder.corpse.CorpseManager;
 import org.inventivetalent.murder.game.GameManager;
 import org.inventivetalent.murder.item.ItemManager;
 import org.inventivetalent.murder.listener.*;
@@ -78,6 +79,7 @@ public class Murder extends JavaPlugin {
 	public ItemManager        itemManager;
 	public ArenaEditorManager arenaEditorManager;
 	public SpectateManager    spectateManager;
+	public CorpseManager      corpseManager;
 
 	public EditorListener     editorListener;
 	public DataListener       dataListener;
@@ -196,6 +198,7 @@ public class Murder extends JavaPlugin {
 		itemManager = new ItemManager(this);
 		arenaEditorManager = new ArenaEditorManager(this);
 		spectateManager = new SpectateManager(this);
+		corpseManager = new CorpseManager(this);
 
 		Bukkit.getPluginManager().registerEvents(editorListener = new EditorListener(this), this);
 		Bukkit.getPluginManager().registerEvents(dataListener = new DataListener(this), this);

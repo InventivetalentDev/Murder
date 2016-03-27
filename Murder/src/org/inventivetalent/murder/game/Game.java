@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.game;
 
+import de.inventivegames.npc.living.NPCPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
@@ -69,7 +70,8 @@ public class Game {
 
 	public final Set<MurderProjectile> projectiles = new HashSet<>();
 
-	public final Set<Item> droppedItems = new HashSet<>();//Dropped loot, knife, guns
+	public final Set<Item>      droppedItems = new HashSet<>();//Dropped loot, knife, guns
+	public final Set<NPCPlayer> corpses      = new HashSet<>();
 
 	public int ticks = 0;
 
