@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-//TODO: Store arenas in individual files; only load when needed
 public class ArenaManager {
 
 	private Murder plugin;
