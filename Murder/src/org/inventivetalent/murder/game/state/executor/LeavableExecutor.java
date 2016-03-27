@@ -51,8 +51,9 @@ public class LeavableExecutor extends StateExecutor {
 				game.players.remove(uuid);
 				game.broadcastLeave(uuid);
 
-				PlayerData data = Murder.instance.playerManager.removeData(uuid);
+				PlayerData data = Murder.instance.playerManager.getData(uuid);
 				if (data != null) {
+					data.gameId = null;
 					if (data.getOfflinePlayer().isOnline()) {
 						//Remove black screen
 						data.getPlayer().getInventory().setHelmet(null);
@@ -77,6 +78,8 @@ public class LeavableExecutor extends StateExecutor {
 						if (data.bossBar != null) {
 							data.bossBar.removePlayer(data.getPlayer());
 						}
+
+						Murder.instance.playerManager.removeData(uuid);
 					}
 				}
 			}
