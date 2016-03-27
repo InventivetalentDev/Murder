@@ -102,9 +102,12 @@ public class PacketListener {
 							if ("PacketPlayInBlockDig".equals(receivedPacket.getPacketName())) {
 								if (Minecraft.VERSION.newerThan(Minecraft.Version.v1_9_R1)) {
 									PlayerData playerData = plugin.playerManager.getData(receivedPacket.getPlayer().getUniqueId());
-									if (playerData != null && playerData.isInGame())
-									//Cancel hand-swap
-									{ receivedPacket.setCancelled(true); }
+									if (playerData != null && playerData.isInGame()) {
+										if (((Enum) receivedPacket.getPacketValue("c")).ordinal() == 6) {
+											//Cancel hand-swap
+											receivedPacket.setCancelled(true);
+										}
+									}
 								}
 							}
 						}
