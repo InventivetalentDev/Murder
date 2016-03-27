@@ -24,7 +24,7 @@ items:
     meta:
       display: "&c&lKnife"
       enchants:
-      - "DAMAGE_ALLx8-f"
+      - "DAMAGE_ALLx10-f"
   gun:
     type: "DIAMOND_HOE" #Don't change this, unless you have a custom resource pack
     meta:
