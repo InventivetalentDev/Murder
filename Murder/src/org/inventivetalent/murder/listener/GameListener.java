@@ -256,8 +256,8 @@ public class GameListener implements Listener {
 						//noinspection ConstantConditions
 						data.getGame().timeoutPlayers.add(data.uuid);
 
-						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SNOWMAN_SHOOT, 0.1f, 3f);
-						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SHULKER_SHOOT, 0.1f, 2f);
+//						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.ENTITY_SNOWMAN_SHOOT, 0.1f, 1f);
+						data.getPlayer().getWorld().playSound(data.getPlayer().getLocation(), Sound.BLOCK_METAL_HIT, 1f, 3f);
 					}
 				}
 
