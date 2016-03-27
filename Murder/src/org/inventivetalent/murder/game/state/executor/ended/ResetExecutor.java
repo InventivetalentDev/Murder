@@ -30,6 +30,7 @@ package org.inventivetalent.murder.game.state.executor.ended;
 
 import com.google.common.base.Predicate;
 import org.bukkit.entity.Item;
+import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
@@ -68,6 +69,9 @@ public class ResetExecutor extends LeavableExecutor {
 			for (Item item : game.droppedItems) {
 				item.remove();
 			}
+
+			//Despawn corpses
+			Murder.instance.corpseManager.removeCorpses(game);
 		}
 		ticks++;
 	}
