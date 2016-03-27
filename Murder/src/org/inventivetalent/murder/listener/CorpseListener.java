@@ -94,8 +94,10 @@ public class CorpseListener implements Listener {
 							data.lootCount--;
 							player.setLevel(data.lootCount);
 
+							String originalNametag = data.nameTag;
 							data.disguiseTag = entity.getName();
 							plugin.playerManager.disguisePlayer(player, entity.getName());
+							data.nameTag = originalNametag;
 							player.sendMessage(MESSAGE_LOADER.getMessage("disguise.disguised", "disguise.disguised", new MessageFormatter() {
 								@Override
 								public String format(String key, String message) {
