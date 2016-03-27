@@ -28,10 +28,12 @@
 
 package org.inventivetalent.murder.listener;
 
+import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.player.PlayerData;
@@ -57,6 +59,17 @@ public class SpectatorListener implements Listener {
 						plugin.spectateManager.openSpectatorMenu(data);
 					}
 				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void on(PlayerToggleSneakEvent event) {
+		PlayerData playerData = plugin.playerManager.getData(event.getPlayer().getUniqueId());
+		if (playerData != null) {
+			if (playerData.isInGame() && playerData.isSpectator) {
+				//Reset the gamemode when the player "leaves" their target
+				event.getPlayer().setGameMode(GameMode.ADVENTURE);
 			}
 		}
 	}

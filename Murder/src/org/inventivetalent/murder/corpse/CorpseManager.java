@@ -31,6 +31,9 @@ package org.inventivetalent.murder.corpse;
 import de.inventivegames.npc.NPCLib;
 import de.inventivegames.npc.living.NPCPlayer;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.player.PlayerData;
@@ -43,8 +46,23 @@ public class CorpseManager {
 		this.plugin = plugin;
 	}
 
-	public NPCPlayer spawnCorpse(Game game, PlayerData data,Location location) {
-		if(data.isInGame()&&data.nameTag!=null) {
+	public NPCPlayer spawnCorpse(Game game, PlayerData data, Location l) {
+		if (data.isInGame() && data.nameTag != null) {
+			Location location = l.clone();
+
+			Block block = location.getBlock();
+			while (block.getType() != Material.AIR) {
+				block = block.getRelative(BlockFace.UP);
+			}
+			location.setY(block.getY() + .125);
+
+			//Make sure there's enough room
+			block = location.getBlock().getRelative(BlockFace.NORTH);
+			while (block.getRelative(BlockFace.NORTH).getType() != Material.AIR) {
+				block = block.getRelative(BlockFace.SOUTH);
+			}
+			location = block.getLocation();
+
 			NPCPlayer npc = (NPCPlayer) NPCLib.spawnPlayerNPC(location, data.nameTag, data.nameTag.substring(1, 2) + "b");
 			npc.setLying(true);
 			npc.setCollision(false);
@@ -59,6 +77,5 @@ public class CorpseManager {
 			npc.despawn();
 		}
 	}
-
 
 }

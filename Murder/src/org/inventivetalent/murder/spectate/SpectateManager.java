@@ -28,6 +28,7 @@
 
 package org.inventivetalent.murder.spectate;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -100,6 +101,9 @@ public class SpectateManager {
 						public void onInteract(Player player, ClickType clickType, ItemStack itemStack) {
 							if (player == null || data1.getPlayer() == null) { return; }
 							player.teleport(data1.getPlayer().getLocation());
+
+							player.setGameMode(GameMode.SPECTATOR);
+							player.setSpectatorTarget(data1.getPlayer());
 						}
 					}, InventoryMenuBuilder.ALL_CLICK_TYPES);
 				}

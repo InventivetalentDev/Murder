@@ -75,7 +75,10 @@ public class IngameExecutor extends LeavableExecutor {
 				PlayerData data = Murder.instance.playerManager.getData(uuid);
 				if (data != null) {
 					System.out.println(data.getPlayer() + " died");
+
 					final Location deathLocation = data.getPlayer().getLocation();
+					NPCPlayer corpse = Murder.instance.corpseManager.spawnCorpse(game, data, deathLocation.clone());
+					corpse.setGravity(true);
 
 					//Make the player a spectator
 					data.isSpectator = true;
@@ -134,8 +137,7 @@ public class IngameExecutor extends LeavableExecutor {
 						}
 					}
 
-					NPCPlayer corpse = Murder.instance.corpseManager.spawnCorpse(game, data, deathLocation.clone().add(0, .25, 0));
-					corpse.setGravity(true);
+
 				}
 			}
 			game.killedPlayers.clear();
