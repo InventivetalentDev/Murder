@@ -53,35 +53,36 @@ public class LeavableExecutor extends StateExecutor {
 
 				PlayerData data = Murder.instance.playerManager.removeData(uuid);
 				if (data != null) {
-					//Remove black screen
-					data.getPlayer().getInventory().setHelmet(null);
-
-					//Clear effects
-					for (PotionEffect effect : data.getPlayer().getActivePotionEffects()) {
-						data.getPlayer().removePotionEffect(effect.getType());
-					}
-
 					if (data.getOfflinePlayer().isOnline()) {
+						//Remove black screen
+						data.getPlayer().getInventory().setHelmet(null);
+
+						//Clear effects
+						for (PotionEffect effect : data.getPlayer().getActivePotionEffects()) {
+							data.getPlayer().removePotionEffect(effect.getType());
+						}
+
 						data.restoreData();
 						Murder.instance.playerManager.resetPlayer(data.getOfflinePlayer());
-					}
 
-					for (UUID uuid1 : game.players) {
-						Player player = game.getPlayer(uuid1);
-						if (player != null) { player.showPlayer(data.getPlayer()); }
-					}
+						for (UUID uuid1 : game.players) {
+							Player player = game.getPlayer(uuid1);
+							if (player != null) { player.showPlayer(data.getPlayer()); }
+						}
 
-					//Reset resource pack
-					ResourcePackAPI.setResourcepack(data.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
+						//Reset resource pack
+						ResourcePackAPI.setResourcepack(data.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
 
-					//Reset BossBar
-					if (data.bossBar != null) {
-						data.bossBar.removePlayer(data.getPlayer());
+						//Reset BossBar
+						if (data.bossBar != null) {
+							data.bossBar.removePlayer(data.getPlayer());
+						}
 					}
 				}
 			}
 			game.leavingPlayers.clear();
 		}
+
 	}
 
 	@Override
