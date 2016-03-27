@@ -58,7 +58,7 @@ public class PlayerCommands {
 					 "mj" },
 			 usage = "<Arena Name | Arena ID>",
 			 min = 1,
-//			 max = 1,
+			 //			 max = 1,
 			 errorHandler = MurderErrorHandler.class)
 	@Permission(PERM_BASE + "join")
 	public void join(Player sender, @OptionalArg String name, @OptionalArg Integer id) {
@@ -99,7 +99,7 @@ public class PlayerCommands {
 		}
 
 		Game game = plugin.gameManager.getGame(playerData.gameId);
-		game.removePlayer(sender);
+		if (game != null) { game.removePlayer(sender); }
 	}
 
 }
