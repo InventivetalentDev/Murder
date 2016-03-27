@@ -28,7 +28,7 @@ items:
   gun:
     type: "DIAMOND_HOE" #Don't change this, unless you have a custom resource pack
     meta:
-      display: "&9&l"
+      display: "&9&lGun"
   bullet:
     type: "ARROW" #Don't change this, unless you have a custom resource pack
     meta:
