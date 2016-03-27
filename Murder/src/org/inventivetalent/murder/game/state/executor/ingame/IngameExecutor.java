@@ -131,11 +131,11 @@ public class IngameExecutor extends LeavableExecutor {
 								killerData.getPlayer().getInventory().setItem(4, null);
 								killerData.getPlayer().getInventory().setItem(8, null);
 							}
-							if (data.role == Role.WEAPON) {
-								//Drop the gun
-								Item dropped = deathLocation.getWorld().dropItemNaturally(deathLocation, Murder.instance.itemManager.getGun());
-								game.droppedItems.add(dropped);
-							}
+						}
+						if (data.role == Role.WEAPON) {
+							//Drop the gun
+							Item dropped = deathLocation.getWorld().dropItemNaturally(deathLocation, Murder.instance.itemManager.getGun());
+							game.droppedItems.add(dropped);
 						}
 					}
 
