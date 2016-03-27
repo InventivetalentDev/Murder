@@ -32,6 +32,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.player.PlayerData;
 
@@ -53,6 +54,14 @@ public class DataListener implements Listener {
 					if (event.getPlayer().isOnline() && playerData.stored) { playerData.restoreData(); }
 				}
 			}, 10);
+		}
+	}
+
+	@EventHandler
+	public void onQuit(PlayerQuitEvent event) {
+		PlayerData playerData = plugin.playerManager.getData(event.getPlayer().getUniqueId());
+		if (playerData != null && playerData.getGame() != null) {
+			playerData.getGame().leavingPlayers.add(event.getPlayer().getUniqueId());
 		}
 	}
 
