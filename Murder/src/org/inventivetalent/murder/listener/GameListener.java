@@ -120,6 +120,9 @@ public class GameListener implements Listener {
 								//								event.setCancelled(true);
 
 								damagerData = Murder.instance.playerManager.getData(damager.getUniqueId());
+								if (damagerData.role != Role.MURDERER) {
+									event.setCancelled(true);
+								}
 							}
 							if (damager.getType() == EntityType.ARROW) {
 								if (damager.hasMetadata("MURDER")) {
