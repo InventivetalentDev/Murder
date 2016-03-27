@@ -127,6 +127,7 @@ public class IngameExecutor extends LeavableExecutor {
 									}
 								}));
 								killerData.gunTimeout = 200;
+								killerData.reloadTimer = 0;
 								game.timeoutPlayers.add(killerData.uuid);
 								//Drop the gun
 								Item dropped = killerData.getPlayer().getWorld().dropItemNaturally(killerData.getPlayer().getLocation(), Murder.instance.itemManager.getGun());
@@ -134,9 +135,13 @@ public class IngameExecutor extends LeavableExecutor {
 								killerData.getPlayer().getInventory().setItem(4, null);
 								killerData.getPlayer().getInventory().setItem(8, null);
 							}
+							if (data.role == Role.WEAPON) {
+								//Drop the gun
+								Item dropped = deathLocation.getWorld().dropItemNaturally(deathLocation, Murder.instance.itemManager.getGun());
+								game.droppedItems.add(dropped);
+							}
 						}
 					}
-
 
 				}
 			}
