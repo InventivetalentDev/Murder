@@ -70,6 +70,8 @@ public class SpectatorListener implements Listener {
 			if (playerData.isInGame() && playerData.isSpectator) {
 				//Reset the gamemode when the player "leaves" their target
 				event.getPlayer().setGameMode(GameMode.ADVENTURE);
+				event.getPlayer().setAllowFlight(true);
+				event.getPlayer().setFlying(true);
 			}
 		}
 	}
