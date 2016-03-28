@@ -31,6 +31,7 @@ package org.inventivetalent.murder.command;
 import org.bukkit.entity.Player;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.arena.Arena;
+import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.command.Command;
 import org.inventivetalent.pluginannotations.command.JoinedArg;
@@ -78,6 +79,9 @@ public class ToggleCommands {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("error.notFound", "error.notFound"));
 			return;
 		}
+		Game game = plugin.gameManager.getGameForArenaId(arena.id);
+		if (game != null) { game.kickAllPlayers(); }
+
 		plugin.arenaManager.removeArena(arena);
 		arena.disabled = true;
 		plugin.arenaManager.addArena(arena);
