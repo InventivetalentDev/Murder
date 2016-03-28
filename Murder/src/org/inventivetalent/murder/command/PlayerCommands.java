@@ -83,6 +83,7 @@ public class PlayerCommands {
 		Game game = plugin.gameManager.getOrCreateGame(arena);
 		if (!game.gameState.isJoinable()) {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("game.error.notJoinable", "game.error.notJoinable"));
+			return;
 		}
 		game.addPlayer(sender);
 	}
