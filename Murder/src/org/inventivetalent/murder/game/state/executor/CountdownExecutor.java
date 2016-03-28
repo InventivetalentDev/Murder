@@ -40,7 +40,7 @@ public class CountdownExecutor extends LeavableExecutor {
 	public CountdownExecutor(Game game, CountdownType type) {
 		super(game);
 		this.type = type;
-//		resetTime();
+		//		resetTime();
 	}
 
 	protected void resetTime() {
@@ -60,12 +60,14 @@ public class CountdownExecutor extends LeavableExecutor {
 			if (type == CountdownType.LOBBY) {
 				if (game.players.size() >= game.arena.minPlayers) {
 					game.lobbyCountdown--;
-					game.broadcastMessage(Game.MESSAGE_LOADER.getMessage("countdown.lobby.time", "countdown.lobby.time", new MessageFormatter() {
-						@Override
-						public String format(String key, String message) {
-							return String.format(message, game.lobbyCountdown + 1);
-						}
-					}));
+					if ((game.lobbyCountdown + 1) % 10 == 0 || game.lobbyCountdown < 5) {
+						game.broadcastMessage(Game.MESSAGE_LOADER.getMessage("countdown.lobby.time", "countdown.lobby.time", new MessageFormatter() {
+							@Override
+							public String format(String key, String message) {
+								return String.format(message, game.lobbyCountdown + 1);
+							}
+						}));
+					}
 				} else {
 					//Not enough players
 					if (game.lobbyCountdown < Murder.instance.lobbyTime) {//We actually started the countdown
@@ -76,12 +78,14 @@ public class CountdownExecutor extends LeavableExecutor {
 			}
 			if (type == CountdownType.START) {
 				game.startCountdown--;
-				game.broadcastMessage(Game.MESSAGE_LOADER.getMessage("countdown.start.time", "countdown.start.time", new MessageFormatter() {
-					@Override
-					public String format(String key, String message) {
-						return String.format(message, game.startCountdown + 1);
-					}
-				}));
+				if ((game.startCountdown + 1) % 10 == 0 || game.startCountdown < 5) {
+					game.broadcastMessage(Game.MESSAGE_LOADER.getMessage("countdown.start.time", "countdown.start.time", new MessageFormatter() {
+						@Override
+						public String format(String key, String message) {
+							return String.format(message, game.startCountdown + 1);
+						}
+					}));
+				}
 			}
 			game.ticks = 0;
 		}
