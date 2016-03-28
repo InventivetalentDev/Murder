@@ -134,6 +134,8 @@ messages:
         sign: "&c[Ingame]"
       ended:
         sign: "&7[Ended]"
+      disabled:
+        sign: "&8[Disabled]"
     join: "&7%s &ejoined the game. &6(%s/%s)"
     leave: "&7%s &eleft the game. &6(%s/%s)"
     countdown:

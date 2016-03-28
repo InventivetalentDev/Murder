@@ -79,7 +79,9 @@ public class GameManager {
 
 	public void refreshSigns(Game game) {
 		for (Sign sign : plugin.arenaManager.getArenaSigns(game.arena.id)) {
-			if (game.gameState == GameState.DISPOSE) {
+			if (game.arena.disabled) {
+				sign.setLine(plugin.signLineState, Game.MESSAGE_LOADER.getMessage("state.disabled.sign", "state.disabled.sign"));
+			} else if (game.gameState == GameState.DISPOSE) {
 				sign.setLine(plugin.signLineState, GameState.WAITING.getSignText());
 			} else {
 				sign.setLine(plugin.signLineState, game.gameState.getSignText());
