@@ -66,6 +66,8 @@ public class ArenaEditor {
 	public Set<SpawnPoint> playerSpawnPoints = new HashSet<>();
 	public Set<SpawnPoint> lootSpawnPoints   = new HashSet<>();
 
+	boolean wasDisabled;
+
 	MessageFormatter minCornerFormatter = new VectorFormatter(new Callable<Vector>() {
 		@Override
 		public Vector call() throws Exception {
@@ -244,6 +246,8 @@ public class ArenaEditor {
 		arena.minPlayers = Math.max(Murder.instance.minPlayers, arena.minPlayers);
 		arena.maxPlayers = playerSpawnPoints.size();
 
+		arena.disabled = wasDisabled;
+
 		return arena;
 	}
 
@@ -255,6 +259,8 @@ public class ArenaEditor {
 		this.playerSpawnPoints.addAll(arena.getSpawnPoints(SpawnType.PLAYER));
 		this.lootSpawnPoints.clear();
 		this.lootSpawnPoints.addAll(arena.getSpawnPoints(SpawnType.LOOT));
+
+		this.wasDisabled = arena.disabled;
 	}
 
 	@Override
