@@ -84,6 +84,8 @@ public class LeavableExecutor extends StateExecutor {
 				}
 			}
 			game.leavingPlayers.clear();
+
+			Murder.instance.gameManager.refreshSigns(game);
 		}
 
 	}

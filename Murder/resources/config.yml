@@ -209,8 +209,23 @@ messages:
         short: "&cMissing arguments. Usage: %s"
         long: "&cToo many arguments. Usage: %s"
       parse: "&cFailed to parse argument '%s' to %s"
+  sign:
+    create:
+      leave: "&aLeave sign created"
+      join: "&aJoin sign created"
 
-
+sign:
+  title: "&9[&cMurder&9]"
+  lines:
+    title: 0
+    arena: 1
+    state: 2
+    players: 3
+    leave: 2
+  format:
+    players: "&6%s/%s&7 Players"
+  key:
+    leave: "leave" # Keyword a sign has to contain to be counted as a leave-sign
 
 # Name tags and colors - color+name can only be 15 characters long!
 name:

@@ -220,6 +220,8 @@ public class Game {
 				stateExecutor = gameState.newExecutor(this);
 			}
 
+			Murder.instance.gameManager.refreshSigns(this);
+
 			if (gameState == GameState.DISPOSE) {
 				if (Murder.instance.debug) { Murder.instance.getLogger().info("[" + gameId + "] Reached DISPOSE state, removing game."); }
 				Murder.instance.gameManager.removeGame(this.gameId);

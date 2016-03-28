@@ -28,8 +28,10 @@
 
 package org.inventivetalent.murder.game;
 
+import org.bukkit.block.Sign;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.arena.Arena;
+import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.GameTask;
 
 import java.util.HashMap;
@@ -73,6 +75,18 @@ public class GameManager {
 			game = addGame(new Game(arena));
 		}
 		return game;
+	}
+
+	public void refreshSigns(Game game) {
+		for (Sign sign : plugin.arenaManager.getArenaSigns(game.arena.id)) {
+			if (game.gameState == GameState.DISPOSE) {
+				sign.setLine(plugin.signLineState, GameState.WAITING.getSignText());
+			} else {
+				sign.setLine(plugin.signLineState, game.gameState.getSignText());
+			}
+			sign.setLine(plugin.signLinePlayers, String.format(plugin.signFormatPlayers, game.players.size(), game.arena.maxPlayers));
+			sign.update();
+		}
 	}
 
 	public void removeGame(UUID uuid) {

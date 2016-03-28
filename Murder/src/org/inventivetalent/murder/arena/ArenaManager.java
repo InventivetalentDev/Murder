@@ -32,20 +32,22 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.inventivetalent.murder.Murder;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class ArenaManager {
 
 	private Murder plugin;
 	public  File   arenaFolder;
-	//	public final Set<Arena> tempArenas = new HashSet<>();
-	public final Map<String, Integer> nameMap = new HashMap<>();
+
+	public final Map<String, Integer>        nameMap = new HashMap<>();
+	public final Map<Integer, Set<Location>> signMap = new HashMap<>();
 
 	public ArenaManager(Murder plugin) {
 		this.plugin = plugin;
@@ -62,6 +64,7 @@ public class ArenaManager {
 			file.createNewFile();
 			Murder.instance.writeJson(arena.toJson(), file);
 			nameMap.put(arena.name.toLowerCase(), arena.id);
+			signMap.put(arena.id, new HashSet<Location>());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -84,6 +87,28 @@ public class ArenaManager {
 			return getArenaById(nameMap.get(name.toLowerCase()));
 		}
 		return null;
+	}
+
+	public Set<Sign> getArenaSigns(int id) {
+		Set<Sign> signs = new HashSet<>();
+		if (!signMap.containsKey(id)) { return signs; }
+		for (Iterator<Location> iterator = signMap.get(id).iterator(); iterator.hasNext(); ) {
+			Location next = iterator.next();
+			Block block = next.getBlock();
+			if (!(block.getState() instanceof Sign)) {
+				iterator.remove();
+				continue;
+			}
+			signs.add((Sign) block.getState());
+		}
+		return signs;
+	}
+
+	public void addArenaSign(int id, Sign sign) {
+		Set<Location> signs = signMap.get(id);
+		if (signs == null) { signs = new HashSet<>(); }
+		if (!signs.contains(sign.getLocation())) { signs.add(sign.getLocation()); }
+		signMap.put(id, signs);
 	}
 
 	public boolean removeArena(Arena arena) {

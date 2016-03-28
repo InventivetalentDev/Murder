@@ -73,6 +73,8 @@ public class LobbyExecutor extends CountdownExecutor {
 				game.waitingForResourcepack.add(uuid);
 			}
 			game.joiningPlayers.clear();
+
+			Murder.instance.gameManager.refreshSigns(game);
 		}
 	}
 

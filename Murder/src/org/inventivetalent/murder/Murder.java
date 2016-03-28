@@ -88,6 +88,7 @@ public class Murder extends JavaPlugin {
 	public NameListener       nameListener;
 	public ProtectionListener protectionListener;
 	public CorpseListener     corpseListener;
+	public SignListener       signListener;
 
 	public PacketListener packetListener;
 
@@ -116,6 +117,18 @@ public class Murder extends JavaPlugin {
 	@ConfigValue(path = "resourcepack.reset.hash") public String resetPackHash;
 
 	@ConfigValue(path = "players.min") public int minPlayers;
+
+	@ConfigValue(path = "sign.title",
+				 colorChar = '&') public             String signTitle;
+	@ConfigValue(path = "sign.lines.title") public   int    signLineTitle;
+	@ConfigValue(path = "sign.lines.arena") public   int    signLineArena;
+	@ConfigValue(path = "sign.lines.state") public   int    signLineState;
+	@ConfigValue(path = "sign.lines.players") public int    signLinePlayers;
+	@ConfigValue(path = "sign.lines.leave") public   int    signLineLeave;
+	@ConfigValue(path = "sign.format.players",
+				 colorChar = '&') public             String signFormatPlayers;
+	@ConfigValue(path = "sign.key.leave",
+				 colorChar = '&') public             String signKeyLeave;
 
 	@Override
 	public void onLoad() {
@@ -221,6 +234,7 @@ public class Murder extends JavaPlugin {
 		if (classExists("org.bukkit.event.player.PlayerPickupArrowEvent")) { Bukkit.getPluginManager().registerEvents(new GameListenerArrow(this), this); }
 		Bukkit.getPluginManager().registerEvents(protectionListener = new ProtectionListener(this), this);
 		Bukkit.getPluginManager().registerEvents(corpseListener = new CorpseListener(this), this);
+		Bukkit.getPluginManager().registerEvents(signListener = new SignListener(this), this);
 
 		packetListener = new PacketListener(this);
 
