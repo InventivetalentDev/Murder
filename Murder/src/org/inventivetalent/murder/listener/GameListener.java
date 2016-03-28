@@ -64,6 +64,7 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	public void on(PlayerMoveEvent event) {
+		//TODO: Footsteps
 		Player player = event.getPlayer();
 		PlayerData data = plugin.playerManager.getData(player.getUniqueId());
 		if (data != null) {
@@ -132,7 +133,7 @@ public class GameListener implements Listener {
 										MurderProjectile projectile = (MurderProjectile) metaList.get(0).value();
 										if (projectile != null) {
 											damagerData = Murder.instance.playerManager.getData(projectile.shooter.getUniqueId());
-											//Instant killa
+											//Instant kill
 											event.setDamage(40);
 										}
 									}
@@ -140,8 +141,11 @@ public class GameListener implements Listener {
 							}
 
 							if (damagerData != null) {
-								if (damagerData.isInGame() && damagerData.getGame() != null && (damagerData.role == Role.MURDERER || damagerData.role == Role.WEAPON)) {
-									if (plugin.itemManager.getGun().equals(player.getItemInHand()) || plugin.itemManager.getKnife().equals(player.getItemInHand())) {
+								if (damagerData.isInGame() && damagerData.getGame() != null) {
+									if (//
+											(damagerData.role == Role.MURDERER && (damager.getType() == EntityType.ARROW || plugin.itemManager.getKnife().equals(damagerData.getPlayer().getInventory().getItemInHand()))) ||// It's the murderer AND it's a direct attack OR the thrown knife
+													(damagerData.role == Role.WEAPON && damager.getType() == EntityType.ARROW)// It's a weapon-bystander AND it's a shot bullet
+											) {
 										//Set the potential killer
 										data.killer = damagerData.uuid;
 
