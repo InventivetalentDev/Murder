@@ -85,8 +85,8 @@ items:
 
 resourcepack:
   game:
-    url: "https://download.nodecdn.net/containers/nodecraft/minepack/8e388be05536b4a815a6c7752565d99f.zip"
-    hash: "596dced578dfc757e1d1dfd3258ca8f1a24ff315"
+    url: "https://download.nodecdn.net/containers/nodecraft/minepack/b4ceac9375440bb61a7e306a47391c4a.zip"
+    hash: "b1bb2ccf5d2cc542e85ad676b6e6ced2655122d9"
   reset:
     url: "https://download.nodecdn.net/containers/nodecraft/minepack/d2c7e3ec1f6fae1a3893a52ac4f2a13b.zip"
     hash: "5b056fdb71892731fc15fd05ce0329ef251ca3f1"

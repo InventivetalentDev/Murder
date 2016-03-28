@@ -86,7 +86,14 @@ public class GameManager {
 			} else {
 				sign.setLine(plugin.signLineState, game.gameState.getSignText());
 			}
-			sign.setLine(plugin.signLinePlayers, String.format(plugin.signFormatPlayers, game.players.size(), game.arena.maxPlayers));
+			if (game.arena.disabled) {
+				sign.setLine(plugin.signLinePlayers, String.format(plugin.signFormatPlayers, "-", "-"));
+			} else if (game.gameState == GameState.DISPOSE) {
+				sign.setLine(plugin.signLinePlayers, String.format(plugin.signFormatPlayers, 0, game.arena.maxPlayers));
+			} else {
+				sign.setLine(plugin.signLinePlayers, String.format(plugin.signFormatPlayers, game.players.size(), game.arena.maxPlayers));
+			}
+
 			sign.update();
 		}
 	}

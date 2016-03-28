@@ -29,13 +29,17 @@
 package org.inventivetalent.murder.game.state.executor.ingame;
 
 import de.inventivegames.npc.living.NPCPlayer;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
+import org.inventivetalent.murder.game.FootStep;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 import org.inventivetalent.murder.player.PlayerData;
@@ -44,12 +48,17 @@ import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageFormatter;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 
 public class IngameExecutor extends LeavableExecutor {
 
 	static MessageLoader MESSAGE_LOADER = PluginAnnotations.MESSAGE.newMessageLoader(Murder.instance, "config.yml", "messages.game", null);
+
+	int           footstepTicks = 0;
+	Set<FootStep> footSteps     = new HashSet<>();
 
 	public IngameExecutor(Game game) {
 		super(game);
@@ -186,6 +195,92 @@ public class IngameExecutor extends LeavableExecutor {
 				}
 			} else {
 				iterator.remove();
+			}
+		}
+
+		if (footstepTicks % 5 == 0) {
+			Player murderer = game.getPlayer(game.getMurderer());
+			if (murderer != null) {
+				for (Iterator<FootStep> iterator = footSteps.iterator(); iterator.hasNext(); ) {
+					FootStep next = iterator.next();
+					PlayerData playerData = Murder.instance.playerManager.getData(next.uuid);
+					if (playerData == null || !playerData.isInGame() || playerData.killed) {
+						iterator.remove();
+						continue;
+					}
+					if (next.vector.distance(murderer.getLocation().toVector()) > 16) { continue; }
+					next.display(murderer);
+				}
+			}
+		}
+		if (footstepTicks++ >= 20) {
+			footstepTicks = 0;
+			for (UUID uuid : game.players) {
+				PlayerData data = Murder.instance.playerManager.getData(uuid);
+				if (data != null && data.isInGame() && !data.isSpectator) {
+					Player player = data.getPlayer();
+					if (player.isOnGround()) {
+						Color color = Color.WHITE;
+						switch (ChatColor.getByChar(data.nameTag.substring(1, 2))) {
+							case BLACK:
+								color = Color.BLACK;
+								break;
+							case DARK_BLUE:
+								color = Color.NAVY;
+								break;
+							case DARK_GREEN:
+								color = Color.GREEN;
+								break;
+							case DARK_AQUA:
+								color = Color.BLUE;
+								break;
+							case DARK_RED:
+								color = Color.MAROON;
+								break;
+							case DARK_PURPLE:
+								color = Color.PURPLE;
+								break;
+							case GOLD:
+								color = Color.ORANGE;
+								break;
+							case GRAY:
+								color = Color.SILVER;
+								break;
+							case DARK_GRAY:
+								color = Color.GRAY;
+								break;
+							case BLUE:
+								color = Color.TEAL;
+								break;
+							case GREEN:
+								color = Color.LIME;
+								break;
+							case AQUA:
+								color = Color.AQUA;
+								break;
+							case RED:
+								color = Color.RED;
+								break;
+							case LIGHT_PURPLE:
+								color = Color.FUCHSIA;
+								break;
+							case YELLOW:
+								color = Color.YELLOW;
+								break;
+							case WHITE:
+								color = Color.WHITE;
+								break;
+							case MAGIC:
+							case BOLD:
+							case STRIKETHROUGH:
+							case UNDERLINE:
+							case ITALIC:
+							case RESET:
+								break;
+						}
+						footSteps.add(new FootStep(data.uuid, player.getLocation().toVector(), color));
+					}
+				}
 			}
 		}
 

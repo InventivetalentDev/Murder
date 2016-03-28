@@ -64,7 +64,6 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	public void on(PlayerMoveEvent event) {
-		//TODO: Footsteps
 		Player player = event.getPlayer();
 		PlayerData data = plugin.playerManager.getData(player.getUniqueId());
 		if (data != null) {
