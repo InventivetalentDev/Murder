@@ -31,6 +31,7 @@ package org.inventivetalent.murder.command;
 import org.bukkit.entity.Player;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.arena.Arena;
+import org.inventivetalent.murder.command.error.MurderErrorHandler;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.command.Command;
@@ -53,7 +54,8 @@ public class ToggleCommands {
 			 aliases = {
 					 "mEnable",
 					 "me" },
-			 usage = "<Arena Name>")
+			 usage = "<Arena Name>",
+			 errorHandler = MurderErrorHandler.class)
 	@Permission("murder.arena.toggle")
 	public void enable(Player sender, @JoinedArg String name) {
 		Arena arena = plugin.arenaManager.getArenaByName(name);
@@ -73,7 +75,8 @@ public class ToggleCommands {
 			 aliases = {
 					 "mDisable",
 					 "md" },
-			 usage = "<Arena Name>")
+			 usage = "<Arena Name>",
+			 errorHandler = MurderErrorHandler.class)
 	@Permission("murder.arena.toggle")
 	public void disable(Player sender, @JoinedArg String name) {
 		Arena arena = plugin.arenaManager.getArenaByName(name);
