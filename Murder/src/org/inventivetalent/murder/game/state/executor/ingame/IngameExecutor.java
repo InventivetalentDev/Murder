@@ -125,6 +125,7 @@ public class IngameExecutor extends LeavableExecutor {
 								killerData.gunTimeout = 200;
 								killerData.reloadTimer = 0;
 								game.timeoutPlayers.add(killerData.uuid);
+								killerData.role = Role.DEFAULT;
 								//Drop the gun
 								Item dropped = killerData.getPlayer().getWorld().dropItemNaturally(killerData.getPlayer().getLocation(), Murder.instance.itemManager.getGun());
 								game.droppedItems.add(dropped);
