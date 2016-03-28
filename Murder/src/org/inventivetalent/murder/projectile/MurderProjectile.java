@@ -86,8 +86,10 @@ public class MurderProjectile {
 			return true;
 		}
 
+		boolean hitPlayer = false;
 		List<Entity> nearby = projectile.getNearbyEntities(.5, 1, .5);
 		for (Entity entity : nearby) {
+			if (entity.getLocation().distance(projectile.getLocation()) > 1.51) { continue; }
 			if (entity.getUniqueId().equals(shooter.getUniqueId())) { continue; }
 			if (entity.getType() != EntityType.PLAYER) { continue; }
 			PlayerData playerData = Murder.instance.playerManager.getData(entity.getUniqueId());
@@ -108,11 +110,11 @@ public class MurderProjectile {
 					game.killedPlayers.add(playerData.uuid);
 
 					this.projectile.remove();
-					return true;
+					hitPlayer = true;
 				}
 			}
 		}
-		return false;
+		return hitPlayer;
 	}
 
 	@Override
