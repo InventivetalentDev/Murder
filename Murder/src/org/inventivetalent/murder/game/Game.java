@@ -215,7 +215,11 @@ public class Game {
 
 	public void tick() {
 		if (this.stateExecutor != null) {
-			this.stateExecutor.tick();
+			try {
+				this.stateExecutor.tick();
+			} catch (Exception e) {
+				throw new RuntimeException("Exception while calling tick() in " + this.stateExecutor + " (" + this.gameState + ")", e);
+			}
 			if (this.stateExecutor.finished()) {
 				if (Murder.instance.debug) { Murder.instance.getLogger().info("[" + gameId + "] State " + gameState + " finished, switching to " + gameState.next()); }
 				gameState = gameState.next();
