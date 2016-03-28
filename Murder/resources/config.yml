@@ -206,6 +206,13 @@ messages:
         ingame: "&cYou are already ingame"
         notIngame: "&cYou are not ingame"
         notJoinable: "&cYou can't join this game"
+    countdown:
+      set:
+        lobby: "&aLobby countdown set to %s"
+        start: "&aStart countdown set to %s"
+      error:
+        gameNotFound: "&cNo game for this arena found"
+        invalidState: "&cCannot set countdown for state %s"
     error:
       unknown: "&cUnknown error while executing command. See console for details."
       permission: "&cYou are missing the following permission: %s"
