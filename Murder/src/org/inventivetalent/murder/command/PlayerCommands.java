@@ -36,10 +36,13 @@ import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.player.PlayerData;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.command.Command;
+import org.inventivetalent.pluginannotations.command.Completion;
 import org.inventivetalent.pluginannotations.command.OptionalArg;
 import org.inventivetalent.pluginannotations.command.Permission;
 import org.inventivetalent.pluginannotations.command.exception.InvalidLengthException;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
+
+import java.util.List;
 
 public class PlayerCommands {
 
@@ -92,6 +95,13 @@ public class PlayerCommands {
 			return;
 		}
 		game.addPlayer(sender);
+	}
+
+	@Completion
+	public void join(List<String> list, Player player, String name, @OptionalArg Integer id) {
+		if (name == null) {
+			list.addAll(plugin.arenaManager.nameMap.keySet());
+		}
 	}
 
 	@Command(name = "murderLeave",
