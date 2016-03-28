@@ -193,8 +193,12 @@ messages:
           notEditing: "&cYou are not editing an arena"
           notComplete: "&cThe arena setup is not complete yet"
           duplicate: "&cAn arena with that name already exists"
+        toggle:
+          disable: "&cArena disabled"
+          enable: "&aArena enabled"
       error:
         notFound: "&cArena not found"
+        disabled: "&cThis arena is currently disabled"
     game:
       error:
         ingame: "&cYou are already ingame"

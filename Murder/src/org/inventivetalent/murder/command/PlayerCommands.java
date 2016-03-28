@@ -80,6 +80,11 @@ public class PlayerCommands {
 			return;
 		}
 
+		if (arena.disabled) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("arena.error.disabled", "arena.error.disabled"));
+			return;
+		}
+
 		Game game = plugin.gameManager.getOrCreateGame(arena);
 		if (!game.gameState.isJoinable()) {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("game.error.notJoinable", "game.error.notJoinable"));

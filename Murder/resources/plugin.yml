@@ -4,7 +4,3 @@ author: inventivetalent
 version: ${project.version}
 
 softdepend: [PacketListenerApi, ItemBuilder, MessageBuilder, NPCLib, ResourcePackApi, TitleAPI, MenuBuilder]
-
-commands:
-  murder:
-    aliases: []

@@ -42,6 +42,7 @@ import org.inventivetalent.murder.arena.editor.ArenaEditorManager;
 import org.inventivetalent.murder.command.ArenaCommands;
 import org.inventivetalent.murder.command.GameCommands;
 import org.inventivetalent.murder.command.PlayerCommands;
+import org.inventivetalent.murder.command.ToggleCommands;
 import org.inventivetalent.murder.corpse.CorpseManager;
 import org.inventivetalent.murder.game.GameManager;
 import org.inventivetalent.murder.item.ItemManager;
@@ -96,6 +97,7 @@ public class Murder extends JavaPlugin {
 	public ArenaCommands  arenaCommands;
 	public GameCommands   gameCommands;
 	public PlayerCommands playerCommands;
+	public ToggleCommands toggleCommands;
 
 	public ArenaOutlineTask arenaOutlineTask;
 
@@ -242,6 +244,7 @@ public class Murder extends JavaPlugin {
 		PluginAnnotations.COMMAND.registerCommands(this, arenaCommands = new ArenaCommands(this));
 		PluginAnnotations.COMMAND.registerCommands(this, gameCommands = new GameCommands(this));
 		PluginAnnotations.COMMAND.registerCommands(this, playerCommands = new PlayerCommands(this));
+		PluginAnnotations.COMMAND.registerCommands(this, toggleCommands = new ToggleCommands(this));
 
 		arenaOutlineTask = new ArenaOutlineTask(this);
 		arenaOutlineTask.runTaskTimer(this, 10, 10);

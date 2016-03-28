@@ -52,11 +52,12 @@ public class Arena {
 	public final int    id;
 	public final String world;
 	public final Set<SpawnPoint> spawnPoints = new HashSet<>();
-	public Vector minCorner;
-	public Vector maxCorner;
-	public String name;
-	public int    minPlayers;
-	public int    maxPlayers;
+	public Vector  minCorner;
+	public Vector  maxCorner;
+	public String  name;
+	public int     minPlayers;
+	public int     maxPlayers;
+	public boolean disabled;
 
 	public Arena(@Nonnull String world, @Nonnull String name) {
 		this.id = ID_COUNTER++;
@@ -91,6 +92,8 @@ public class Arena {
 		JsonObject playerObject = jsonObject.getAsJsonObject("players");
 		this.minPlayers = playerObject.get("min").getAsInt();
 		this.maxPlayers = playerObject.get("max").getAsInt();
+
+		this.disabled = jsonObject.has("disabled") && jsonObject.get("disabled").getAsBoolean();
 	}
 
 	public World getWorld() {
@@ -142,6 +145,8 @@ public class Arena {
 		playerObject.addProperty("min", minPlayers);
 		playerObject.addProperty("max", maxPlayers);
 		jsonObject.add("players", playerObject);
+
+		jsonObject.addProperty("disabled", disabled);
 
 		return jsonObject;
 	}
