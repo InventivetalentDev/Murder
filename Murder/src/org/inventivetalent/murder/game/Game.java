@@ -202,6 +202,12 @@ public class Game {
 		return uuids;
 	}
 
+	public void kickAllPlayers() {
+		for (UUID uuid : players) {
+			leavingPlayers.add(uuid);
+		}
+	}
+
 	@Nullable
 	public Player getPlayer(UUID uuid) {
 		return Bukkit.getPlayer(uuid);
