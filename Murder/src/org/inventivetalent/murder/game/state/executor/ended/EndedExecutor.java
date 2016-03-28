@@ -63,7 +63,7 @@ public class EndedExecutor extends LeavableExecutor {
 				public String format(String key, String message) {
 					PlayerData murdererData = Murder.instance.playerManager.getData(game.getMurderer());
 					if (murdererData != null) {
-						return String.format(message, murdererData.getPlayer().getName(), murdererData.nameTag);
+						return String.format(message, murdererData.nameTag.substring(0, 2) + murdererData.getPlayer().getName(), murdererData.nameTag);
 					}
 					return String.format(message, "?", "?");
 				}

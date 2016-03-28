@@ -105,7 +105,7 @@ public class IngameExecutor extends LeavableExecutor {
 							game.broadcastMessage(MESSAGE_LOADER.getMessage("kill.murderer.player", "kill.murderer.player", new MessageFormatter() {
 								@Override
 								public String format(String key, String message) {
-									return String.format(message, killerData.getPlayer().getName(), killerData.nameTag);
+									return String.format(message, killerData.nameTag.substring(0, 2) + killerData.getPlayer().getName(), killerData.nameTag);
 								}
 							}));
 						} else {
@@ -119,7 +119,7 @@ public class IngameExecutor extends LeavableExecutor {
 								game.broadcastMessage(MESSAGE_LOADER.getMessage("kill.innocent.player", "kill.innocent.player", new MessageFormatter() {
 									@Override
 									public String format(String key, String message) {
-										return String.format(message, killerData.getPlayer().getName(), killerData.nameTag);
+										return String.format(message, killerData.nameTag.substring(0, 2) + killerData.getPlayer().getName(), killerData.nameTag);
 									}
 								}));
 								killerData.gunTimeout = 200;
