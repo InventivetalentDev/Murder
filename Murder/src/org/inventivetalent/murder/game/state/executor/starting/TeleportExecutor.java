@@ -30,6 +30,7 @@ package org.inventivetalent.murder.game.state.executor.starting;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import org.bukkit.Location;
 import org.inventivetalent.murder.arena.spawn.SpawnPoint;
 import org.inventivetalent.murder.arena.spawn.SpawnType;
 import org.inventivetalent.murder.game.CountdownType;
@@ -39,6 +40,7 @@ import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
 import org.inventivetalent.murder.player.PlayerData;
 
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
 
 public class TeleportExecutor extends CountdownExecutor {
@@ -60,7 +62,10 @@ public class TeleportExecutor extends CountdownExecutor {
 			updatePlayerStates(GameState.TELEPORT, new Predicate<PlayerData>() {
 				@Override
 				public boolean apply(PlayerData playerData) {
-					playerData.getPlayer().teleport(iterator.next().getLocation(game.arena.getWorld()));
+					Location location = iterator.next().getLocation(game.arena.getWorld()).clone();
+					Random random = new Random();
+					location.add(random.nextDouble(), random.nextDouble(), random.nextDouble());
+					playerData.getPlayer().teleport(location);
 					return true;
 				}
 			});
