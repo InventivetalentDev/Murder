@@ -224,13 +224,15 @@ public class Game {
 				if (Murder.instance.debug) { Murder.instance.getLogger().info("[" + gameId + "] State " + gameState + " finished, switching to " + gameState.next()); }
 				gameState = gameState.next();
 				stateExecutor = gameState.newExecutor(this);
+
+				Murder.instance.gameManager.refreshSigns(this);
 			} else if (this.stateExecutor.revert()) {
 				if (Murder.instance.debug) { Murder.instance.getLogger().info("[" + gameId + "] State " + gameState + " did not finish, going back to " + gameState.previous()); }
 				gameState = gameState.previous();
 				stateExecutor = gameState.newExecutor(this);
-			}
 
-			Murder.instance.gameManager.refreshSigns(this);
+				Murder.instance.gameManager.refreshSigns(this);
+			}
 
 			if (gameState == GameState.DISPOSE) {
 				if (Murder.instance.debug) { Murder.instance.getLogger().info("[" + gameId + "] Reached DISPOSE state, removing game."); }
