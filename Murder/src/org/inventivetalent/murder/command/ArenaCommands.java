@@ -55,6 +55,7 @@ public class ArenaCommands {
 	}
 
 	@Command(name = "murderArena",
+			 description = "Create, edit or remove an arena",
 			 aliases = {
 					 "mArena",
 					 "ma" },

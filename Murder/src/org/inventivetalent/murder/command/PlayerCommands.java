@@ -44,7 +44,7 @@ import org.inventivetalent.pluginannotations.message.MessageLoader;
 public class PlayerCommands {
 
 	public static final String        PERM_BASE      = "murder.player.";
-	static              MessageLoader MESSAGE_LOADER = PluginAnnotations.MESSAGE.newMessageLoader(Murder.instance, "config.yml", "messages.command", null);
+	public              MessageLoader MESSAGE_LOADER = PluginAnnotations.MESSAGE.newMessageLoader(Murder.instance, "config.yml", "messages.command", null);
 
 	private Murder plugin;
 
@@ -53,6 +53,7 @@ public class PlayerCommands {
 	}
 
 	@Command(name = "murderJoin",
+			 description = "Join a game",
 			 aliases = {
 					 "mJoin",
 					 "mj" },
@@ -67,7 +68,7 @@ public class PlayerCommands {
 		}
 
 		PlayerData playerData = plugin.playerManager.getData(sender.getUniqueId());
-		if (playerData.gameId != null) {
+		if (playerData != null && playerData.gameId != null) {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("game.error.ingame", "game.error.ingame"));
 			return;
 		}
@@ -94,6 +95,7 @@ public class PlayerCommands {
 	}
 
 	@Command(name = "murderLeave",
+			 description = "Leave the current game",
 			 aliases = {
 					 "mLeave",
 					 "ml" },
@@ -102,7 +104,7 @@ public class PlayerCommands {
 	@Permission(PERM_BASE + "leave")
 	public void leave(Player sender) {
 		PlayerData playerData = plugin.playerManager.getData(sender.getUniqueId());
-		if (playerData.gameId == null) {
+		if (playerData == null || playerData.gameId == null) {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("game.error.notIngame", "game.error.notIngame"));
 			return;
 		}

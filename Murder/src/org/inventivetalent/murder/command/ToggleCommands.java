@@ -49,6 +49,7 @@ public class ToggleCommands {
 	}
 
 	@Command(name = "murderEnable",
+			 description = "Enable an arena",
 			 aliases = {
 					 "mEnable",
 					 "me" },
@@ -68,6 +69,7 @@ public class ToggleCommands {
 	}
 
 	@Command(name = "murderDisable",
+			 description = "Disable an arena",
 			 aliases = {
 					 "mDisable",
 					 "md" },
