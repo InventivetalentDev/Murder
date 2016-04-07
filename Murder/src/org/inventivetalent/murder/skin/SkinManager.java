@@ -31,11 +31,11 @@ package org.inventivetalent.murder.skin;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.common.io.InputSupplier;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
 import org.inventivetalent.murder.Murder;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
@@ -92,7 +92,7 @@ public class SkinManager {
 				string += line;
 			}
 			reader.close();
-			plugin.getNickManager().loadCustomSkin(name, (JSONObject) (new JSONParser().parse(string)));
+			plugin.getNickManager().loadCustomSkin(name, new JsonParser().parse(string).getAsJsonObject());
 		}
 	}
 
@@ -105,7 +105,7 @@ public class SkinManager {
 					return new InputStreamReader(new URL(String.format("http://api.inventivetalent.org/skin/murder/?s=%s", name)).openConnection().getInputStream(), Charsets.UTF_8);
 				}
 			});
-			JSONObject json = (JSONObject) new JSONParser().parse(string);
+			JsonObject json = new JsonParser().parse(string).getAsJsonObject();
 			plugin.getLogger().info("Loaded skin data for " + name);
 			plugin.getNickManager().loadCustomSkin(name, json);
 			File localFile = new File(localSkinStorage, name + ".skin");

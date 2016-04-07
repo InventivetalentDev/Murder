@@ -4,7 +4,7 @@
   <groupId>org.inventivetalent</groupId>
   <artifactId>murder</artifactId>
   <name>Murder</name>
-  <version>3.1.0</version>
+  <version>3.1.1</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -118,19 +118,19 @@
     <dependency>
       <groupId>org.inventivetalent.packetlistener</groupId>
       <artifactId>api</artifactId>
-      <version>[3.3.0,)</version>
+      <version>[3.3.5,)</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.inventivetalent.packetlistener</groupId>
       <artifactId>1_7</artifactId>
-      <version>[3.3.0,)</version>
+      <version>[3.3.5,)</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.inventivetalent.packetlistener</groupId>
       <artifactId>1_8</artifactId>
-      <version>[3.3.0,)</version>
+      <version>[3.3.5,)</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -142,7 +142,7 @@
     <dependency>
       <groupId>org.inventivetalent.nicknamer</groupId>
       <artifactId>api</artifactId>
-      <version>[2.4.3,)</version>
+      <version>[3.0.0,)</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
