@@ -136,7 +136,7 @@ public class ArenaEditor {
 				if (itemStack.equals(Murder.instance.itemManager.getLootSpawnSelector())) {
 					if (checkBounds(event)) {
 						Vector vector = event.getBlockPlaced().getLocation().toVector();
-						playerSpawnPoints.add(new SpawnPoint(vector, SpawnType.LOOT));
+						lootSpawnPoints.add(new SpawnPoint(vector, SpawnType.LOOT));
 						event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("spawn.add.loot", "spawn.add.loot", new VectorFormatter(vector)));
 					}
 				}
@@ -168,7 +168,7 @@ public class ArenaEditor {
 			}
 			if (material.equals(Murder.instance.itemManager.getLootSpawnSelector().getType())) {
 				Vector vector = event.getBlock().getLocation().toVector();
-				playerSpawnPoints.remove(new SpawnPoint(vector, SpawnType.LOOT));
+				lootSpawnPoints.remove(new SpawnPoint(vector, SpawnType.LOOT));
 				event.getPlayer().sendMessage(MESSAGE_LOADER.getMessage("spawn.remove.loot", "spawn.remove.loot", new VectorFormatter(vector)));
 			}
 		}
