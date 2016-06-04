@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>murder</artifactId>
-    <version>3.1.1</version>
+    <version>3.1.2</version>
     <name>Murder</name>
 
     <build>
@@ -174,7 +174,7 @@
         <dependency>
             <groupId>org.inventivetalent.nicknamer</groupId>
             <artifactId>api</artifactId>
-            <version>[3.0.0,)</version>
+            <version>[3.8.0,)</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent.resourcepackapi</groupId>
@@ -189,7 +189,7 @@
         <dependency>
             <groupId>org.inventivetalent.npclib</groupId>
             <artifactId>api</artifactId>
-            <version>[1.8.3,)</version>
+            <version>1.8.0</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
