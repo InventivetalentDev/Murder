@@ -28,7 +28,6 @@
 
 package org.inventivetalent.murder.game.state.executor.ingame;
 
-import de.inventivegames.npc.living.NPCPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -44,6 +43,7 @@ import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.executor.LeavableExecutor;
 import org.inventivetalent.murder.player.PlayerData;
 import org.inventivetalent.murder.projectile.MurderProjectile;
+import org.inventivetalent.npclib.npc.living.human.NPCPlayer;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageFormatter;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
@@ -83,7 +83,6 @@ public class IngameExecutor extends LeavableExecutor {
 				if (data != null) {
 					final Location deathLocation = data.getPlayer().getLocation();
 					NPCPlayer corpse = Murder.instance.corpseManager.spawnCorpse(game, data, deathLocation.clone());
-					corpse.setGravity(true);
 
 					//Make the player a spectator
 					data.isSpectator = true;

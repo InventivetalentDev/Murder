@@ -28,7 +28,6 @@
 
 package org.inventivetalent.murder.game;
 
-import de.inventivegames.npc.living.NPCPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
@@ -41,6 +40,7 @@ import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.StateExecutor;
 import org.inventivetalent.murder.player.PlayerData;
 import org.inventivetalent.murder.projectile.MurderProjectile;
+import org.inventivetalent.npclib.npc.living.human.NPCPlayer;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageFormatter;
 import org.inventivetalent.pluginannotations.message.MessageLoader;

@@ -28,7 +28,6 @@
 
 package org.inventivetalent.murder.listener;
 
-import de.inventivegames.npc.NPCLib;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -49,6 +48,7 @@ import org.inventivetalent.murder.player.PlayerData;
 import org.inventivetalent.murder.projectile.GunProjectile;
 import org.inventivetalent.murder.projectile.KnifeProjectile;
 import org.inventivetalent.murder.projectile.MurderProjectile;
+import org.inventivetalent.npclib.NPCLib;
 
 import java.util.List;
 

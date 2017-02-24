@@ -28,8 +28,6 @@
 
 package org.inventivetalent.murder.listener;
 
-import de.inventivegames.npc.NPCLib;
-import de.inventivegames.npc.event.NPCCollideEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -40,6 +38,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.npclib.NPCLib;
+import org.inventivetalent.npclib.event.NPCCollisionEvent;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageFormatter;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
@@ -56,9 +56,9 @@ public class CorpseListener implements Listener {
 	}
 
 	@EventHandler
-	public void on(final NPCCollideEvent event) {
-		if (event.getWith() != null && event.getWith().getType() == EntityType.PLAYER) {
-			Player player = (Player) event.getWith();
+	public void on(final NPCCollisionEvent event) {
+		if (event.getEntity() != null && event.getEntity().getType() == EntityType.PLAYER) {
+			Player player = (Player) event.getEntity();
 			PlayerData data = plugin.playerManager.getData(player.getUniqueId());
 			if (data != null) {
 				if (data.isInGame() && data.getGame() != null) {
@@ -68,7 +68,7 @@ public class CorpseListener implements Listener {
 							TitleAPI.sendSubTitle(player, new TextComponent(MESSAGE_LOADER.getMessage("disguise.info", "disguise.info", new MessageFormatter() {
 								@Override
 								public String format(String key, String message) {
-									return String.format(message, event.getNPC().getName());
+									return String.format(message, event.getNpc().getName());
 								}
 							})));
 						} else {

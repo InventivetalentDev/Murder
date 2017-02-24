@@ -28,8 +28,6 @@
 
 package org.inventivetalent.murder.corpse;
 
-import de.inventivegames.npc.NPCLib;
-import de.inventivegames.npc.living.NPCPlayer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -37,6 +35,9 @@ import org.bukkit.block.BlockFace;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.player.PlayerData;
+import org.inventivetalent.npclib.npc.living.human.NPCPlayer;
+
+import java.util.UUID;
 
 public class CorpseManager {
 
@@ -63,9 +64,12 @@ public class CorpseManager {
 			}
 			location = block.getLocation();
 
-			NPCPlayer npc = (NPCPlayer) NPCLib.spawnPlayerNPC(location, data.nameTag, data.nameTag.substring(1, 2) + "b");
-			npc.setLying(true);
-			npc.setCollision(false);
+			NPCPlayer npc = plugin.npcRegistry.spawnPlayerNPC(location, NPCPlayer.class, UUID.randomUUID(), data.nameTag);
+			npc.setSkin(data.nameTag.substring(1, 2) + "b");
+			npc.setLaying(true);
+			npc.setPersistent(false);
+			//TODO: collision
+			//TODO: gravity
 			game.corpses.add(npc);
 			return npc;
 		}

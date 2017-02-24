@@ -53,6 +53,8 @@ import org.inventivetalent.murder.spectate.SpectateManager;
 import org.inventivetalent.murder.task.ArenaOutlineTask;
 import org.inventivetalent.nicknamer.api.INickNamer;
 import org.inventivetalent.nicknamer.api.NickManager;
+import org.inventivetalent.npclib.NPCLib;
+import org.inventivetalent.npclib.registry.NPCRegistry;
 import org.inventivetalent.packetlistener.PacketListenerAPI;
 import org.inventivetalent.playerversion.PlayerVersion;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
@@ -89,6 +91,7 @@ public class Murder extends JavaPlugin {
 	public SignListener       signListener;
 
 	public PacketListener packetListener;
+	public NPCRegistry npcRegistry;
 
 	public ArenaCommands     arenaCommands;
 	public GameCommands      gameCommands;
@@ -237,6 +240,7 @@ public class Murder extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(signListener = new SignListener(this), this);
 
 		packetListener = new PacketListener(this);
+		npcRegistry = NPCLib.createRegistry(this);
 
 		PluginAnnotations.COMMAND.registerCommands(this, arenaCommands = new ArenaCommands(this));
 		PluginAnnotations.COMMAND.registerCommands(this, gameCommands = new GameCommands(this));
