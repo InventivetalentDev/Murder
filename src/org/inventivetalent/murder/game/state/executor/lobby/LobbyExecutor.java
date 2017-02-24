@@ -36,7 +36,6 @@ import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.GameState;
 import org.inventivetalent.murder.game.state.executor.CountdownExecutor;
 import org.inventivetalent.murder.player.PlayerData;
-import org.inventivetalent.rpapi.ResourcePackAPI;
 
 import java.util.UUID;
 
@@ -55,7 +54,7 @@ public class LobbyExecutor extends CountdownExecutor {
 				//Send the resource pack
 				Player player = game.getPlayer(uuid);
 				if (player != null) {
-					ResourcePackAPI.setResourcepack(player, Murder.instance.gamePackUrl, Murder.instance.gamePackHash);
+					player.setResourcePack(Murder.instance.gamePackUrl);//TODO: hash
 				}
 			}
 			game.waitingForResourcepack.clear();

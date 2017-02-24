@@ -180,18 +180,6 @@ public class Murder extends JavaPlugin {
 		} else {
 			getLogger().info("Found MenuBuilder");
 		}
-		if (!Bukkit.getPluginManager().isPluginEnabled("ResourcePackApi")) {
-			getLogger().severe("****************************************");
-			getLogger().severe(" ");
-			getLogger().severe("    This plugin depends on ResourcePackApi    ");
-			getLogger().severe("        https://r.spiget.org/2397        ");
-			getLogger().severe(" ");
-			getLogger().severe("****************************************");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
-		} else {
-			getLogger().info("Found ResourcePackApi");
-		}
 		if (!Bukkit.getPluginManager().isPluginEnabled("NPCLib")) {
 			getLogger().severe("****************************************");
 			getLogger().severe(" ");

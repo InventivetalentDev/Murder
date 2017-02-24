@@ -34,7 +34,6 @@ import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.game.Game;
 import org.inventivetalent.murder.game.state.StateExecutor;
 import org.inventivetalent.murder.player.PlayerData;
-import org.inventivetalent.rpapi.ResourcePackAPI;
 
 import java.util.UUID;
 
@@ -72,7 +71,7 @@ public class LeavableExecutor extends StateExecutor {
 						}
 
 						//Reset resource pack
-						ResourcePackAPI.setResourcepack(data.getPlayer(), Murder.instance.resetPackUrl, Murder.instance.resetPackHash);
+						data.getPlayer().setResourcePack(Murder.instance.resetPackUrl);//TODO: hash
 
 						//Reset BossBar
 						if (data.bossBar != null) {
