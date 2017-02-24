@@ -58,7 +58,6 @@ import org.inventivetalent.playerversion.PlayerVersion;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.config.ConfigValue;
 import org.inventivetalent.title.TitleAPI;
-import org.mcstats.MetricsLite;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -256,13 +255,6 @@ public class Murder extends JavaPlugin {
 			}
 		}, 20);
 
-		try {
-			MetricsLite metrics = new MetricsLite(this);
-			if (metrics.start()) {
-				getLogger().info("Metrics started");
-			}
-		} catch (Exception e) {
-		}
 	}
 
 	@Override
