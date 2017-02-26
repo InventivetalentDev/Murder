@@ -13,6 +13,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.URL;
+import java.net.URLConnection;
 
 public class SkinManager {
 
@@ -89,7 +90,9 @@ public class SkinManager {
 			string = CharStreams.toString(new InputSupplier<InputStreamReader>() {
 				@Override
 				public InputStreamReader getInput() throws IOException {
-					return new InputStreamReader(new URL(String.format("http://api.mineskin.org/get/id/%s", mineskinId)).openConnection().getInputStream(), Charsets.UTF_8);
+					URLConnection connection = new URL(String.format("http://api.mineskin.org/get/id/%s", mineskinId)).openConnection();
+					connection.addRequestProperty("User-Agent", "Murder/" + plugin.getDescription().getVersion());
+					return new InputStreamReader(connection.getInputStream(), Charsets.UTF_8);
 				}
 			});
 			JsonObject rawJson = new JsonParser().parse(string).getAsJsonObject();
