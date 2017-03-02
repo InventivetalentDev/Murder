@@ -1,7 +1,8 @@
 package org.inventivetalent.murder.game.state.executor.starting;
 
 import net.md_5.bungee.api.chat.TextComponent;
-import org.inventivetalent.bossbar.BossBarAPI;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarFlag;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.game.CountdownType;
@@ -57,7 +58,8 @@ public class AssignExecutor extends CountdownExecutor {
 
 				//BossBar
 				TextComponent textComponent = new TextComponent(String.format(data.role.getBarText(), data.nameTag));
-				data.bossBar = BossBarAPI.addBar(data.getPlayer(), textComponent, data.role.getBarColor(), data.role.getBarStyle(), 1);
+				data.bossBar = Bukkit.createBossBar(textComponent.getText(), data.role.getBarColor(), data.role.getBarStyle(), BarFlag.DARKEN_SKY);
+				data.bossBar.addPlayer(data.getPlayer());
 			}
 		}
 		ticks++;

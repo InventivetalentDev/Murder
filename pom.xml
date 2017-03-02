@@ -7,7 +7,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>murder</artifactId>
-    <version>3.2.0-SNAPSHOT</version>
+    <version>3.3.0-SNAPSHOT</version>
     <name>Murder</name>
 
     <build>
@@ -136,11 +136,6 @@
             <groupId>org.inventivetalent.npc-lib</groupId>
             <artifactId>api</artifactId>
             <version>2.5.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.inventivetalent</groupId>
-            <artifactId>bossbarapi</artifactId>
-            <version>[2.3.8,)</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>

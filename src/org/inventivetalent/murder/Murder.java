@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.inventivetalent.apihelper.APIManager;
-import org.inventivetalent.bossbar.BossBarAPI;
 import org.inventivetalent.entityanimation.AnimationAPI;
 import org.inventivetalent.murder.arena.ArenaManager;
 import org.inventivetalent.murder.arena.editor.ArenaEditorManager;
@@ -108,7 +107,6 @@ public class Murder extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		APIManager.require(PacketListenerAPI.class, this);
-		APIManager.require(BossBarAPI.class, this);
 		APIManager.require(PlayerVersion.class, this);
 		APIManager.require(TitleAPI.class, this);
 		APIManager.require(AnimationAPI.class, this);
@@ -167,7 +165,6 @@ public class Murder extends JavaPlugin {
 		instance = this;
 
 		APIManager.initAPI(PacketListenerAPI.class);
-		APIManager.initAPI(BossBarAPI.class);
 		APIManager.initAPI(PlayerVersion.class);
 		APIManager.initAPI(TitleAPI.class);
 		APIManager.initAPI(AnimationAPI.class);

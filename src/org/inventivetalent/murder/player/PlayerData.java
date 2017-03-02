@@ -1,6 +1,6 @@
 package org.inventivetalent.murder.player;
 
-import org.inventivetalent.bossbar.BossBar;
+import org.bukkit.boss.BossBar;
 import org.inventivetalent.murder.Murder;
 import org.inventivetalent.murder.Role;
 import org.inventivetalent.murder.game.Game;

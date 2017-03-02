@@ -1,6 +1,7 @@
 package org.inventivetalent.murder;
 
-import org.inventivetalent.bossbar.BossBarAPI;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
 
@@ -52,16 +53,16 @@ public enum Role {
 		return MESSAGE_LOADER.getMessage(barTextKey, barTextKey);
 	}
 
-	public BossBarAPI.Color getBarColor() {
+	public BarColor getBarColor() {
 		String value = MESSAGE_LOADER.getMessage(barColorKey, null);
-		if (value == null) { return BossBarAPI.Color.WHITE; }
-		return BossBarAPI.Color.valueOf(value.toUpperCase());
+		if (value == null) { return BarColor.WHITE; }
+		return BarColor.valueOf(value.toUpperCase());
 	}
 
-	public BossBarAPI.Style getBarStyle() {
+	public BarStyle getBarStyle() {
 		String value = MESSAGE_LOADER.getMessage(barStyleKey, null);
-		if (value == null) { return BossBarAPI.Style.PROGRESS; }
-		return BossBarAPI.Style.valueOf(value.toUpperCase());
+		if (value == null) { return BarStyle.SOLID; }
+		return BarStyle.valueOf(value.toUpperCase());
 	}
 
 }

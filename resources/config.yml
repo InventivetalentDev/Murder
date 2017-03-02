@@ -101,7 +101,7 @@ messages:
       bossbar:
         text: "%s                ${default.name}"
         color: "BLUE"
-        style: "PROGRESS"
+        style: "SOLID"
     murderer:
       name: "&cMurderer"
       title: "&cYou are the ${murderer.name}"
@@ -110,7 +110,7 @@ messages:
       bossbar:
         text: "%s                ${murderer.name}"
         color: "RED"
-        style: "NOTCHED_10"
+        style: "SEGMENTED_10"
     weapon:
       name: "&9Bystander"
       title: "&9You are a ${default.name}"
@@ -119,7 +119,7 @@ messages:
       bossbar:
         text: "%s                ${weapon.name}"
         color: "BLUE"
-        style: "NOTCHED_10"
+        style: "SEGEMENTED_10"
     spectator:
       name: "&7Spectator"
   game:
