@@ -119,7 +119,7 @@ messages:
       bossbar:
         text: "%s                ${weapon.name}"
         color: "BLUE"
-        style: "SEGEMENTED_10"
+        style: "SEGMENTED_10"
     spectator:
       name: "&7Spectator"
   game:
