@@ -160,7 +160,7 @@ public class Murder extends JavaPlugin {
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		} else {
-			getLogger().info("Found MenuBuilder");
+			getLogger().info("Found NPCLib");
 		}
 		instance = this;
 
